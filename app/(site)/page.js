@@ -4,6 +4,8 @@ import PageWrapper from '@/components/PageWrapper';
 import AdBanner from '@/components/AdBanner';
 import ToolsGrid from '@/components/ToolsGrid';
 
+export const revalidate = 60; // Revalidate this page cache every 60 seconds
+
 export default async function HomePage() {
   let tools = [];
   let upcomingTools = [];
