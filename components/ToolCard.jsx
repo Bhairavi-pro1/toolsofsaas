@@ -1,4 +1,5 @@
 import { urlFor } from '@/sanity/lib/image';
+import Link from 'next/link';
 
 export default function ToolCard({ tool, isUpcoming = false }) {
   const cardContent = (
@@ -37,6 +38,16 @@ export default function ToolCard({ tool, isUpcoming = false }) {
     );
   }
 
+  const isInternal = tool.href && tool.href.startsWith('/');
+
+  if (isInternal) {
+    return (
+      <Link href={tool.href} className="tool-card">
+        {cardContent}
+      </Link>
+    );
+  }
+
   return (
     <a
       href={tool.href}
@@ -48,3 +59,4 @@ export default function ToolCard({ tool, isUpcoming = false }) {
     </a>
   );
 }
+

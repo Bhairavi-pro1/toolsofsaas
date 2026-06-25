@@ -1,0 +1,407 @@
+/* ═══════════════════════════════════════════════════
+   Team Planner — Styling Theme Adapter
+   Features: Glassmorphism, Responsive Grid, Theme Aware
+   ═══════════════════════════════════════════════════ */
+
+.team-planner-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+.tp-header {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.tp-header h1 {
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, var(--text-main) 30%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tp-header p {
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.tp-wrap {
+  width: 100%;
+}
+
+.tp-main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* Glassmorphism Cards */
+.tp-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.tp-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-hover);
+}
+
+.tp-card-body {
+  padding: 24px;
+}
+
+.tp-section {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  min-width: 0;
+  margin-bottom: 20px;
+}
+
+[data-theme='light'] .tp-section {
+  background: rgba(15, 23, 42, 0.02);
+}
+
+.tp-section h3 {
+  margin-bottom: 12px;
+  font-size: 20px;
+  color: var(--text-main);
+}
+
+/* Form Styling */
+.tp-field {
+  margin-bottom: 20px;
+}
+
+.tp-field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tp-textarea,
+.tp-input,
+.tp-select {
+  width: 100%;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-main);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
+  outline: none;
+  font-family: var(--font-inter), sans-serif;
+  transition: all 0.2s ease;
+}
+
+.tp-textarea:focus,
+.tp-input:focus,
+.tp-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+  background: var(--bg-card-hover);
+}
+
+.tp-textarea {
+  min-height: 250px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.tp-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.tp-small {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* Mode Switches */
+.tp-mode-switch {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  background: var(--input-bg);
+  padding: 6px;
+  border-radius: 30px;
+  border: 1px solid var(--input-border);
+  width: fit-content;
+}
+
+.tp-tab {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tp-tab:hover {
+  color: var(--text-main);
+}
+
+.tp-tab.active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+/* Buttons */
+.tp-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.tp-btn {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-outfit), sans-serif;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tp-btn:hover {
+  transform: translateY(-1px);
+}
+
+.tp-btn:active {
+  transform: translateY(1px);
+}
+
+.tp-btn-primary {
+  color: #fff;
+  background: var(--primary);
+  box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.tp-btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 6px 20px var(--primary-glow);
+}
+
+.tp-btn-secondary {
+  background: var(--input-bg);
+  color: var(--text-main);
+  border: 1px solid var(--input-border);
+}
+
+.tp-btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+}
+
+.tp-btn-danger {
+  background: rgba(220, 38, 38, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.tp-btn-danger:hover {
+  background: rgba(220, 38, 38, 0.2);
+}
+
+/* Results Display */
+.tp-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tp-pill {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.tp-result-area {
+  min-height: 300px;
+}
+
+.tp-empty {
+  background: rgba(255, 255, 255, 0.01);
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.tp-days {
+  display: grid;
+  gap: 20px;
+}
+
+.tp-day-card {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.tp-day-head {
+  padding: 14px 20px;
+  background: linear-gradient(135deg, var(--input-bg) 0%, rgba(99, 102, 241, 0.05) 100%);
+  border-bottom: 1px solid var(--border);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--primary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.tp-team-grid {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.tp-team-card {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 0;
+}
+
+.tp-team-title {
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--text-main);
+  font-size: 15px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+
+.tp-member-list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-main);
+}
+
+.tp-member-list li {
+  margin-bottom: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* Sidebar Ads/Layout */
+.tp-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tp-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  background: rgba(99, 102, 241, 0.05);
+  border-left: 3px solid var(--primary);
+  padding: 12px;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Print Support */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .team-planner-container,
+  .team-planner-container * {
+    visibility: visible !important;
+  }
+  .team-planner-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+  }
+  .tp-header,
+  .tp-main-grid > .tp-card:first-child, /* Hide form input card */
+  .tp-sidebar,
+  .tp-btns,
+  .navbar,
+  .footer,
+  .tp-usage-card,
+  .tp-ad-bottom {
+    display: none !important;
+  }
+  .tp-card {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .tp-day-card {
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+  }
+  .tp-day-head {
+    background: #eee !important;
+    color: #000 !important;
+    border-bottom: 1px solid #ccc !important;
+  }
+  .tp-team-card {
+    background: none !important;
+    border: 1px solid #eee !important;
+  }
+  .tp-team-title {
+    color: #000 !important;
+    border-bottom: 1px solid #eee !important;
+  }
+  .tp-member-list {
+    color: #000 !important;
+  }
+}

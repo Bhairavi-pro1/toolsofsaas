@@ -48,9 +48,9 @@ export default defineType({
     defineField({
       name: 'href',
       title: 'URL',
-      type: 'url',
-      validation: (Rule) => Rule.required().uri({ scheme: ['http', 'https'] }),
-      description: 'External link to the tool',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+      description: 'Link to the tool. Can be external (e.g., https://example.com) or internal (e.g., /tools/team-planner)',
     }),
     defineField({
       name: 'order',
