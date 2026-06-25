@@ -9,18 +9,6 @@ const nextConfig = {
       },
     ],
   },
-  async rewrites() {
-    return [
-      {
-        source: '/errorfixer',
-        destination: 'https://errorfixer002.netlify.app/errorfixer',
-      },
-      {
-        source: '/errorfixer/:path*',
-        destination: 'https://errorfixer002.netlify.app/errorfixer/:path*',
-      },
-    ];
-  },
 };
 
 export default nextConfig;
