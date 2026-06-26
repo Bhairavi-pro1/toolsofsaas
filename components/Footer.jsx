@@ -23,6 +23,7 @@ export default function Footer() {
             <Link href="/contact">Contact Us</Link>
             <Link href="/terms">Terms of Service</Link>
             <Link href="/blog">Blog</Link>
+            <Link href="/affiliate-disclosure">Affiliate Disclosure</Link>
           </div>
         </div> 
       </div>

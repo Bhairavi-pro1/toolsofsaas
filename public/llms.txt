@@ -1,0 +1,18 @@
+# ToolsOfSaaS - Core Directory & Resources
+
+> ToolsOfSaaS is a curated directory of browser-based utilities and software-as-a-service (SaaS) tools designed to streamline daily workflows for developers, designers, teachers, and teams.
+
+## Navigation & Discovery
+- [Homepage](https://toolsofsaas.com/)
+- [Sitemap](https://toolsofsaas.com/sitemap.xml)
+- [About Us](https://toolsofsaas.com/about)
+- [Contact Information](https://toolsofsaas.com/contact)
+- [Official Blog](https://toolsofsaas.com/blog)
+
+## Curated Tools & Utilities
+- [Random Team Generator & Multiday Planner](https://toolsofsaas.com/tools/team-planner): An advanced random grouping tool and multiday scheduler. It automatically runs sorting loops to minimize teammate repeat matches, ensuring diverse peer collaborations in classrooms, projects, sprints, and speed networking workshops.
+
+## Legal and Compliance Policies
+- [Privacy Policy](https://toolsofsaas.com/privacy)
+- [Terms of Service](https://toolsofsaas.com/terms)
+- [Affiliate Disclosure](https://toolsofsaas.com/affiliate-disclosure)

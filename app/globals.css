@@ -1016,3 +1016,675 @@ a {
   .post-title { font-size: 34px; }
   .post-hero-image { height: 280px; }
 }
+
+/* ═══════════════════════════════════════════════════
+   SeoLandingPage Components Layout and Styling
+   ═══════════════════════════════════════════════════ */
+
+.seo-container {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 40px;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+/* Sidebar Navigation */
+.seo-sidebar {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  padding: 10px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seo-nav-item {
+  display: block;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: var(--font-outfit), sans-serif;
+  color: var(--text-muted);
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+  background: none;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  width: 100%;
+}
+
+.seo-nav-item:hover {
+  color: var(--primary);
+  border-left-color: var(--primary-glow);
+  padding-left: 16px;
+}
+
+.seo-nav-item.active {
+  color: var(--primary);
+  border-left-color: var(--primary);
+  font-weight: 600;
+  padding-left: 16px;
+}
+
+/* Main Content Area */
+.seo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  min-width: 0;
+}
+
+/* Section Common Styles */
+.seo-section {
+  scroll-margin-top: 100px;
+}
+
+.seo-section-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 10px;
+  letter-spacing: -0.02em;
+}
+
+.seo-text {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.seo-text strong {
+  color: var(--text-main);
+}
+
+/* Feature Cards Grid */
+.seo-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.seo-feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.seo-feature-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-hover);
+}
+
+.seo-feature-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.seo-feature-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.seo-feature-benefit, .seo-feature-example {
+  font-size: 13px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  color: var(--text-muted);
+}
+
+.seo-feature-benefit strong, .seo-feature-example strong {
+  color: var(--primary);
+}
+
+/* Steps (How to Use) */
+.seo-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.seo-step-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  gap: 20px;
+}
+
+.seo-step-num {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--primary);
+  font-family: var(--font-outfit), sans-serif;
+  line-height: 1;
+}
+
+.seo-step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.seo-step-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.seo-step-explanation {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.seo-step-tips {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.seo-step-tip-box {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.seo-step-tip-box.pro {
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: var(--text-main);
+}
+
+.seo-step-tip-box.mistake {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: var(--text-main);
+}
+
+/* Benefits Grid */
+.seo-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.seo-benefit-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.seo-benefit-card:hover {
+  border-color: var(--border-hover);
+}
+
+.seo-benefit-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.seo-benefit-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.seo-benefit-advantage {
+  font-size: 13px;
+  color: var(--secondary);
+  font-style: italic;
+}
+
+/* Audiences Section */
+.seo-audience-tabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.seo-audience-tab {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.seo-audience-tab:hover {
+  border-color: var(--border-hover);
+  color: var(--text-main);
+}
+
+.seo-audience-tab.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.seo-audience-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.seo-audience-header {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Scenarios / Use Cases */
+.seo-scenarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.seo-scenario-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.seo-scenario-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.seo-scenario-detail {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.seo-scenario-detail strong {
+  color: var(--text-main);
+}
+
+/* Problems Solved */
+.seo-problems-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.seo-problem-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.seo-problem-q {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.seo-problem-a {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Comparison Table */
+.seo-table-container {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.seo-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.seo-table th, .seo-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.seo-table th {
+  background: var(--input-bg);
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.seo-table td {
+  color: var(--text-muted);
+}
+
+.seo-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.seo-table td.highlight {
+  color: var(--primary);
+  font-weight: 600;
+  background: rgba(99, 102, 241, 0.03);
+}
+
+/* Tips & Common Mistakes Lists */
+.seo-tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.seo-tip-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.seo-tip-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.seo-tip-text {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* FAQ Accordion */
+.seo-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.seo-faq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.seo-faq-item:hover {
+  border-color: var(--border-hover);
+}
+
+.seo-faq-question {
+  width: 100%;
+  padding: 18px 24px;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+}
+
+.seo-faq-icon {
+  font-size: 18px;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.seo-faq-item.open .seo-faq-icon,
+details.seo-faq-item[open] .seo-faq-icon {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+
+.seo-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.seo-faq-item.open .seo-faq-answer,
+details.seo-faq-item[open] .seo-faq-answer {
+  max-height: 1000px;
+}
+
+.seo-faq-answer-inner {
+  padding: 0 24px 20px 24px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* Platforms, Security, Performance, Accessibility Grid cards */
+.seo-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.seo-grid-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.seo-grid-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+.seo-grid-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Call to Action Banner */
+.seo-cta-banner {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);
+  border: 1px solid var(--border-hover);
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.seo-cta-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.seo-cta-desc {
+  font-size: 16px;
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.seo-cta-btn {
+  display: inline-block;
+  padding: 12px 32px;
+  background: var(--primary);
+  color: #ffffff;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px var(--primary-glow);
+}
+
+.seo-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--primary-glow);
+  opacity: 0.95;
+}
+
+/* Related searches long lists */
+.seo-keywords-block {
+  margin-top: 12px;
+}
+
+.seo-keywords-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.seo-keyword-pill {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Internal & External links */
+.seo-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.seo-links-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.seo-links-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}
+
+.seo-links-card ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seo-links-card a {
+  font-size: 13px;
+  color: var(--primary);
+  transition: color 0.2s ease;
+}
+
+.seo-links-card a:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+/* Responsive Overrides */
+@media (max-width: 1024px) {
+  .seo-container {
+    grid-template-columns: 1fr;
+  }
+  .seo-sidebar {
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   Details / Summary Native Accordion Layout Support
+   ═══════════════════════════════════════════════════ */
+details.seo-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+details.seo-faq-item summary {
+  list-style: none;
+}
+
+.seo-faq-item.open .seo-faq-icon,
+details.seo-faq-item[open] .seo-faq-icon {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+
+.seo-faq-item:not(.open) .seo-faq-answer,
+details.seo-faq-item:not([open]) .seo-faq-answer {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.seo-faq-item.open .seo-faq-answer,
+details.seo-faq-item[open] .seo-faq-answer {
+  max-height: 1000px !important;
+  overflow: visible !important;
+}
+
+
+
