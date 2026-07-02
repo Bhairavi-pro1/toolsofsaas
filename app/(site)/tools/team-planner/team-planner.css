@@ -235,6 +235,46 @@
   background: rgba(220, 38, 38, 0.2);
 }
 
+/* Results Header & Actions */
+.tp-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.tp-results-header h3 {
+  margin: 0 !important;
+  font-size: 20px;
+  color: var(--text-main);
+}
+
+.tp-results-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.tp-action-btn {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-outfit), sans-serif;
+  transition: all 0.2s ease;
+}
+
+.tp-action-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
 /* Results Display */
 .tp-summary {
   display: flex;
@@ -403,5 +443,125 @@
   }
   .tp-member-list {
     color: #000 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .tp-header {
+    text-align: left;
+  }
+  
+  .tp-header h1 {
+    font-size: 28px;
+    line-height: 1.2;
+  }
+  
+  .tp-header p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* Full-width tool adjustments */
+  .team-planner-container {
+    padding: 20px 0px 40px !important;
+  }
+
+  .tp-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .tp-card-body {
+    padding: 10px 0 !important;
+  }
+
+  /* Font size reduction for the entire tool */
+  .tp-field label {
+    font-size: 12px !important;
+  }
+
+  .tp-textarea,
+  .tp-input,
+  .tp-select {
+    font-size: 13px !important;
+    padding: 10px 12px !important;
+  }
+
+  .tp-tab {
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+  }
+
+  .tp-mode-switch {
+    padding: 4px !important;
+  }
+
+  .tp-btn {
+    font-size: 12px !important;
+    padding: 10px 16px !important;
+  }
+
+  .tp-btns {
+    justify-content: space-evenly !important;
+  }
+
+  .tp-small {
+    font-size: 11px !important;
+  }
+
+  .tp-section {
+    padding: 15px !important;
+    border-radius: 12px !important;
+  }
+
+  .tp-section h3 {
+    font-size: 16px !important;
+  }
+
+  .tp-team-title {
+    font-size: 13px !important;
+  }
+
+  .tp-member-list li {
+    font-size: 12px !important;
+  }
+
+  .tp-summary {
+    justify-content: space-between !important;
+  }
+
+  .tp-pill {
+    font-size: 11px !important;
+    padding: 4px 10px !important;
+    flex-grow: 1 !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+  }
+
+  .tp-note {
+    font-size: 11px !important;
+    padding: 10px !important;
+  }
+
+  .tp-empty {
+    font-size: 13px !important;
+    padding: 30px 15px !important;
+    min-height: 200px !important;
+  }
+
+  .tp-results-header h3 {
+    font-size: 16px !important;
+  }
+
+  .tp-action-btn {
+    font-size: 11px !important;
+    padding: 5px 10px !important;
   }
 }

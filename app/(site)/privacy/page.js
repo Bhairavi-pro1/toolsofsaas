@@ -14,7 +14,7 @@ export const metadata = {
     'user data security',
   ],
   robots: {
-    index: false,
+    index: true,
     follow: true,
   },
   alternates: {

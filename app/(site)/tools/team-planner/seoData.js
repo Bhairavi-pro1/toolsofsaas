@@ -1,7 +1,7 @@
 // SEO content configuration for "team generator and multiday planner"
 export const teamPlannerSeoData = {
   seoMetadata: {
-    metaTitle: "Free Team Generator & Multiday Planner | Rotate Groups Fairly",
+    metaTitle: "Free Team Generator & Multiday Planner",
     metaDescription: "Generate random groups instantly and plan schedules for multi-day events. Our smart algorithm reduces repeating teammate pairs automatically. 100% free.",
     seoUrlSlug: "team-planner",
     canonicalUrl: "https://toolsofsaas.com/tools/team-planner",

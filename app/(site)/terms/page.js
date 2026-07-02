@@ -12,7 +12,7 @@ export const metadata = {
     'saas directory guidelines',
   ],
   robots: {
-    index: false,
+    index: true,
     follow: true,
   },
   alternates: {

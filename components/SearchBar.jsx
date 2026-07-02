@@ -28,10 +28,6 @@ export default function SearchBar({ searchQuery, setSearchQuery }) {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      {/* <div className="search-icon-wrapper">
-        <span className="search-shortcut">/</span>
-        <span className="search-icon">🔍</span>
-      </div> */}
     </div>
   );
 }

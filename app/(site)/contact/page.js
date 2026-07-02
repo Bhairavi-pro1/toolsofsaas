@@ -3,7 +3,7 @@ import PageWrapper from '@/components/PageWrapper';
 const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'Bhairavi.co@gmail.com';
 
 export const metadata = {
-  title: 'Contact Us - Get in Touch for Support & Feedback',
+  title: 'Contact Us - Support & Feedback',
   description:
     'Have questions or feedback? Contact ToolsOfSaaS. We\'re here to help with tool suggestions, support inquiries, and collaboration requests related to our web tools directory.',
   keywords: [

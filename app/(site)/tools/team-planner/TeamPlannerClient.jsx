@@ -411,24 +411,6 @@ export default function TeamPlannerClient() {
                 >
                   Shuffle Again
                 </button>
-                <button
-                  type="button"
-                  onClick={handleCopy}
-                  disabled={!result}
-                  className="tp-btn tp-btn-secondary"
-                  style={{ opacity: !result ? 0.5 : 1, cursor: !result ? 'not-allowed' : 'pointer' }}
-                >
-                  {copied ? '✓ Copied' : 'Copy Result'}
-                </button>
-                <button
-                  type="button"
-                  onClick={handlePrint}
-                  disabled={!result}
-                  className="tp-btn tp-btn-secondary"
-                  style={{ opacity: !result ? 0.5 : 1, cursor: !result ? 'not-allowed' : 'pointer' }}
-                >
-                  Print
-                </button>
                 <button type="button" onClick={handleClear} className="tp-btn tp-btn-danger">
                   Clear
                 </button>
@@ -443,7 +425,27 @@ export default function TeamPlannerClient() {
           {/* Results Section */}
           <div className="tp-card" ref={resultsRef}>
             <div className="tp-card-body">
-              <h3>Results</h3>
+              <div className="tp-results-header">
+                <h3>Results</h3>
+                {result && (
+                  <div className="tp-results-actions">
+                    <button
+                      type="button"
+                      onClick={handleCopy}
+                      className="tp-action-btn"
+                    >
+                      {copied ? '✓ Copied' : 'Copy Result'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handlePrint}
+                      className="tp-action-btn"
+                    >
+                      Download Result
+                    </button>
+                  </div>
+                )}
+              </div>
               {error && <div className="tp-empty" style={{ color: '#ef4444', borderColor: '#ef4444' }}>{error}</div>}
 
               {!error && !result && (

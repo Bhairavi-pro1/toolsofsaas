@@ -218,7 +218,7 @@ export default function SeoLandingPage({ data }) {
           
           {/* Overview / Introduction */}
           <section id="overview" className="seo-section">
-            <h1 className="seo-section-title">{h1}</h1>
+            <h2 className="seo-section-title">{h1}</h2>
             {introduction?.paragraphs?.map((p, idx) => (
               <p key={idx} className="seo-text" dangerouslySetInnerHTML={{ __html: p }} />
             ))}
