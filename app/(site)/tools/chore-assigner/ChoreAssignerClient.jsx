@@ -262,27 +262,33 @@ export default function ChoreAssignerClient() {
       const sortedChores = shuffle(choreObjs).sort((a, b) => b.score - a.score);
 
       sortedChores.forEach(chore => {
-        let candidates = allocations.slice();
-
-        // Avoid repeat check
-        if (avoidRepeat && prevMap.size > 0) {
-          const prevOwner = prevMap.get(chore.name.toLowerCase());
-          if (prevOwner) {
-            const filtered = candidates.filter(c => c.person.toLowerCase() !== prevOwner.toLowerCase());
-            if (filtered.length > 0) {
-              candidates = filtered;
-            }
-          }
-        }
-
-        // Sort candidates by current total workload score, then chore count, then random tie-breaker
-        candidates = shuffle(candidates).sort((a, b) => {
+        // Sort all candidates by workload score, then chore count, then random tie-breaker
+        let sortedCandidates = shuffle(allocations.slice()).sort((a, b) => {
           if (a.totalScore !== b.totalScore) return a.totalScore - b.totalScore;
           if (a.chores.length !== b.chores.length) return a.chores.length - b.chores.length;
           return 0;
         });
 
-        const chosen = candidates[0];
+        const minScore = sortedCandidates[0].totalScore;
+        const minChoreCount = sortedCandidates[0].chores.length;
+
+        // Filter to only those candidates who are at the minimum workload level
+        let bestCandidates = sortedCandidates.filter(c => 
+          c.totalScore === minScore && c.chores.length === minChoreCount
+        );
+
+        // Avoid repeat check
+        if (avoidRepeat && prevMap.size > 0) {
+          const prevOwner = prevMap.get(chore.name.toLowerCase());
+          if (prevOwner) {
+            const repeatFiltered = bestCandidates.filter(c => c.person.toLowerCase() !== prevOwner.toLowerCase());
+            if (repeatFiltered.length > 0) {
+              bestCandidates = repeatFiltered;
+            }
+          }
+        }
+
+        const chosen = bestCandidates[0];
         chosen.chores.push({
           name: chore.name,
           score: chore.score,
@@ -295,23 +301,25 @@ export default function ChoreAssignerClient() {
       const shuffledChores = shuffle(remainingChores);
 
       shuffledChores.forEach(choreName => {
-        let candidates = allocations.slice();
+        // Sort by current chore count, then random tie-breaker
+        let sortedCandidates = shuffle(allocations.slice()).sort((a, b) => a.chores.length - b.chores.length);
+        const minChoreCount = sortedCandidates[0].chores.length;
+
+        // Filter to only those candidates who are at the minimum workload level
+        let bestCandidates = sortedCandidates.filter(c => c.chores.length === minChoreCount);
 
         // Avoid repeat check
         if (avoidRepeat && prevMap.size > 0) {
           const prevOwner = prevMap.get(choreName.toLowerCase());
           if (prevOwner) {
-            const filtered = candidates.filter(c => c.person.toLowerCase() !== prevOwner.toLowerCase());
-            if (filtered.length > 0) {
-              candidates = filtered;
+            const repeatFiltered = bestCandidates.filter(c => c.person.toLowerCase() !== prevOwner.toLowerCase());
+            if (repeatFiltered.length > 0) {
+              bestCandidates = repeatFiltered;
             }
           }
         }
 
-        // Sort by current chore count, then random tie-breaker
-        candidates = shuffle(candidates).sort((a, b) => a.chores.length - b.chores.length);
-
-        const chosen = candidates[0];
+        const chosen = bestCandidates[0];
         chosen.chores.push({
           name: choreName,
           score: 1,
@@ -488,8 +496,35 @@ export default function ChoreAssignerClient() {
     setIsSpinning(true);
     setSpinWinner(null);
 
-    // Pick a random index
-    const winningIndex = Math.floor(Math.random() * wheelItems.length);
+    // Weighted Random Selection: select candidates based on workload capacity to ensure equity while keeping it random
+    const workloads = wheelItems.map(person => {
+      const block = assignments.find(b => b.person.toLowerCase() === person.toLowerCase());
+      const totalScore = block ? block.totalScore : 0;
+      const choreCount = block && block.chores ? block.chores.length : 0;
+      const currentWork = assignmentMode === 'weighted' ? totalScore : choreCount;
+      return { person, currentWork };
+    });
+
+    const maxWork = Math.max(...workloads.map(w => w.currentWork));
+
+    const candidatesWithWeights = workloads.map(w => {
+      // Inverse weight: people with lower workloads get higher weights
+      const weight = maxWork - w.currentWork + 1;
+      return { person: w.person, weight };
+    });
+
+    const totalWeight = candidatesWithWeights.reduce((sum, c) => sum + c.weight, 0);
+    let randomVal = Math.random() * totalWeight;
+    let chosenWinner = candidatesWithWeights[0].person;
+    for (const c of candidatesWithWeights) {
+      randomVal -= c.weight;
+      if (randomVal <= 0) {
+        chosenWinner = c.person;
+        break;
+      }
+    }
+
+    const winningIndex = wheelItems.findIndex(item => item.toLowerCase() === chosenWinner.toLowerCase());
     const winnerItem = wheelItems[winningIndex];
 
     const segmentAngle = 360 / wheelItems.length;
@@ -722,89 +757,7 @@ export default function ChoreAssignerClient() {
             </section>
           </div>
 
-          {/* SECOND ROW: SETTINGS CARD (FULL WIDTH) */}
-          <section className="ca-card ca-settings-card">
-            <div className="ca-card-body">
-              <h3>Settings</h3>
-              <div className="ca-row">
-                <div>
-                  <label htmlFor="ca-assign-mode">Mode</label>
-                  <select
-                    id="ca-assign-mode"
-                    className="ca-select"
-                    value={assignmentMode}
-                    onChange={e => setAssignmentMode(e.target.value)}
-                  >
-                    <option value="equal">Quick Assign (Equal Chores)</option>
-                    <option value="weighted">Fair Assign (Weighted Difficulty)</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="ca-score-range">Difficulty Range</label>
-                  <select
-                    id="ca-score-range"
-                    className="ca-select"
-                    value={maxScoreRange}
-                    onChange={e => setMaxScoreRange(parseInt(e.target.value))}
-                    disabled={assignmentMode !== 'weighted'}
-                  >
-                    <option value="5">1 to 5</option>
-                    <option value="10">1 to 10</option>
-                  </select>
-                </div>
-              </div>
 
-              <div className="ca-check">
-                <input
-                  type="checkbox"
-                  id="ca-check-repeat"
-                  checked={avoidRepeat}
-                  onChange={e => setAvoidRepeat(e.target.checked)}
-                />
-                <label htmlFor="ca-check-repeat">Avoid giving roommate same chore as previous cached assignment.</label>
-              </div>
-
-              <div className="ca-check">
-                <input
-                  type="checkbox"
-                  id="ca-check-save"
-                  checked={saveResult}
-                  onChange={e => setSaveResult(e.target.checked)}
-                />
-                <label htmlFor="ca-check-save">Sync results in browser cache to remember roster history.</label>
-              </div>
-
-              {/* Score slider list for weighted mode */}
-              {assignmentMode === 'weighted' && cleanChores.length > 0 && (
-                <div className="ca-score-wrap">
-                  <label>Chore Workload Difficulty</label>
-                  <p className="ca-help">Adjust task weights: 1 (easiest) to {maxScoreRange} (heaviest work).</p>
-                  <div className="ca-score-list">
-                    {cleanChores.map((chore, index) => {
-                      const key = chore.toLowerCase();
-                      const val = choreScores[key] || 1;
-                      return (
-                        <div key={index} className="ca-score-item">
-                          <span className="ca-score-name" title={chore}>{chore}</span>
-                          <div className="ca-score-val-wrap">
-                            <input
-                              type="number"
-                              className="ca-input"
-                              min="1"
-                              max={maxScoreRange}
-                              value={val}
-                              style={{ padding: '6px 8px', textAlign: 'center' }}
-                              onChange={e => handleScoreChange(chore, e.target.value)}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-          </section>
 
           {/* TABS SELECTOR */}
           <nav className="ca-tabs" aria-label="Tool mode tabs" style={{ margin: '12px 0 0' }}>
@@ -841,6 +794,18 @@ export default function ChoreAssignerClient() {
                     <span className="ca-results-pill" style={{ textTransform: 'capitalize' }}>
                       {assignmentMode} Mode
                     </span>
+                    <div className="ca-tooltip-container">
+                      <button type="button" className="ca-tooltip-icon" aria-label="Usage guide info">
+                        i
+                      </button>
+                      <div className="ca-tooltip-content">
+                        <h4>Chore Assigner Guide</h4>
+                        <p><strong>Instant Auto-Assign:</strong> Distributes all unassigned chores based on the Mode (Weighted or Equal) to keep workloads fair.</p>
+                        <p><strong>Shuffle Again:</strong> Resets all current assignments and locks, performing a completely randomized reshuffle from scratch.</p>
+                        <p><strong>Lock & Unlock:</strong> Click the padlock icon next to any assignment. When locked, that specific assignment remains fixed and won't be changed when clicking Auto-Assign again.</p>
+                        <p><strong>Spin Wheel Connection:</strong> Assignments generated by the Spin Wheel are saved as locked pairings in the roster. You can spin for a few chores, lock them, and then use Instant Auto-Assign to automatically distribute the rest.</p>
+                      </div>
+                    </div>
                   </div>
                 </header>
 
@@ -1287,6 +1252,70 @@ export default function ChoreAssignerClient() {
               </>
             )}
           </article>
+
+          {/* SETTINGS CARD (FULL WIDTH) */}
+          <section className="ca-card ca-settings-card">
+            <div className="ca-card-body">
+              <h3>Settings</h3>
+              <div className="ca-row">
+                <div>
+                  <label htmlFor="ca-assign-mode">Mode</label>
+                  <select
+                    id="ca-assign-mode"
+                    className="ca-select"
+                    value={assignmentMode}
+                    onChange={e => setAssignmentMode(e.target.value)}
+                  >
+                    <option value="equal">Quick Assign (Equal Chores)</option>
+                    <option value="weighted">Fair Assign (Weighted Difficulty)</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="ca-score-range">Difficulty Range</label>
+                  <select
+                    id="ca-score-range"
+                    className="ca-select"
+                    value={maxScoreRange}
+                    onChange={e => setMaxScoreRange(parseInt(e.target.value))}
+                    disabled={assignmentMode !== 'weighted'}
+                  >
+                    <option value="5">1 to 5</option>
+                    <option value="10">1 to 10</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Score slider list for weighted mode */}
+              {assignmentMode === 'weighted' && cleanChores.length > 0 && (
+                <div className="ca-score-wrap">
+                  <label>Chore Workload Difficulty</label>
+                  <p className="ca-help">Adjust task weights: 1 (easiest) to {maxScoreRange} (heaviest work).</p>
+                  <div className="ca-score-list">
+                    {cleanChores.map((chore, index) => {
+                      const key = chore.toLowerCase();
+                      const val = choreScores[key] || 1;
+                      return (
+                        <div key={index} className="ca-score-item">
+                          <span className="ca-score-name" title={chore}>{chore}</span>
+                          <div className="ca-score-val-wrap">
+                            <input
+                              type="number"
+                              className="ca-input"
+                              min="1"
+                              max={maxScoreRange}
+                              value={val}
+                              style={{ padding: '6px 8px', textAlign: 'center' }}
+                              onChange={e => handleScoreChange(chore, e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
         </main>
       </div>
 

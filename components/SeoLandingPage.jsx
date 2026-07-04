@@ -592,9 +592,15 @@ export default function SeoLandingPage({ data }) {
                 <button
                   type="button"
                   onClick={() => {
-                    const topElement = document.querySelector('.team-planner-container') || document.querySelector('.tp-header');
+                    const topElement =
+                      document.querySelector('.chore-assigner-container') ||
+                      document.querySelector('.team-planner-container') ||
+                      document.querySelector('.ca-header') ||
+                      document.querySelector('.tp-header');
                     if (topElement) {
                       topElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
                   }}
                   className="seo-cta-btn"

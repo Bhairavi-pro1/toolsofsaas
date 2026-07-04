@@ -347,6 +347,7 @@
   min-height: 400px;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 }
 
 .ca-results-header {
@@ -369,6 +370,7 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .ca-results-pill {
@@ -379,6 +381,88 @@
   background: rgba(99, 102, 241, 0.1);
   border: 1px solid rgba(99, 102, 241, 0.2);
   color: var(--primary);
+}
+
+/* Tooltip styles */
+.ca-tooltip-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ca-tooltip-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.ca-tooltip-icon:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.ca-tooltip-content {
+  visibility: hidden;
+  opacity: 0;
+  width: 320px;
+  background: #1e293b; /* Opaque slate color for dark theme */
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  color: var(--text-main);
+  padding: 16px;
+  border-radius: 12px;
+  position: absolute;
+  top: 130%;
+  right: 0;
+  z-index: 100;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateY(-8px);
+  pointer-events: none;
+  font-weight: normal;
+  text-transform: none;
+  text-align: left;
+}
+
+[data-theme='light'] .ca-tooltip-content {
+  background: #ffffff; /* Opaque white color for light theme */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.ca-tooltip-container:hover .ca-tooltip-content {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.ca-tooltip-content h4 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.ca-tooltip-content p {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.ca-tooltip-content p:last-child {
+  margin-bottom: 0;
 }
 
 .ca-results-body {
