@@ -67,6 +67,110 @@ function playTickSound() {
   }
 }
 
+// Helper: core assignment algorithm used by both generator and wheel
+function runAssignmentAlgorithm(peopleList, choresList, mode, scores, locks, prevMap, avoidRepeat) {
+  const lockedChoreNames = locks.map(l => l.choreName.toLowerCase());
+  const remainingChores = choresList.filter(c => !lockedChoreNames.includes(c.toLowerCase()));
+
+  // Initialize allocations for everyone
+  const allocations = peopleList.map(person => {
+    const personLocks = locks.filter(l => l.person.toLowerCase() === person.toLowerCase());
+    const personChores = personLocks.map(l => ({
+      name: l.choreName,
+      score: l.score,
+      locked: true
+    }));
+    const totalScore = personChores.reduce((sum, ch) => sum + ch.score, 0);
+
+    return {
+      person,
+      chores: personChores,
+      totalScore
+    };
+  });
+
+  // Assign remaining chores
+  if (mode === 'weighted') {
+    // Map chores to objects with their scores, sort descending by score
+    const choreObjs = remainingChores.map(chore => {
+      const key = chore.toLowerCase();
+      const score = Math.max(1, parseFloat(scores[key]) || 1);
+      return { name: chore, score };
+    });
+    
+    const sortedChores = shuffle(choreObjs).sort((a, b) => b.score - a.score);
+
+    sortedChores.forEach(chore => {
+      // Sort all candidates by workload score, then chore count, then random tie-breaker
+      let sortedCandidates = shuffle(allocations.slice()).sort((a, b) => {
+        if (a.totalScore !== b.totalScore) return a.totalScore - b.totalScore;
+        if (a.chores.length !== b.chores.length) return a.chores.length - b.chores.length;
+        return 0;
+      });
+
+      const minScore = sortedCandidates[0].totalScore;
+      const minChoreCount = sortedCandidates[0].chores.length;
+
+      // Filter to only those candidates who are at the minimum workload level
+      let bestCandidates = sortedCandidates.filter(c => 
+        c.totalScore === minScore && c.chores.length === minChoreCount
+      );
+
+      // Avoid repeat check
+      if (avoidRepeat && prevMap && prevMap.size > 0) {
+        const prevOwner = prevMap.get(chore.name.toLowerCase());
+        if (prevOwner) {
+          const repeatFiltered = bestCandidates.filter(c => c.person.toLowerCase() !== prevOwner.toLowerCase());
+          if (repeatFiltered.length > 0) {
+            bestCandidates = repeatFiltered;
+          }
+        }
+      }
+
+      const chosen = bestCandidates[0];
+      chosen.chores.push({
+        name: chore.name,
+        score: chore.score,
+        locked: false
+      });
+      chosen.totalScore += chore.score;
+    });
+  } else {
+    // Equal mode
+    const shuffledChores = shuffle(remainingChores);
+
+    shuffledChores.forEach(choreName => {
+      // Sort by current chore count, then random tie-breaker
+      let sortedCandidates = shuffle(allocations.slice()).sort((a, b) => a.chores.length - b.chores.length);
+      const minChoreCount = sortedCandidates[0].chores.length;
+
+      // Filter to only those candidates who are at the minimum workload level
+      let bestCandidates = sortedCandidates.filter(c => c.chores.length === minChoreCount);
+
+      // Avoid repeat check
+      if (avoidRepeat && prevMap && prevMap.size > 0) {
+        const prevOwner = prevMap.get(choreName.toLowerCase());
+        if (prevOwner) {
+          const repeatFiltered = bestCandidates.filter(c => c.person.toLowerCase() !== prevOwner.toLowerCase());
+          if (repeatFiltered.length > 0) {
+            bestCandidates = repeatFiltered;
+          }
+        }
+      }
+
+      const chosen = bestCandidates[0];
+      chosen.chores.push({
+        name: choreName,
+        score: 1,
+        locked: false
+      });
+      chosen.totalScore += 1;
+    });
+  }
+
+  return allocations;
+}
+
 export default function ChoreAssignerClient() {
   // Tabs: 'assigner' or 'wheel'
   const [activeTab, setActiveTab] = useState('assigner');
@@ -87,6 +191,7 @@ export default function ChoreAssignerClient() {
   // Core assignment lists
   const [assignments, setAssignments] = useState([]);
   const [lockedAssignments, setLockedAssignments] = useState([]); // Array of { person, choreName, score }
+  const [wheelAssignments, setWheelAssignments] = useState([]); // Array of { person, chores: [], totalScore } for wheel
   
   // Spin Wheel specific state
   const wheelMode = 'people'; // Always spin for people (pick person for chore)
@@ -113,6 +218,7 @@ export default function ChoreAssignerClient() {
         if (parsed.choreScores !== undefined) setChoreScores(parsed.choreScores);
         if (parsed.lockedAssignments !== undefined) setLockedAssignments(parsed.lockedAssignments);
         if (parsed.assignments !== undefined) setAssignments(parsed.assignments);
+        if (parsed.wheelAssignments !== undefined) setWheelAssignments(parsed.wheelAssignments);
       }
     } catch (e) {
       console.error('Failed to load local config', e);
@@ -130,14 +236,15 @@ export default function ChoreAssignerClient() {
       saveResult,
       choreScores,
       lockedAssignments,
-      assignments
+      assignments,
+      wheelAssignments
     };
     try {
       localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify(config));
     } catch (e) {
       console.error('Failed to save config', e);
     }
-  }, [peopleInput, choresInput, assignmentMode, maxScoreRange, avoidRepeat, saveResult, choreScores, lockedAssignments, assignments]);
+  }, [peopleInput, choresInput, assignmentMode, maxScoreRange, avoidRepeat, saveResult, choreScores, lockedAssignments, assignments, wheelAssignments]);
 
   const cleanPeople = parseUniqueLines(peopleInput);
   const cleanChores = parseUniqueLines(choresInput);
@@ -228,108 +335,32 @@ export default function ChoreAssignerClient() {
       setLockedAssignments([]);
     }
 
-    const lockedChoreNames = activeLocks.map(l => l.choreName.toLowerCase());
-    const remainingChores = cleanChores.filter(c => !lockedChoreNames.includes(c.toLowerCase()));
-
-    // Initialize allocations for everyone
-    const allocations = cleanPeople.map(person => {
-      const personLocks = activeLocks.filter(l => l.person.toLowerCase() === person.toLowerCase());
-      const personChores = personLocks.map(l => ({
-        name: l.choreName,
-        score: l.score,
-        locked: true
-      }));
-      const totalScore = personChores.reduce((sum, ch) => sum + ch.score, 0);
-
-      return {
-        person,
-        chores: personChores,
-        totalScore
-      };
-    });
-
     const prevMap = getPreviousAssignmentsMap();
 
-    // Assign remaining chores
-    if (assignmentMode === 'weighted') {
-      // Map chores to objects with their scores, sort descending by score
-      const choreObjs = remainingChores.map(chore => {
-        const key = chore.toLowerCase();
-        const score = Math.max(1, parseFloat(choreScores[key]) || 1);
-        return { name: chore, score };
-      });
-      
-      const sortedChores = shuffle(choreObjs).sort((a, b) => b.score - a.score);
+    // Answer 1: Instant Assigner
+    const allocations = runAssignmentAlgorithm(
+      cleanPeople,
+      cleanChores,
+      assignmentMode,
+      choreScores,
+      activeLocks,
+      prevMap,
+      avoidRepeat
+    );
 
-      sortedChores.forEach(chore => {
-        // Sort all candidates by workload score, then chore count, then random tie-breaker
-        let sortedCandidates = shuffle(allocations.slice()).sort((a, b) => {
-          if (a.totalScore !== b.totalScore) return a.totalScore - b.totalScore;
-          if (a.chores.length !== b.chores.length) return a.chores.length - b.chores.length;
-          return 0;
-        });
-
-        const minScore = sortedCandidates[0].totalScore;
-        const minChoreCount = sortedCandidates[0].chores.length;
-
-        // Filter to only those candidates who are at the minimum workload level
-        let bestCandidates = sortedCandidates.filter(c => 
-          c.totalScore === minScore && c.chores.length === minChoreCount
-        );
-
-        // Avoid repeat check
-        if (avoidRepeat && prevMap.size > 0) {
-          const prevOwner = prevMap.get(chore.name.toLowerCase());
-          if (prevOwner) {
-            const repeatFiltered = bestCandidates.filter(c => c.person.toLowerCase() !== prevOwner.toLowerCase());
-            if (repeatFiltered.length > 0) {
-              bestCandidates = repeatFiltered;
-            }
-          }
-        }
-
-        const chosen = bestCandidates[0];
-        chosen.chores.push({
-          name: chore.name,
-          score: chore.score,
-          locked: false
-        });
-        chosen.totalScore += chore.score;
-      });
-    } else {
-      // Equal mode
-      const shuffledChores = shuffle(remainingChores);
-
-      shuffledChores.forEach(choreName => {
-        // Sort by current chore count, then random tie-breaker
-        let sortedCandidates = shuffle(allocations.slice()).sort((a, b) => a.chores.length - b.chores.length);
-        const minChoreCount = sortedCandidates[0].chores.length;
-
-        // Filter to only those candidates who are at the minimum workload level
-        let bestCandidates = sortedCandidates.filter(c => c.chores.length === minChoreCount);
-
-        // Avoid repeat check
-        if (avoidRepeat && prevMap.size > 0) {
-          const prevOwner = prevMap.get(choreName.toLowerCase());
-          if (prevOwner) {
-            const repeatFiltered = bestCandidates.filter(c => c.person.toLowerCase() !== prevOwner.toLowerCase());
-            if (repeatFiltered.length > 0) {
-              bestCandidates = repeatFiltered;
-            }
-          }
-        }
-
-        const chosen = bestCandidates[0];
-        chosen.chores.push({
-          name: choreName,
-          score: 1,
-          locked: false
-        });
-        chosen.totalScore += 1;
-      });
-    }
+    // Answer 2: Spinning Wheel
+    const wheelAllocations = runAssignmentAlgorithm(
+      cleanPeople,
+      cleanChores,
+      assignmentMode,
+      choreScores,
+      activeLocks,
+      prevMap,
+      avoidRepeat
+    );
 
     setAssignments(allocations);
+    setWheelAssignments(wheelAllocations);
 
     // Save final state for repeat check next time
     if (saveResult) {
@@ -361,6 +392,7 @@ export default function ChoreAssignerClient() {
       nextLocks = [...activeLocks, { person: personName, choreName, score: choreScore }];
     }
     setLockedAssignments(nextLocks);
+    setWheelAssignments([]); // Clear wheel assignments to force regeneration
 
     // Update assignment list state immediately to reflect lock changes
     setAssignments(prev => prev.map(block => {
@@ -386,6 +418,7 @@ export default function ChoreAssignerClient() {
       setChoresInput('');
       setAssignments([]);
       setLockedAssignments([]);
+      setWheelAssignments([]);
       setChoreScores({});
       setSpinWinner(null);
       localStorage.removeItem(STORAGE_KEY_LAST_ASSIGN);
@@ -496,32 +529,65 @@ export default function ChoreAssignerClient() {
     setIsSpinning(true);
     setSpinWinner(null);
 
-    // Weighted Random Selection: select candidates based on workload capacity to ensure equity while keeping it random
-    const workloads = wheelItems.map(person => {
-      const block = assignments.find(b => b.person.toLowerCase() === person.toLowerCase());
-      const totalScore = block ? block.totalScore : 0;
-      const choreCount = block && block.chores ? block.chores.length : 0;
-      const currentWork = assignmentMode === 'weighted' ? totalScore : choreCount;
-      return { person, currentWork };
-    });
+    // Get current wheel assignments or generate if empty/invalid
+    let currentWheelAssignments = wheelAssignments;
+    const activeLocks = getActiveLocks();
 
-    const maxWork = Math.max(...workloads.map(w => w.currentWork));
+    const isOutofSync = !currentWheelAssignments || currentWheelAssignments.length === 0 || 
+      !cleanPeople.every(p => currentWheelAssignments.some(b => b.person.toLowerCase() === p.toLowerCase())) ||
+      !cleanChores.every(c => currentWheelAssignments.some(b => b.chores.some(ch => ch.name.toLowerCase() === c.toLowerCase())));
 
-    const candidatesWithWeights = workloads.map(w => {
-      // Inverse weight: people with lower workloads get higher weights
-      const weight = maxWork - w.currentWork + 1;
-      return { person: w.person, weight };
-    });
-
-    const totalWeight = candidatesWithWeights.reduce((sum, c) => sum + c.weight, 0);
-    let randomVal = Math.random() * totalWeight;
-    let chosenWinner = candidatesWithWeights[0].person;
-    for (const c of candidatesWithWeights) {
-      randomVal -= c.weight;
-      if (randomVal <= 0) {
-        chosenWinner = c.person;
-        break;
+    if (isOutofSync) {
+      const prevMap = getPreviousAssignmentsMap();
+      currentWheelAssignments = runAssignmentAlgorithm(
+        cleanPeople,
+        cleanChores,
+        assignmentMode,
+        choreScores,
+        activeLocks,
+        prevMap,
+        avoidRepeat
+      );
+      setWheelAssignments(currentWheelAssignments);
+      
+      // Also generate assignments if they are empty
+      if (assignments.length === 0) {
+        const instantResult = runAssignmentAlgorithm(
+          cleanPeople,
+          cleanChores,
+          assignmentMode,
+          choreScores,
+          activeLocks,
+          prevMap,
+          avoidRepeat
+        );
+        setAssignments(instantResult);
       }
+    }
+
+    // Find who is pre-assigned to this chore in the wheel assignments
+    const targetBlock = currentWheelAssignments.find(block => 
+      block.chores.some(ch => ch.name.toLowerCase() === selectedChoreForSpin.toLowerCase())
+    );
+    let chosenWinner = targetBlock ? targetBlock.person : null;
+
+    // Fallback if chore is not found in wheel assignments for some reason
+    if (!chosenWinner) {
+      const prevMap = getPreviousAssignmentsMap();
+      const freshWheelResult = runAssignmentAlgorithm(
+        cleanPeople,
+        cleanChores,
+        assignmentMode,
+        choreScores,
+        activeLocks,
+        prevMap,
+        avoidRepeat
+      );
+      setWheelAssignments(freshWheelResult);
+      const fallbackBlock = freshWheelResult.find(block => 
+        block.chores.some(ch => ch.name.toLowerCase() === selectedChoreForSpin.toLowerCase())
+      );
+      chosenWinner = fallbackBlock ? fallbackBlock.person : wheelItems[0];
     }
 
     const winningIndex = wheelItems.findIndex(item => item.toLowerCase() === chosenWinner.toLowerCase());
@@ -1024,6 +1090,7 @@ export default function ChoreAssignerClient() {
                               chores: [],
                               totalScore: 0
                             })));
+                            setWheelAssignments([]);
                             setSpinWinner(null);
                           }}
                         >
