@@ -173,7 +173,7 @@ function runAssignmentAlgorithm(peopleList, choresList, mode, scores, locks, pre
 
 export default function ChoreAssignerClient() {
   // Tabs: 'assigner' or 'wheel'
-  const [activeTab, setActiveTab] = useState('assigner');
+  const [activeTab, setActiveTab] = useState('wheel');
 
   // Inputs state
   const [peopleInput, setPeopleInput] = useState(DEFAULT_PEOPLE);
