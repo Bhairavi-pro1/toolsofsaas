@@ -50,7 +50,7 @@ export default defineType({
       title: 'URL',
       type: 'string',
       validation: (Rule) => Rule.required(),
-      description: 'Link to the tool. Can be external (e.g., https://example.com) or internal (e.g., /tools/team-planner)',
+      description: 'Link to the tool. Can be external (e.g., https://example.com) or internal (e.g., /tools/random-team-generator)',
     }),
     defineField({
       name: 'order',

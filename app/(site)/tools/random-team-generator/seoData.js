@@ -1,27 +1,27 @@
 // SEO content configuration for "team generator and multiday planner"
 export const teamPlannerSeoData = {
   seoMetadata: {
-    metaTitle: "Free Team Generator & Multiday Planner",
+    metaTitle: "Free Random Team Generator & Multiday Planner",
     metaDescription: "Generate random groups instantly and plan schedules for multi-day events. Our smart algorithm reduces repeating teammate pairs automatically. 100% free.",
-    seoUrlSlug: "team-planner",
-    canonicalUrl: "https://toolsofsaas.com/tools/team-planner",
+    seoUrlSlug: "random-team-generator",
+    canonicalUrl: "https://toolsofsaas.com/tools/random-team-generator",
     ogTitle: "Random Team Generator and Multiday Planner - ToolsOfSaaS",
     ogDescription: "Generate random teams instantly. Run multi-day group rosters without repeated pairings using our advanced balancing algorithm.",
     twitterTitle: "Free Team Generator & Multiday Planner - Rotate Groups Fairly",
     twitterDescription: "No more repeated teammate pairings. Generate random rosters for classrooms, workshops, agile teams, and tournaments instantly.",
     suggestedImageAlt: "Interactive user interface of the team generator and multiday planner showing randomized team schedules",
-    primaryKeyword: "team generator and multiday planner",
+    primaryKeyword: "random team generator",
     secondaryKeywords: [
       "team management",
-      "team planner",
+      "random team generator",
       "planner",
       "team organizer",
       "team resource planner",
       "team planning tool",
-      "online team planner",
-      "team planner online",
-      "free team planner",
-      "team planner free",
+      "online random team generator",
+      "random team generator online",
+      "free random team generator",
+      "random team generator free",
       "team schedule planner",
       "team planning app",
       "team workload planner",
@@ -95,13 +95,13 @@ export const teamPlannerSeoData = {
     contentCategory: "productivity"
   },
 
-  h1: "Free Team Generator and Multiday Planner",
+  h1: "Free Random Team Generator and Multiday Planner",
 
   introduction: {
     paragraphs: [
-      "The <strong>team generator and multiday planner</strong> is an advanced, web-based utility designed to split lists of names into randomized teams and build rotation schedules across multiple days, rounds, or sessions. Whether you are setting up daily team meetings, arranging project groups for a university classroom, or organizing multi-round networking workshops, our browser-based <strong>online team planner</strong> delivers instant results. Built with a proprietary pairing algorithm, this smart tool reduces teammate repeat matches, ensuring participants collaborate with new peers during each consecutive round.",
-      "We built this <strong>free team planner</strong> (which also serves as a robust <strong>team planning tool</strong> and <strong>team workload planner</strong>) to solve a common administrative problem: the frustration of manually sorting participants into groups and trying to ensure they do not keep pairing up with the same partners. Relying on paper drafts, spreadsheets, or basic random generators often leads to unfair team structures and duplicate pairings. Our <strong>team planner free</strong> online platform eliminates manual work by executing hundreds of random shuffles in milliseconds, scoring each option, and displaying the combination that maximizes collaborative diversity.",
-      "Students, remote development teams, teachers, and business owners can use this lightweight <strong>team schedule planner</strong> and <strong>team planning app</strong> directly in their browser. Because it operates as an on-demand <strong>team resource planner</strong> and <strong>team work planner</strong>, you can adjust settings dynamically on the fly. And because all parsing and calculations run entirely in client-side Javascript, your data never leaves your computer, making it one of the most secure systems to access a <strong>team planner online</strong>.",
+      "The <strong>random team generator and multiday planner</strong> is an advanced, web-based utility designed to split lists of names into randomized teams and build rotation schedules across multiple days, rounds, or sessions. Whether you are setting up daily team meetings, arranging project groups for a university classroom, or organizing multi-round networking workshops, our browser-based <strong>online random team generator</strong> delivers instant results. Built with a proprietary pairing algorithm, this smart tool reduces teammate repeat matches, ensuring participants collaborate with new peers during each consecutive round.",
+      "We built this <strong>free random team generator</strong> (which also serves as a robust <strong>team planning tool</strong> and <strong>team workload planner</strong>) to solve a common administrative problem: the frustration of manually sorting participants into groups and trying to ensure they do not keep pairing up with the same partners. Relying on paper drafts, spreadsheets, or basic random generators often leads to unfair team structures and duplicate pairings. Our <strong>random team generator free</strong> online platform eliminates manual work by executing hundreds of random shuffles in milliseconds, scoring each option, and displaying the combination that maximizes collaborative diversity.",
+      "Students, remote development teams, teachers, and business owners can use this lightweight <strong>team schedule planner</strong> and <strong>team planning app</strong> directly in their browser. Because it operates as an on-demand <strong>team resource planner</strong> and <strong>team work planner</strong>, you can adjust settings dynamically on the fly. And because all parsing and calculations run entirely in client-side Javascript, your data never leaves your computer, making it one of the most secure systems to access a <strong>random team generator online</strong>.",
       "Traditional scheduling approaches require hours of sorting, tracking historical pairs, and dealing with complaints about unfair grouping. By using our web tool, you save time, improve team integration, and maintain absolute neutrality in group allocation. Simply input your member list, select your grouping constraints, specify the length of your cycle, and let the algorithm compile your schedule in a single click."
     ]
   },
@@ -1143,16 +1143,16 @@ export const teamPlannerSeoData = {
   ],
 
   relatedTools: [
-    { name: "Random Team Generator", url: "/tools/team-planner", anchorText: "Random Team Generator" },
-    { name: "Multi-Day Group Rotator", url: "/tools/team-planner", anchorText: "Multi-Day Group Rotator" },
-    { name: "Classroom Group Maker", url: "/tools/team-planner", anchorText: "Classroom Group Maker" },
-    { name: "Pair Programming Scheduler", url: "/tools/team-planner", anchorText: "Pair Programming Scheduler" },
-    { name: "Breakout Room Builder", url: "/tools/team-planner", anchorText: "Breakout Room Builder" },
-    { name: "Agile Standup Rotator", url: "/tools/team-planner", anchorText: "Agile Standup Rotator" },
-    { name: "Networking Group Coordinator", url: "/tools/team-planner", anchorText: "Networking Group Coordinator" },
-    { name: "Tournament Roster Maker", url: "/tools/team-planner", anchorText: "Tournament Roster Maker" },
-    { name: "Online Name Randomizer", url: "/tools/team-planner", anchorText: "Online Name Randomizer" },
-    { name: "Roster Splitter Tool", url: "/tools/team-planner", anchorText: "Roster Splitter Tool" }
+    { name: "Random Team Generator", url: "/tools/random-team-generator", anchorText: "Random Team Generator" },
+    { name: "Multi-Day Group Rotator", url: "/tools/random-team-generator", anchorText: "Multi-Day Group Rotator" },
+    { name: "Classroom Group Maker", url: "/tools/random-team-generator", anchorText: "Classroom Group Maker" },
+    { name: "Pair Programming Scheduler", url: "/tools/random-team-generator", anchorText: "Pair Programming Scheduler" },
+    { name: "Breakout Room Builder", url: "/tools/random-team-generator", anchorText: "Breakout Room Builder" },
+    { name: "Agile Standup Rotator", url: "/tools/random-team-generator", anchorText: "Agile Standup Rotator" },
+    { name: "Networking Group Coordinator", url: "/tools/random-team-generator", anchorText: "Networking Group Coordinator" },
+    { name: "Tournament Roster Maker", url: "/tools/random-team-generator", anchorText: "Tournament Roster Maker" },
+    { name: "Online Name Randomizer", url: "/tools/random-team-generator", anchorText: "Online Name Randomizer" },
+    { name: "Roster Splitter Tool", url: "/tools/random-team-generator", anchorText: "Roster Splitter Tool" }
   ],
 
 
@@ -1202,9 +1202,9 @@ export const teamPlannerSeoData = {
     "@graph": [
       {
         "@type": "WebApplication",
-        "@id": "https://toolsofsaas.com/tools/team-planner#application",
-        "name": "Team Generator & Multiday Planner",
-        "url": "https://toolsofsaas.com/tools/team-planner",
+        "@id": "https://toolsofsaas.com/tools/random-team-generator#application",
+        "name": "Random Team Generator & Multiday Planner",
+        "url": "https://toolsofsaas.com/tools/random-team-generator",
         "applicationCategory": "ProductivityApplication",
         "operatingSystem": "All",
         "browserRequirements": "Requires HTML5 support. Compatible with Chrome, Firefox, Safari, Edge, and mobile browsers.",
@@ -1223,7 +1223,7 @@ export const teamPlannerSeoData = {
 
       {
         "@type": "HowTo",
-        "@id": "https://toolsofsaas.com/tools/team-planner#howto",
+        "@id": "https://toolsofsaas.com/tools/random-team-generator#howto",
         "name": "How to Generate Multi-Day Groups Without Teammate Repeats",
         "step": [
           {
@@ -1255,7 +1255,7 @@ export const teamPlannerSeoData = {
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://toolsofsaas.com/tools/team-planner#breadcrumb",
+        "@id": "https://toolsofsaas.com/tools/random-team-generator#breadcrumb",
         "itemListElement": [
           {
             "@type": "ListItem",
@@ -1272,16 +1272,16 @@ export const teamPlannerSeoData = {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "Team Planner",
-            "item": "https://toolsofsaas.com/tools/team-planner"
+            "name": "Random Team Generator",
+            "item": "https://toolsofsaas.com/tools/random-team-generator"
           }
         ]
       },
       {
         "@type": "WebPage",
-        "@id": "https://toolsofsaas.com/tools/team-planner#webpage",
-        "url": "https://toolsofsaas.com/tools/team-planner",
-        "name": "Free Team Generator & Multiday Planner | ToolsOfSaaS",
+        "@id": "https://toolsofsaas.com/tools/random-team-generator#webpage",
+        "url": "https://toolsofsaas.com/tools/random-team-generator",
+        "name": "Free Random Team Generator & Multiday Planner | ToolsOfSaaS",
         "description": "Generate random groups instantly and plan schedules for multi-day events. Our smart algorithm reduces repeating teammate pairs automatically."
       }
     ]

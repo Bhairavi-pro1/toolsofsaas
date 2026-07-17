@@ -502,7 +502,7 @@ export const choreAssignerSeoData = {
 
   relatedTools: [
     {
-      url: "/tools/team-planner",
+      url: "/tools/random-team-generator",
       anchorText: "Random Team Generator and Multiday Planner"
     }
   ],

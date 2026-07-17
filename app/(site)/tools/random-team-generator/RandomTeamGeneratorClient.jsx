@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import AdBanner from '@/components/AdBanner';
-import './team-planner.css';
+import './random-team-generator.css';
 
 // Helper: Clean up names input list
 function cleanNames(raw) {
@@ -158,7 +158,7 @@ function buildPlainText(schedule) {
   return lines.join('\n').trim();
 }
 
-export default function TeamPlannerClient() {
+export default function RandomTeamGeneratorClient() {
   const resultsRef = useRef(null);
   const [mode, setMode] = useState('single');
   const [namesText, setNamesText] = useState('');
@@ -295,30 +295,30 @@ export default function TeamPlannerClient() {
   };
 
   return (
-    <div className="team-planner-container">
+    <div className="random-team-generator-container">
       {/* Header Info */}
-      <div className="tp-header">
+      <div className="rtg-header">
         <h1>Random Team Generator & Multi-Day Planner</h1>
         <p>Create random teams in one click or generate schedules for multiple days with teammate repeat prevention.</p>
       </div>
 
-      <div className="tp-wrap">
-        <div className="tp-main-grid">
+      <div className="rtg-wrap">
+        <div className="rtg-main-grid">
           {/* Inputs Section */}
-          <div className="tp-card">
-            <div className="tp-card-body">
+          <div className="rtg-card">
+            <div className="rtg-card-body">
               {/* Mode Tabs */}
-              <div className="tp-mode-switch">
+              <div className="rtg-mode-switch">
                 <button
                   type="button"
-                  className={`tp-tab ${mode === 'single' ? 'active' : ''}`}
+                  className={`rtg-tab ${mode === 'single' ? 'active' : ''}`}
                   onClick={() => setMode('single')}
                 >
                   Single List
                 </button>
                 <button
                   type="button"
-                  className={`tp-tab ${mode === 'multi' ? 'active' : ''}`}
+                  className={`rtg-tab ${mode === 'multi' ? 'active' : ''}`}
                   onClick={() => setMode('multi')}
                 >
                   Multiple Day Planner
@@ -326,25 +326,25 @@ export default function TeamPlannerClient() {
               </div>
 
               {/* Names input */}
-              <div className="tp-field">
-                <label htmlFor="tp-names">Names</label>
+              <div className="rtg-field">
+                <label htmlFor="rtg-names">Names</label>
                 <textarea
-                  id="tp-names"
-                  className="tp-textarea"
+                  id="rtg-names"
+                  className="rtg-textarea"
                   value={namesText}
                   onChange={(e) => setNamesText(e.target.value)}
                   placeholder={"Enter one name per line\n\nExample:\nAarav\nMia\nNoah\nSophia\n..."}
                 />
-                <div className="tp-small">One name per line. Blank lines are ignored. Duplicate names are removed automatically.</div>
+                <div className="rtg-small">One name per line. Blank lines are ignored. Duplicate names are removed automatically.</div>
               </div>
 
               {/* Split setup */}
-              <div className="tp-row">
-                <div className="tp-field">
-                  <label htmlFor="tp-split-mode">Split by</label>
+              <div className="rtg-row">
+                <div className="rtg-field">
+                  <label htmlFor="rtg-split-mode">Split by</label>
                   <select
-                    id="tp-split-mode"
-                    className="tp-select"
+                    id="rtg-split-mode"
+                    className="rtg-select"
                     value={splitMode}
                     onChange={(e) => setSplitMode(e.target.value)}
                   >
@@ -352,14 +352,14 @@ export default function TeamPlannerClient() {
                     <option value="size">Members per team</option>
                   </select>
                 </div>
-                <div className="tp-field">
-                  <label htmlFor="tp-split-value">Value</label>
+                <div className="rtg-field">
+                  <label htmlFor="rtg-split-value">Value</label>
                   <input
-                    id="tp-split-value"
+                    id="rtg-split-value"
                     type="number"
                     min="1"
                     step="1"
-                    className="tp-input"
+                    className="rtg-input"
                     value={splitValue}
                     onChange={(e) => setSplitValue(Math.max(1, parseInt(e.target.value, 10) || 0))}
                   />
@@ -368,24 +368,24 @@ export default function TeamPlannerClient() {
 
               {/* Multi-day settings */}
               {mode === 'multi' && (
-                <div className="tp-row">
-                  <div className="tp-field">
-                    <label htmlFor="tp-days">Number of days</label>
+                <div className="rtg-row">
+                  <div className="rtg-field">
+                    <label htmlFor="rtg-days">Number of days</label>
                     <input
-                      id="tp-days"
+                      id="rtg-days"
                       type="number"
                       min="1"
                       step="1"
-                      className="tp-input"
+                      className="rtg-input"
                       value={days}
                       onChange={(e) => setDays(Math.max(1, parseInt(e.target.value, 10) || 1))}
                     />
                   </div>
-                  <div className="tp-field">
-                    <label htmlFor="tp-day-style">Day label style</label>
+                  <div className="rtg-field">
+                    <label htmlFor="rtg-day-style">Day label style</label>
                     <select
-                      id="tp-day-style"
-                      className="tp-select"
+                      id="rtg-day-style"
+                      className="rtg-select"
                       value={dayLabelStyle}
                       onChange={(e) => setDayLabelStyle(e.target.value)}
                     >
@@ -398,86 +398,86 @@ export default function TeamPlannerClient() {
               )}
 
               {/* Buttons */}
-              <div className="tp-btns">
-                <button type="button" onClick={handleGenerate} className="tp-btn tp-btn-primary">
+              <div className="rtg-btns">
+                <button type="button" onClick={handleGenerate} className="rtg-btn rtg-btn-primary">
                   Generate Teams
                 </button>
                 <button
                   type="button"
                   onClick={handleGenerate}
                   disabled={!result}
-                  className="tp-btn tp-btn-secondary"
+                  className="rtg-btn rtg-btn-secondary"
                   style={{ opacity: !result ? 0.5 : 1, cursor: !result ? 'not-allowed' : 'pointer' }}
                 >
                   Shuffle Again
                 </button>
-                <button type="button" onClick={handleClear} className="tp-btn tp-btn-danger">
+                <button type="button" onClick={handleClear} className="rtg-btn rtg-btn-danger">
                   Clear
                 </button>
               </div>
 
-              <div className="tp-note" style={{ marginTop: '20px' }}>
+              <div className="rtg-note" style={{ marginTop: '20px' }}>
                 <strong>Best-Effort Repeat Reduction:</strong> When generating rosters across multiple days, our scheduler runs background comparisons to minimize the amount of times the same teammates group together.
               </div>
             </div>
           </div>
 
           {/* Results Section */}
-          <div className="tp-card" ref={resultsRef}>
-            <div className="tp-card-body">
-              <div className="tp-results-header">
+          <div className="rtg-card" ref={resultsRef}>
+            <div className="rtg-card-body">
+              <div className="rtg-results-header">
                 <h3>Results</h3>
                 {result && (
-                  <div className="tp-results-actions">
+                  <div className="rtg-results-actions">
                     <button
                       type="button"
                       onClick={handleCopy}
-                      className="tp-action-btn"
+                      className="rtg-action-btn"
                     >
                       {copied ? '✓ Copied' : 'Copy Result'}
                     </button>
                     <button
                       type="button"
                       onClick={handlePrint}
-                      className="tp-action-btn"
+                      className="rtg-action-btn"
                     >
                       Download Result
                     </button>
                   </div>
                 )}
               </div>
-              {error && <div className="tp-empty" style={{ color: '#ef4444', borderColor: '#ef4444' }}>{error}</div>}
+              {error && <div className="rtg-empty" style={{ color: '#ef4444', borderColor: '#ef4444' }}>{error}</div>}
 
               {!error && !result && (
-                <div className="tp-empty">
+                <div className="rtg-empty">
                   Add names, choose team settings, then click <strong>Generate Teams</strong>.
                 </div>
               )}
 
               {!error && result && (
                 <>
-                  <div className="tp-summary">
-                    <div className="tp-pill">{result.totalNames} names</div>
-                    <div className="tp-pill">{result.teamCount} teams per day</div>
-                    <div className="tp-pill">{mode === 'multi' ? `${result.days} days` : 'single list'}</div>
+                  <div className="rtg-summary">
+                    <div className="rtg-pill">{result.totalNames} names</div>
+                    <div className="rtg-pill">{result.teamCount} teams per day</div>
+                    <div className="rtg-pill">{mode === 'multi' ? `${result.days} days` : 'single list'}</div>
                     {mode === 'multi' && (
                       <>
-                        <div className="tp-pill">Repeat reduction active</div>
-                        <div className="tp-pill">Teammate pairs repeated: {result.stats.repeatedPairs}</div>
+                        <div className="rtg-pill">Repeat reduction active</div>
+                        <div className="rtg-pill">Teammate pairs repeated: {result.stats.repeatedPairs}</div>
                       </>
                     )}
                   </div>
 
-                  <div className="tp-result-area">
-                    <div className="tp-days">
+                  <div className="rtg-result-area">
+                    <div className="rtg-days">
                       {result.schedule.map((day, dIdx) => (
-                        <div key={dIdx} className="tp-day-card">
-                          <div className="tp-day-head">{day.label}</div>
-                          <div className="tp-team-grid">
+                        <div key={dIdx} className="rtg-day-card">
+                          <div className="rtg-day-head">{day.label}</div>
+                          <div className="rtg-team-grid">
                             {day.teams.map((team, tIdx) => (
-                              <div key={tIdx} className="tp-team-card">
-                                <div className="tp-team-title">{teamName(tIdx)}</div>
-                                <ol className="tp-member-list">
+                              <div key={tIdx} className="rtg-team-card">
+                                <div className="rtg-team-title">{teamName(tIdx)}</div>
+                                <ol className="rtg-member-list">
                                   {team.map((member, mIdx) => (
                                     <li key={mIdx}>{member}</li>
                                   ))}
@@ -497,8 +497,8 @@ export default function TeamPlannerClient() {
       </div>
 
       {/* Usage Tips Section below the tool */}
-      <div className="tp-card tp-usage-card" style={{ marginTop: '30px' }}>
-        <div className="tp-card-body">
+      <div className="rtg-card rtg-usage-card" style={{ marginTop: '30px' }}>
+        <div className="rtg-card-body">
           <h3 style={{ marginBottom: '14px', fontSize: '18px', color: 'var(--text-main)' }}>Usage Tips</h3>
           <ul style={{ paddingLeft: '20px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
             <li style={{ marginBottom: '8px', fontSize: '14px' }}>
@@ -515,7 +515,7 @@ export default function TeamPlannerClient() {
       </div>
 
       {/* Ad Banner below usage tips */}
-      <div className="tp-ad-bottom" style={{ marginTop: '30px' }}>
+      <div className="rtg-ad-bottom" style={{ marginTop: '30px' }}>
         <AdBanner position="footer" />
       </div>
     </div>

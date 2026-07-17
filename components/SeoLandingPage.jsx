@@ -555,7 +555,11 @@ export default function SeoLandingPage({ data }) {
                         <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{alt.whenToChoose}</p>
                       </div>
                       <div style={{ flex: 1, minWidth: 240 }}>
-                        <strong style={{ fontSize: '13px', color: 'var(--primary)' }}>Why our Team Planner is better:</strong>
+                        <strong style={{ fontSize: '13px', color: 'var(--primary)' }}>
+                          Why our {data.seoMetadata?.primaryKeyword
+                            ? data.seoMetadata.primaryKeyword.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+                            : 'Tool'} is better:
+                        </strong>
                         <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{alt.whenThisIsBetter}</p>
                       </div>
                     </div>
@@ -594,9 +598,9 @@ export default function SeoLandingPage({ data }) {
                   onClick={() => {
                     const topElement =
                       document.querySelector('.chore-assigner-container') ||
-                      document.querySelector('.team-planner-container') ||
+                      document.querySelector('.random-team-generator-container') ||
                       document.querySelector('.ca-header') ||
-                      document.querySelector('.tp-header');
+                      document.querySelector('.rtg-header');
                     if (topElement) {
                       topElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     } else {

@@ -10,7 +10,8 @@
 - [Official Blog](https://toolsofsaas.com/blog)
 
 ## Curated Tools & Utilities
-- [Random Team Generator & Multiday Planner](https://toolsofsaas.com/tools/team-planner): An advanced random grouping tool and multiday scheduler. It automatically runs sorting loops to minimize teammate repeat matches, ensuring diverse peer collaborations in classrooms, projects, sprints, and speed networking workshops.
+- [Random Team Generator & Multiday Planner](https://toolsofsaas.com/tools/random-team-generator): An advanced random grouping tool and multiday scheduler. It automatically runs sorting loops to minimize teammate repeat matches, ensuring diverse peer collaborations in classrooms, projects, sprints, and speed networking workshops.
+- [Chore Assigner](https://toolsofsaas.com/tools/chore-assigner): An interactive household chore assigner and fair chore wheel generator. Employs a weighted workload scoring algorithm and an interactive spin wheel to balance tasks across roommates, kids, or family members fairly.
 
 ## Legal and Compliance Policies
 - [Privacy Policy](https://toolsofsaas.com/privacy)

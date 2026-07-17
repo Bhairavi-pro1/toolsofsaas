@@ -1,5 +1,5 @@
 import PageWrapper from '@/components/PageWrapper';
-import TeamPlannerClient from './TeamPlannerClient';
+import RandomTeamGeneratorClient from './RandomTeamGeneratorClient';
 import SeoLandingPage from '@/components/SeoLandingPage';
 import { teamPlannerSeoData } from './seoData';
 
@@ -28,10 +28,10 @@ export const metadata = {
   },
 };
 
-export default function TeamPlannerPage() {
+export default function RandomTeamGeneratorPage() {
   return (
     <PageWrapper>
-      <TeamPlannerClient />
+      <RandomTeamGeneratorClient />
       <SeoLandingPage data={teamPlannerSeoData} />
     </PageWrapper>
   );

@@ -39,7 +39,7 @@ export default function sitemap() {
       priority: 0.5,
     },
     {
-      url: `${siteUrl}/tools/team-planner`,
+      url: `${siteUrl}/tools/random-team-generator`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
