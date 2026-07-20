@@ -6,6 +6,8 @@ import { urlFor } from '@/sanity/lib/image';
 import PageWrapper from '@/components/PageWrapper';
 import AdBanner from '@/components/AdBanner';
 
+export const revalidate = 60;
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   let post = null;

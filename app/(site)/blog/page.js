@@ -5,6 +5,8 @@ import { urlFor } from '@/sanity/lib/image';
 import PageWrapper from '@/components/PageWrapper';
 import AdBanner from '@/components/AdBanner';
 
+export const revalidate = 60;
+
 export const metadata = {
   title: 'Blog - SaaS Insights, Tips & Web Tool Reviews',
   description:

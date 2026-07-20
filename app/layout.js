@@ -121,6 +121,11 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-R22W1REZVM');
           `}
         </Script>
+        <Script
+          src="https://acscdn.com/script/aclib.js"
+          id="aclib"
+          strategy="afterInteractive"
+        />
         {children}
       </body>
     </html>
