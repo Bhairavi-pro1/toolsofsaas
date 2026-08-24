@@ -2,61 +2,71 @@ import { urlFor } from '@/sanity/lib/image';
 import Link from 'next/link';
 
 export default function ToolCard({ tool, isUpcoming = false }) {
-  const cardContent = (
-    <>
-      <div className="tool-header">
-        <div className="tool-icon">
-          {tool.iconImage ? (
-            <img
-              src={urlFor(tool.iconImage).width(112).height(112).url()}
-              alt={`${tool.title} icon`}
-              width={56}
-              height={56}
-            />
-          ) : null}
-        </div>
-        <span className="badge">
-          {isUpcoming ? 'Coming Soon' : (tool.badge || 'Free')}
-        </span>
-      </div>
-      <div>
-        <div className="tool-title">{tool.title}</div>
-        <div className="tool-desc">{tool.description}</div>
-      </div>
-      <div className="tool-footer">
-        <span style={{ fontSize: 14, color: '#64748b' }}>{tool.tag}</span>
-        <span className="visit-btn">{isUpcoming ? 'Waitlist' : 'Visit'}</span>
-      </div>
-    </>
-  );
+  const slug = typeof tool.slug === 'string' ? tool.slug : tool.slug?.current;
+  const detailUrl = slug ? `/tool/${slug}` : (tool.href || '#');
 
-  if (isUpcoming) {
-    return (
-      <div className="tool-card coming-soon">
-        {cardContent}
-      </div>
-    );
-  }
-
-  const isInternal = tool.href && tool.href.startsWith('/');
-
-  if (isInternal) {
-    return (
-      <Link href={tool.href} className="tool-card">
-        {cardContent}
-      </Link>
-    );
-  }
+  // Subtitle / handle fallback
+  const authorHandle = tool.author ? tool.author.toLowerCase().replace(/[^a-z0-9]/g, '') : null;
+  const subtitleText = tool.subtitle || (authorHandle && slug ? `${authorHandle}/${slug}` : (tool.tag || 'Web Tool'));
 
   return (
-    <a
-      href={tool.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="tool-card"
-    >
-      {cardContent}
-    </a>
+    <Link href={detailUrl} className={`tool-card ${isUpcoming ? 'coming-soon' : ''}`}>
+      {/* Top Header: Logo + Title & Subtitle */}
+      <div className="tool-card-header">
+        <div className="tool-card-logo">
+          {tool.iconImage ? (
+            <img
+              src={urlFor(tool.iconImage).width(100).height(100).url()}
+              alt={`${tool.title} logo`}
+              width={48}
+              height={48}
+              loading="lazy"
+            />
+          ) : (
+            <span className="tool-card-logo-fallback">
+              {tool.title ? tool.title.charAt(0).toUpperCase() : 'T'}
+            </span>
+          )}
+        </div>
+
+        <div className="tool-card-meta">
+          <h3 className="tool-card-title">{tool.title}</h3>
+          <span className="tool-card-subtitle">{subtitleText}</span>
+        </div>
+      </div>
+
+      {/* Description Snippet */}
+      <p className="tool-card-desc">{tool.description}</p>
+
+      {/* Bottom Footer: Author Info (avatar strictly if uploaded) + Tag/Badge */}
+      <div className="tool-card-footer">
+        <div className="tool-card-author-box">
+          {tool.authorAvatar && (
+            <img
+              src={urlFor(tool.authorAvatar).width(44).height(44).url()}
+              alt={tool.author || 'Author'}
+              className="tool-card-avatar"
+              width={22}
+              height={22}
+            />
+          )}
+          {tool.author ? (
+            <span className="tool-card-author-name">{tool.author}</span>
+          ) : tool.tag ? (
+            <span className="tool-card-tag">{tool.tag}</span>
+          ) : null}
+        </div>
+
+        <div className="tool-card-badge-box">
+          {isUpcoming ? (
+            <span className="badge badge-upcoming">Coming Soon</span>
+          ) : (
+            <span className="badge">{tool.badge || tool.pricing || 'Free'}</span>
+          )}
+        </div>
+      </div>
+    </Link>
   );
 }
+
 

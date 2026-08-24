@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity';
+import { OrderInput } from '../components/OrderInput';
 
 export default defineType({
   name: 'upcomingTool',
@@ -43,7 +44,28 @@ export default defineType({
       title: 'Display Order',
       type: 'number',
       initialValue: 0,
-      description: 'Lower numbers appear first in the grid',
+      description: 'Lower numbers appear first in the grid (e.g., 0, 1, 2, ...)',
+      components: {
+        input: OrderInput,
+      },
+      validation: (Rule) =>
+        Rule.custom(async (value, context) => {
+          if (value === undefined || value === null) return true;
+          const client = context.getClient({ apiVersion: '2024-01-01' });
+          const id = (context.document?._id || '').replace(/^drafts\./, '');
+          const docType = context.document?._type || 'upcomingTool';
+
+          const duplicates = await client.fetch(
+            `*[_type == $docType && !(_id in [$id, "drafts." + $id]) && order == $value]{ title, order }`,
+            { docType, id, value }
+          );
+
+          if (duplicates && duplicates.length > 0) {
+            const first = duplicates[0];
+            return `Warning: Order ${value} is already assigned to "${first.title || 'another upcoming tool'}".`;
+          }
+          return true;
+        }).warning(),
     }),
   ],
   orderings: [
