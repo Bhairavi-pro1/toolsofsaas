@@ -1,6 +1,7 @@
 import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
 import Script from 'next/script';
+import { ADS_CONFIG, areAdsEnabled } from '@/lib/adsConfig';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -72,6 +73,8 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const adsEnabled = areAdsEnabled();
+
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
@@ -107,6 +110,14 @@ export default function RootLayout({ children }) {
             }),
           }}
         />
+        {/* Google AdSense verification / script (loaded only if Client ID is configured) */}
+        {ADS_CONFIG.adsenseClientId && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS_CONFIG.adsenseClientId}`}
+            crossOrigin="anonymous"
+          />
+        )}
       </head>
       <body>
         <Script
@@ -121,11 +132,14 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-R22W1REZVM');
           `}
         </Script>
-        <Script
-          src="https://acscdn.com/script/aclib.js"
-          id="aclib"
-          strategy="afterInteractive"
-        />
+        {/* Third-party ad script loaded only when ads are enabled */}
+        {adsEnabled && (
+          <Script
+            src="https://acscdn.com/script/aclib.js"
+            id="aclib"
+            strategy="afterInteractive"
+          />
+        )}
         {children}
       </body>
     </html>

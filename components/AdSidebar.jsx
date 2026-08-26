@@ -1,24 +1,27 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { ADS_CONFIG, areAdsEnabled } from '@/lib/adsConfig';
 
 export default function AdSidebar({ side = 'left', delay = 0 }) {
-  const zoneId = '11767662';
+  const isEnabled = areAdsEnabled();
+  const zoneId = ADS_CONFIG.adcash.sidebarZoneId;
   const [shouldRender, setShouldRender] = useState(delay === 0);
   const containerRef = useRef(null);
   const hasRunRef = useRef(false);
 
   useEffect(() => {
+    if (!isEnabled) return;
     if (delay > 0) {
       const timer = setTimeout(() => {
         setShouldRender(true);
       }, delay);
       return () => clearTimeout(timer);
     }
-  }, [delay]);
+  }, [isEnabled, delay]);
 
   useEffect(() => {
-    if (!shouldRender || !containerRef.current || hasRunRef.current) return;
+    if (!isEnabled || !shouldRender || !containerRef.current || hasRunRef.current) return;
 
     let timeoutId;
     const runAd = () => {
@@ -44,7 +47,11 @@ export default function AdSidebar({ side = 'left', delay = 0 }) {
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [shouldRender, zoneId]);
+  }, [isEnabled, shouldRender, zoneId]);
+
+  if (!isEnabled) {
+    return null;
+  }
 
   return (
     <aside className="ad-column">

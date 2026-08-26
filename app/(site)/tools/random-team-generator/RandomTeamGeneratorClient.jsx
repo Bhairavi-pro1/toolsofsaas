@@ -515,9 +515,7 @@ export default function RandomTeamGeneratorClient() {
       </div>
 
       {/* Ad Banner below usage tips */}
-      <div className="rtg-ad-bottom" style={{ marginTop: '30px' }}>
-        <AdBanner position="footer" />
-      </div>
+      <AdBanner position="footer" />
     </div>
   );
 }

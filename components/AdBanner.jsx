@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { ADS_CONFIG, areAdsEnabled } from '@/lib/adsConfig';
 
 export default function AdBanner({ position = 'header' }) {
-  const zoneId = '11767574';
+  const isEnabled = areAdsEnabled();
+  const zoneId = ADS_CONFIG.adcash.bannerZoneId;
   const containerRef = useRef(null);
   const hasRunRef = useRef(false);
 
@@ -20,7 +22,7 @@ export default function AdBanner({ position = 'header' }) {
   };
 
   useEffect(() => {
-    if (!containerRef.current || hasRunRef.current) return;
+    if (!isEnabled || !containerRef.current || hasRunRef.current) return;
 
     let timeoutId;
     const runAd = () => {
@@ -46,7 +48,11 @@ export default function AdBanner({ position = 'header' }) {
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [zoneId]);
+  }, [isEnabled, zoneId]);
+
+  if (!isEnabled) {
+    return null;
+  }
 
   return (
     <div className={`ad-placeholder ${classMap[position] || 'ad-header'}`}>

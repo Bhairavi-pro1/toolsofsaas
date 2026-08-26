@@ -14,137 +14,41 @@ const portableTextComponents = {
     image: ({ value }) => {
       if (!value) return null;
       return (
-        <div
-          style={{
-            position: 'relative',
-            width: '100%',
-            margin: '25px 0',
-            borderRadius: '14px',
-            overflow: 'hidden',
-            border: '1px solid var(--border)',
-            boxShadow: 'var(--shadow)',
-          }}
-        >
+        <div className="tool-detail-portable-img-box">
           <img
             src={urlFor(value).url()}
             alt={value.alt || 'Tool illustration'}
-            style={{ width: '100%', height: 'auto', display: 'block' }}
+            className="tool-detail-portable-img"
           />
         </div>
       );
     },
   },
   block: {
-    normal: ({ children }) => <p style={{ marginBottom: '16px', lineHeight: '1.75', fontSize: '15px', color: 'var(--text-muted)' }}>{children}</p>,
-    h2: ({ children }) => (
-      <h2
-        style={{
-          fontSize: '22px',
-          borderLeft: '4px solid var(--primary)',
-          paddingLeft: '12px',
-          margin: '28px 0 14px 0',
-          color: 'var(--text-main)',
-          fontFamily: 'var(--font-outfit), sans-serif',
-          fontWeight: '700',
-        }}
-      >
-        {children}
-      </h2>
-    ),
-    h3: ({ children }) => (
-      <h3
-        style={{
-          fontSize: '18px',
-          margin: '22px 0 10px 0',
-          color: 'var(--text-main)',
-          fontFamily: 'var(--font-outfit), sans-serif',
-          fontWeight: '600',
-        }}
-      >
-        {children}
-      </h3>
-    ),
-    blockquote: ({ children }) => (
-      <blockquote
-        style={{
-          borderLeft: '4px solid var(--secondary)',
-          paddingLeft: '16px',
-          fontStyle: 'italic',
-          margin: '20px 0',
-          color: 'var(--text-main)',
-          background: 'var(--input-bg)',
-          padding: '12px 16px',
-          borderRadius: '0 8px 8px 0',
-        }}
-      >
-        {children}
-      </blockquote>
-    ),
+    normal: ({ children }) => <p className="tool-detail-p">{children}</p>,
+    h2: ({ children }) => <h2 className="tool-detail-h2">{children}</h2>,
+    h3: ({ children }) => <h3 className="tool-detail-h3">{children}</h3>,
+    blockquote: ({ children }) => <blockquote className="tool-detail-quote">{children}</blockquote>,
   },
   list: {
-    bullet: ({ children }) => (
-      <ul
-        style={{
-          listStyleType: 'disc',
-          paddingLeft: '22px',
-          marginBottom: '18px',
-          color: 'var(--text-muted)',
-          fontSize: '15px',
-          lineHeight: '1.7',
-        }}
-      >
-        {children}
-      </ul>
-    ),
-    number: ({ children }) => (
-      <ol
-        style={{
-          listStyleType: 'decimal',
-          paddingLeft: '22px',
-          marginBottom: '18px',
-          color: 'var(--text-muted)',
-          fontSize: '15px',
-          lineHeight: '1.7',
-        }}
-      >
-        {children}
-      </ol>
-    ),
+    bullet: ({ children }) => <ul className="tool-detail-ul">{children}</ul>,
+    number: ({ children }) => <ol className="tool-detail-ol">{children}</ol>,
   },
   listItem: {
-    bullet: ({ children }) => (
-      <li style={{ marginBottom: '8px', lineHeight: '1.6', listStyle: 'inherit' }}>{children}</li>
-    ),
-    number: ({ children }) => (
-      <li style={{ marginBottom: '8px', lineHeight: '1.6', listStyle: 'inherit' }}>{children}</li>
-    ),
+    bullet: ({ children }) => <li className="tool-detail-li">{children}</li>,
+    number: ({ children }) => <li className="tool-detail-li">{children}</li>,
   },
   marks: {
-    strong: ({ children }) => (
-      <strong style={{ color: 'var(--text-main)', fontWeight: '600' }}>{children}</strong>
-    ),
-    code: ({ children }) => (
-      <code
-        style={{
-          fontFamily: 'monospace',
-          fontSize: '14px',
-          background: 'var(--border)',
-          padding: '2px 6px',
-          borderRadius: '4px',
-          color: 'var(--text-main)',
-        }}
-      >
-        {children}
-      </code>
-    ),
+    strong: ({ children }) => <strong>{children}</strong>,
+    code: ({ children }) => <code>{children}</code>,
     link: ({ children, value }) => {
-      const rel = value?.href && !value.href.startsWith('/') ? 'noreferrer noopener' : undefined;
+      const target = (value?.href || '').startsWith('http') ? '_blank' : undefined;
       return (
         <a
-          href={value?.href || '#'}
-          rel={rel}
-          target={value?.href && !value.href.startsWith('/') ? '_blank' : undefined}
-          style={{ color: 'var(--primary)', textDecoration: 'underline' }}
+          href={value?.href}
+          target={target}
+          rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+          className="tool-detail-link"
         >
           {children}
         </a>
