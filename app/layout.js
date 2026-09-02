@@ -70,6 +70,9 @@ export const metadata = {
   alternates: {
     canonical: siteUrl,
   },
+  other: {
+    monetag: 'b5ca600ae5298abd1b918cbbb9c0560c',
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -78,6 +81,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
+        <meta name="monetag" content="b5ca600ae5298abd1b918cbbb9c0560c" />
         <script
           id="theme-initializer"
           dangerouslySetInnerHTML={{
