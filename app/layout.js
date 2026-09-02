@@ -82,6 +82,12 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
         <meta name="monetag" content="b5ca600ae5298abd1b918cbbb9c0560c" />
+        {/* Monetag Vignette Ad Tag */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(s){s.dataset.zone='11710230',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`,
+          }}
+        />
         <script
           id="theme-initializer"
           dangerouslySetInnerHTML={{
