@@ -17,7 +17,11 @@ const outfit = Outfit({
   display: 'swap',
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.RENDER_EXTERNAL_URL
+    ? `https://${process.env.RENDER_EXTERNAL_URL.replace(/^https?:\/\//, '')}`
+    : 'https://toolsofsaas.com');
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -26,7 +30,7 @@ export const metadata = {
     template: '%s | ToolsOfSaaS',
   },
   description:
-    'ToolsOfSaaS is the ultimate directory for powerful web-based tools and SaaS solutions. Explore curated tools for productivity, development, design, and marketing.',
+    'ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow.',
   keywords: [
     'SaaS directory',
     'web tools',
@@ -47,13 +51,21 @@ export const metadata = {
     siteName: 'ToolsOfSaaS',
     title: 'ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions',
     description:
-      'Ultimate directory for powerful web-based tools and SaaS solutions. Discover tools to supercharge your workflow.',
+      'ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow.',
     images: [
       {
         url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'ToolsOfSaaS - Web Tools Directory',
+        width: 640,
+        height: 640,
+        type: 'image/png',
+        alt: 'ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions',
+      },
+      {
+        url: '/logo.png',
+        width: 512,
+        height: 512,
+        type: 'image/png',
+        alt: 'ToolsOfSaaS Logo',
       },
     ],
   },
@@ -61,11 +73,12 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions',
     description:
-      'Ultimate directory for powerful web-based tools and SaaS solutions. Discover tools to supercharge your workflow.',
+      'ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow.',
     images: ['/og-image.png'],
   },
   icons: {
     icon: '/favicon.png',
+    apple: '/favicon.png',
   },
   alternates: {
     canonical: siteUrl,
@@ -78,6 +91,28 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
+        {/* OpenGraph / Social Media Link Preview Meta Tags */}
+        <meta property="og:site_name" content="ToolsOfSaaS" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions" />
+        <meta
+          property="og:description"
+          content="ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow."
+        />
+        <meta property="og:image" content={`${siteUrl}/og-image.png`} />
+        <meta property="og:image:secure_url" content={`${siteUrl}/og-image.png`} />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="640" />
+        <meta property="og:image:height" content="640" />
+        <meta property="og:image:alt" content="ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions" />
+        <meta
+          name="twitter:description"
+          content="ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow."
+        />
+        <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
+
         <script
           id="theme-initializer"
           dangerouslySetInnerHTML={{
