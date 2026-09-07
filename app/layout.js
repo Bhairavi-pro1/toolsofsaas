@@ -21,7 +21,7 @@ const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.RENDER_EXTERNAL_URL
     ? `https://${process.env.RENDER_EXTERNAL_URL.replace(/^https?:\/\//, '')}`
-    : 'https://toolsofsaas.com');
+    : 'https://toolsofsaas.onrender.com');
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
@@ -54,27 +54,34 @@ export const metadata = {
       'ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow.',
     images: [
       {
-        url: '/og-image.png',
-        width: 640,
-        height: 640,
-        type: 'image/png',
-        alt: 'ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions',
-      },
-      {
         url: '/logo.png',
         width: 512,
         height: 512,
         type: 'image/png',
         alt: 'ToolsOfSaaS Logo',
       },
+      {
+        url: '/favicon.png',
+        width: 500,
+        height: 500,
+        type: 'image/png',
+        alt: 'ToolsOfSaaS Favicon',
+      },
+      {
+        url: '/og-image.png',
+        width: 640,
+        height: 640,
+        type: 'image/png',
+        alt: 'ToolsOfSaaS Banner',
+      },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
     title: 'ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions',
     description:
       'ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow.',
-    images: ['/og-image.png'],
+    images: ['/logo.png'],
   },
   icons: {
     icon: '/favicon.png',
@@ -99,19 +106,21 @@ export default function RootLayout({ children }) {
           property="og:description"
           content="ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow."
         />
-        <meta property="og:image" content={`${siteUrl}/og-image.png`} />
-        <meta property="og:image:secure_url" content={`${siteUrl}/og-image.png`} />
+        <meta property="og:image" content={`${siteUrl}/logo.png`} />
+        <meta property="og:image:secure_url" content={`${siteUrl}/logo.png`} />
         <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="640" />
-        <meta property="og:image:height" content="640" />
-        <meta property="og:image:alt" content="ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions" />
-        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:image:width" content="512" />
+        <meta property="og:image:height" content="512" />
+        <meta property="og:image:alt" content="ToolsOfSaaS Logo" />
+        <link rel="image_src" href={`${siteUrl}/logo.png`} />
+        <meta itemprop="image" content={`${siteUrl}/logo.png`} />
+        <meta name="twitter:card" content="summary" />
         <meta name="twitter:title" content="ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions" />
         <meta
           name="twitter:description"
           content="ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow."
         />
-        <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
+        <meta name="twitter:image" content={`${siteUrl}/logo.png`} />
 
         <script
           id="theme-initializer"
