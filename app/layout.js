@@ -70,6 +70,9 @@ export const metadata = {
   alternates: {
     canonical: siteUrl,
   },
+  other: {
+    verification: 'Vd3n41F',
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -78,6 +81,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
+        {/* Ownership Verification */}
+        <meta name="verification" content="Vd3n41F" />
+        <meta name="publisher-verification" content="Vd3n41F" />
         <script
           id="theme-initializer"
           dangerouslySetInnerHTML={{
