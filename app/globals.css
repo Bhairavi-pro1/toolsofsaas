@@ -225,8 +225,8 @@ a {
   width: 160px;
   height: 600px;
   background: var(--bg-card);
-  border: 1px dashed var(--border-hover);
-  border-radius: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -253,10 +253,9 @@ a {
    ═══════════════════════════════════════ */
 .ad-placeholder {
   background: var(--bg-card);
-  border: 1px dashed var(--border-hover);
-  border-radius: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -320,6 +319,35 @@ a {
 .ad-header { width: 100%; max-width: 900px; height: 90px; margin: 0 auto 40px auto; }
 .ad-footer { width: 100%; max-width: 900px; height: 90px; margin: 60px auto 20px auto; }
 .ad-in-feed { grid-column: 1 / -1; height: 120px; width: 100%; margin: 20px 0; }
+
+/* 320x50 Mobile Ad Banner */
+.ad-mobile-banner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+  height: 50px;
+  margin: 15px auto 25px auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+@media (min-width: 768px) {
+  .ad-mobile-only {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .ad-desktop-only {
+    display: none !important;
+  }
+}
+
 
 /* ═══════════════════════════════════════
    HERO

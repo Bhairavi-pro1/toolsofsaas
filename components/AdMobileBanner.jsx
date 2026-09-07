@@ -2,18 +2,11 @@
 
 import { useEffect, useRef } from 'react';
 import { ADS_CONFIG, areAdsEnabled } from '@/lib/adsConfig';
-import AdMobileBanner from './AdMobileBanner';
 
-export default function AdBanner({ position = 'header' }) {
+export default function AdMobileBanner({ className = '' }) {
   const isEnabled = areAdsEnabled();
-  const adKey = ADS_CONFIG.highRevenueFormat?.bannerKey || 'e2051dca3c2bb317ee62af29706f4816';
+  const adKey = ADS_CONFIG.highRevenueFormat?.mobileBannerKey || '08c962ba39cc51ed22ba2dd21a43b419';
   const containerRef = useRef(null);
-
-  const classMap = {
-    header: 'ad-header',
-    footer: 'ad-footer',
-    'in-feed': 'ad-in-feed',
-  };
 
   useEffect(() => {
     if (!isEnabled || !containerRef.current) return;
@@ -21,11 +14,11 @@ export default function AdBanner({ position = 'header' }) {
     containerRef.current.innerHTML = '';
 
     const iframe = document.createElement('iframe');
-    iframe.width = '728';
-    iframe.height = '90';
-    iframe.title = `Advertisement ${position}`;
-    iframe.style.width = '728px';
-    iframe.style.height = '90px';
+    iframe.width = '320';
+    iframe.height = '50';
+    iframe.title = 'Mobile Advertisement';
+    iframe.style.width = '320px';
+    iframe.style.height = '50px';
     iframe.style.maxWidth = '100%';
     iframe.style.border = 'none';
     iframe.style.overflow = 'hidden';
@@ -46,8 +39,8 @@ export default function AdBanner({ position = 'header' }) {
               html, body {
                 margin: 0;
                 padding: 0;
-                width: 728px;
-                height: 90px;
+                width: 320px;
+                height: 50px;
                 overflow: hidden;
                 display: flex;
                 justify-content: center;
@@ -61,8 +54,8 @@ export default function AdBanner({ position = 'header' }) {
               atOptions = {
                 'key' : '${adKey}',
                 'format' : 'iframe',
-                'height' : 90,
-                'width' : 728,
+                'height' : 50,
+                'width' : 320,
                 'params' : {}
               };
             </script>
@@ -72,23 +65,19 @@ export default function AdBanner({ position = 'header' }) {
       `);
       doc.close();
     }
-  }, [isEnabled, adKey, position]);
+  }, [isEnabled, adKey]);
 
   if (!isEnabled) {
     return null;
   }
 
   return (
-    <>
-      <div className={`ad-desktop-only ad-placeholder ${classMap[position] || 'ad-header'}`}>
-        <div
-          className="ad-script-container"
-          ref={containerRef}
-          style={{ width: '100%', minHeight: '90px', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}
-        />
-      </div>
-      <AdMobileBanner />
-    </>
+    <div className={`ad-mobile-only ad-mobile-banner ${className}`}>
+      <div
+        className="ad-script-container"
+        ref={containerRef}
+        style={{ width: '320px', height: '50px', overflow: 'hidden' }}
+      />
+    </div>
   );
 }
-

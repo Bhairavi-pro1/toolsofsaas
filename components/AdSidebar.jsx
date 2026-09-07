@@ -1,53 +1,75 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ADS_CONFIG, areAdsEnabled } from '@/lib/adsConfig';
 
 export default function AdSidebar({ side = 'left', delay = 0 }) {
   const isEnabled = areAdsEnabled();
-  const zoneId = ADS_CONFIG.adcash.sidebarZoneId;
-  const [shouldRender, setShouldRender] = useState(delay === 0);
+  const adKey = ADS_CONFIG.highRevenueFormat?.skyscraperKey || 'd1720e24b3eaaa5aa2f04f6480f4f69c';
   const containerRef = useRef(null);
-  const hasRunRef = useRef(false);
 
   useEffect(() => {
-    if (!isEnabled) return;
-    if (delay > 0) {
-      const timer = setTimeout(() => {
-        setShouldRender(true);
-      }, delay);
-      return () => clearTimeout(timer);
-    }
-  }, [isEnabled, delay]);
+    if (!isEnabled || !containerRef.current) return;
 
-  useEffect(() => {
-    if (!isEnabled || !shouldRender || !containerRef.current || hasRunRef.current) return;
+    const timer = setTimeout(() => {
+      if (!containerRef.current) return;
+      containerRef.current.innerHTML = '';
 
-    let timeoutId;
-    const runAd = () => {
-      if (window.aclib && typeof window.aclib.runBanner === 'function') {
-        try {
-          hasRunRef.current = true;
-          const script = document.createElement('script');
-          script.type = 'text/javascript';
-          script.text = `aclib.runBanner({ zoneId: '${zoneId}' });`;
-          if (containerRef.current) {
-            containerRef.current.appendChild(script);
-          }
-        } catch (e) {
-          console.error('Adcash runBanner error:', e);
-        }
-      } else {
-        timeoutId = setTimeout(runAd, 200);
+      const iframe = document.createElement('iframe');
+      iframe.width = '160';
+      iframe.height = '600';
+      iframe.title = `Advertisement ${side}`;
+      iframe.style.width = '160px';
+      iframe.style.height = '600px';
+      iframe.style.border = 'none';
+      iframe.style.overflow = 'hidden';
+      iframe.scrolling = 'no';
+      iframe.setAttribute('frameborder', '0');
+
+      containerRef.current.appendChild(iframe);
+
+      const doc = iframe.contentWindow?.document || iframe.contentDocument;
+      if (doc) {
+        doc.open();
+        doc.write(`
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <style>
+                html, body {
+                  margin: 0;
+                  padding: 0;
+                  width: 160px;
+                  height: 600px;
+                  overflow: hidden;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  background: transparent;
+                }
+              </style>
+            </head>
+            <body>
+              <script type="text/javascript">
+                atOptions = {
+                  'key' : '${adKey}',
+                  'format' : 'iframe',
+                  'height' : 600,
+                  'width' : 160,
+                  'params' : {}
+                };
+              </script>
+              <script type="text/javascript" src="https://www.highrevenueformat.com/${adKey}/invoke.js"></script>
+            </body>
+          </html>
+        `);
+        doc.close();
       }
-    };
+    }, delay);
 
-    runAd();
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [isEnabled, shouldRender, zoneId]);
+    return () => clearTimeout(timer);
+  }, [isEnabled, adKey, delay, side]);
 
   if (!isEnabled) {
     return null;
@@ -56,14 +78,7 @@ export default function AdSidebar({ side = 'left', delay = 0 }) {
   return (
     <aside className="ad-column">
       <div className="ad-sticky">
-        <div className="ad-placeholder-label">
-          <span className="ad-icon">📢</span>
-          <span className="ad-text">Advertisement</span>
-          <span className="ad-size">160 × 600</span>
-        </div>
-        {shouldRender && (
-          <div className="ad-script-container" ref={containerRef} />
-        )}
+        <div ref={containerRef} style={{ width: '160px', height: '600px', overflow: 'hidden' }} />
       </div>
     </aside>
   );
