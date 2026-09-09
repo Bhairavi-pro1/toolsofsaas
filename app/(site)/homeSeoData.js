@@ -1,20 +1,24 @@
 export const homeSeoData = {
-  h1: "Discover the Best Free SaaS Tools & Web Utilities",
+  h1: "Hand-Picked Free Web Tools & Instant Browser Utilities",
   whyChooseUs: {
-    title: "Why Choose ToolsOfSaaS?",
-    description: "ToolsOfSaaS was created to simplify digital workspaces by offering a curated catalog of high-performance, web-based tools. We eliminate the friction of searching through bloated software marketplaces, providing immediate access to utilities that run right in your browser.",
+    title: "Why Hand-Crafted Browser Utilities Beat Bloated Marketplaces",
+    description: "Instead of overwhelming you with thousands of paywalled, complex SaaS listings, ToolsOfSaaS delivers a focused, hand-picked suite of lightweight web utilities that do one job exceptionally well — running 100% locally in your browser.",
     points: [
       {
-        title: "Client-Side Privacy First",
-        desc: "Unlike other directories that direct you to data-collecting tools, we focus on client-side utilities. Your input data (rosters, text, codes) stays secure in local browser memory and is never uploaded."
+        title: "Client-Side Privacy Guarantee",
+        desc: "All computations, transformations, and team scheduling algorithms execute directly in your local browser memory. Your data, text, and inputs are never transmitted to external servers or logged in remote databases."
       },
       {
-        title: "Zero Installations & Registrations",
-        desc: "No account setups, email verification, or credit cards. Click on any tool and start working in one second, bypassing strict corporate IT installation reviews."
+        title: "Zero Signups & Instant Access",
+        desc: "Skip tedious registrations, email verifications, and credit card requirements. Every tool is ready to use the moment you open it, bypassing corporate IT review delays."
       },
       {
-        title: "Curated & Verified Quality",
-        desc: "Every single tool in our directory undergoes verification for speed, browser compatibility, mobile responsiveness, and clean ad layouts."
+        title: "Curated Utility Focus",
+        desc: "Rather than indexing massive catalogs of untested links, each tool in our collection is purposefully crafted for fast execution, responsive mobile layouts, and zero-distraction workflows."
+      },
+      {
+        title: "100% Free Forever",
+        desc: "No hidden subscription tiers, trial expirations, export watermarks, or usage limits. Every feature across all utilities is completely open and free for daily personal and team use."
       }
     ]
   },
@@ -23,106 +27,101 @@ export const homeSeoData = {
     title: "How to Use ToolsOfSaaS",
     steps: [
       {
-        title: "Explore the Directory Grid",
-        desc: "Scroll through our homepage to view the curated grid of featured utilities, organized by categories like productivity, developers, and marketing."
+        title: "Select a Hand-Picked Utility",
+        desc: "Browse our focused catalog of productivity generators, formatting tools, and developer utilities right on the homepage grid."
       },
       {
-        title: "Use Smart Live Search",
-        desc: "Type names or functions (e.g., 'planner', 'team generator') into the search bar. The grid filters instantly to show relevant SaaS tools."
+        title: "Filter by Keyword or Category",
+        desc: "Use the instant search bar to find the exact micro-tool you need — such as team generators, multiday planners, or code formatters."
       },
       {
-        title: "Launch Instantly",
-        desc: "Click 'Visit Tool' on any card. The page opens the utility directly inside your browser ready to receive text inputs."
+        title: "Run Instantly in Your Browser",
+        desc: "Launch any tool with zero wait time. Input your data, customize parameters, and see real-time results computed client-side."
       },
       {
-        title: "Configure and Run",
-        desc: "Adjust parameters, copy results to your clipboard in one click, or export clean print PDFs without advertising blocks."
+        title: "Copy or Export in One Click",
+        desc: "Extract formatted results straight to your clipboard, or export clean PDFs and text files without unwanted watermarks or advertisements."
       }
     ]
   },
 
   benefits: {
-    title: "Core Benefits of Our Web Tools Directory",
+    title: "Core Benefits of Client-Side Web Utilities",
     items: [
       {
-        title: "High Performance",
-        desc: "Utilities are optimized with clean JavaScript to execute operations in milliseconds under low system resources."
+        title: "Blazing Execution Speed",
+        desc: "Without server round-trips or database latency, tools calculate and generate outputs in milliseconds directly using your device hardware."
       },
       {
-        title: "Cross-Device Harmony",
-        desc: "Every page is built to display beautifully on desktop screens, tablets, and mobile smartphones alike."
+        title: "Enterprise & Classroom Safe",
+        desc: "Because no sensitive roster names or company data leave your machine, tools meet strict compliance standards (GDPR, FERPA, internal privacy policies)."
       },
       {
-        title: "Completely Free Utility Hub",
-        desc: "No premium locks, credits, or hidden payments. Access full tool features without limits or paywalls."
+        title: "Seamless Mobile & Desktop Harmony",
+        desc: "Engineered with responsive touch controls and clean viewports so you can generate teams or run utilities from smartphones, tablets, or workstations."
       },
       {
-        title: "Offline Operations",
-        desc: "Since scripts run locally, once loaded in your browser, many tools continue to run without an active internet connection."
+        title: "Offline-Ready Architecture",
+        desc: "Once cached by your browser, core scripts continue operating smoothly even if your internet connection drops or you work on the go."
       }
     ]
   },
 
   keyFeatures: {
-    title: "Directory Key Features",
+    title: "Platform Highlights & Tool Architecture",
     cards: [
       {
-        title: "Dynamic Grid Filtering",
-        desc: "Instantly switches between categories and filters search keywords without reloading pages."
+        title: "Instant Live Filtering",
+        desc: "Search and discover utilities without page refreshes, powered by lightweight client-side state."
       },
       {
-        title: "Visual Theme Adapter",
-        desc: "Smoothly switches between dark and light themes using CSS variables to reduce eye fatigue."
+        title: "Adaptive Dark & Light Theme",
+        desc: "Switch between modern dark mode and high-contrast light mode to fit your preferred workspace environment."
       },
       {
-        title: "Next.js Static Prerendering",
-        desc: "Pages load in milliseconds, optimized with dynamic sitemaps and meta tags for Google indexing."
+        title: "Zero-Data Telemetry",
+        desc: "Built from the ground up to respect user confidentiality — zero tracking of input contents, rosters, or code."
       },
       {
-        title: "Minimal Ad Layouts",
-        desc: "Ad banners are placed carefully to support development costs without blocking your interactive workflow."
+        title: "Non-Intrusive Workflow",
+        desc: "Clean user interfaces without pop-up traps, paywall gates, or compulsory newsletter signups."
       }
     ]
   },
 
   comparison: {
-    title: "How We Compare with Standard Software Platforms",
-    headers: ["Feature", "ToolsOfSaaS Directory", "ProductHunt", "AlternativeTo", "G2 & Capterra"],
+    title: "How ToolsOfSaaS Compares with Traditional Tool Outlets",
+    headers: ["Feature / Metric", "ToolsOfSaaS (Instant Tools)", "Standard Online Converters", "Heavy Cloud SaaS Apps"],
     rows: [
       {
-        metric: "Price Model",
-        ours: "100% Free Tools",
-        ph: "Varies (mostly paid)",
-        alt: "Varies (paid and free)",
-        g2: "Paid enterprise licenses"
+        metric: "Access Friction",
+        ours: "Instant 1-Click (Zero Signup)",
+        others: ["Ad redirects & captcha gates", "Mandatory sign-up & email confirmation"]
       },
       {
-        metric: "Login Requirement",
-        ours: "None (zero signup)",
-        ph: "Required to interact",
-        alt: "Required for reviews",
-        g2: "Required for dashboards"
+        metric: "Data Privacy",
+        ours: "100% Client-Side (Zero Storage)",
+        others: ["Server-side uploads & log retention", "Cloud database synchronization & tracking"]
       },
       {
-        metric: "Local Processing",
-        ours: "Yes (client-side privacy)",
-        ph: "No (cloud-based SaaS)",
-        alt: "No",
-        g2: "No"
+        metric: "Cost & Limits",
+        ours: "100% Free Forever (No Paywalls)",
+        others: ["Freemium limits & locked exports", "Paid subscriptions ($15–$50/month)"]
       },
       {
-        metric: "Mobile Interface",
-        ours: "Fully Responsive Layout",
-        ph: "App/Desktop focus",
-        alt: "Cluttered ad layout",
-        g2: "Desktop dashboard focus"
+        metric: "Execution Latency",
+        ours: "Instant in-browser JS (0 ms delay)",
+        others: ["Server queue processing wait times", "Heavy dashboard download & network latency"]
       },
       {
-        metric: "Installation",
-        ours: "None (runs in browser)",
-        ph: "Varies by product",
-        alt: "Varies",
-        g2: "Desktop software focused"
+        metric: "User Experience",
+        ours: "Clean, distraction-free interface",
+        others: ["Cluttered with popups & interstitial ads", "Complex navigation & feature bloat"]
+      },
+      {
+        metric: "Offline Capability",
+        ours: "Runs offline once cached",
+        others: ["Requires constant internet connection", "Fails without active cloud connection"]
       }
     ]
   },
@@ -130,23 +129,23 @@ export const homeSeoData = {
   faqs: [
     {
       q: "What is ToolsOfSaaS?",
-      a: "ToolsOfSaaS is a curated online directory offering quick, free, browser-based utilities and SaaS software. We help users find lightweight tools to complete tasks like generating random teams, parsing code, and managing content without downloading software."
+      a: "ToolsOfSaaS is a focused collection of 100% free, hand-picked browser utilities and micro-tools. We specialize in fast, client-side applications like team generators, scheduling planners, and productivity tools that run directly in your browser without requiring accounts or software downloads."
     },
     {
-      q: "Are the tools on this website safe to use?",
-      a: "Yes. All featured utilities focus on client-side execution, meaning calculations are processed in your local browser memory. None of the text, list of names, or data assets you enter are sent to our servers, assuring FERPA and GDPR compliance."
+      q: "Why focus on a hand-picked collection instead of thousands of directory listings?",
+      a: "Massive software directories often list thousands of outdated, paywalled, or abandonware tools that require tedious registrations. ToolsOfSaaS takes the opposite approach: we offer a carefully vetted set of high-utility tools where every feature works immediately, client-side, with zero friction."
     },
     {
-      q: "How does the search directory work?",
-      a: "Our homepage features a smart search bar that filters the list of tools dynamically. You can search by name, functionality, or category. You can also filter tool cards by clicking on category buttons at the top of the grid."
+      q: "Is my data private when using ToolsOfSaaS utilities?",
+      a: "Yes, completely. Our tools execute locally in your web browser using JavaScript. The names, text, files, and calculations you input are processed in your device's memory and are never uploaded, logged, or stored on our servers."
     },
     {
-      q: "Is there any charge to use the SaaS utilities?",
-      a: "No. All tools cataloged in the ToolsOfSaaS directory are completely free to use. We support server and maintenance costs through non-intrusive advertisement banners, ensuring no paywalls are added."
+      q: "Are there any hidden costs, paywalls, or export limits?",
+      a: "No. All tools on ToolsOfSaaS are 100% free to use with all features unlocked. We support hosting and ongoing development through non-intrusive banner placements, ensuring no paywalls, credits, or subscription locks."
     },
     {
-      q: "Can I submit my own SaaS tool to the directory?",
-      a: "Yes. We accept tool submissions. You can reach out to us through our Contact Us page to submit your application for review and potential indexing in our directory."
+      q: "Can I use these tools on mobile devices or offline?",
+      a: "Yes. Every tool is built with a responsive interface optimized for mobile phones, tablets, and desktop computers. Because the logic runs locally in your browser, once a tool page is loaded, many utilities will continue functioning even without an active internet connection."
     }
   ],
 
@@ -158,7 +157,7 @@ export const homeSeoData = {
         "@id": "https://toolsofsaas.com#website",
         "url": "https://toolsofsaas.com",
         "name": "ToolsOfSaaS",
-        "description": "Curated directory of the best free web-based tools and SaaS utilities.",
+        "description": "Hand-picked suite of free, privacy-first web utilities and instant browser micro-tools.",
         "publisher": {
           "@type": "Organization",
           "name": "ToolsOfSaaS",
@@ -182,23 +181,39 @@ export const homeSeoData = {
             "name": "What is ToolsOfSaaS?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "ToolsOfSaaS is a curated online directory offering quick, free, browser-based utilities and SaaS software. We help users find lightweight tools to complete tasks like generating random teams, parsing code, and managing content without downloading software."
+              "text": "ToolsOfSaaS is a focused collection of 100% free, hand-picked browser utilities and micro-tools. We specialize in fast, client-side applications like team generators, scheduling planners, and productivity tools that run directly in your browser without requiring accounts or software downloads."
             }
           },
           {
             "@type": "Question",
-            "name": "Are the tools on this website safe to use?",
+            "name": "Why focus on a hand-picked collection instead of thousands of directory listings?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes. All featured utilities focus on client-side execution, meaning calculations are processed in your local browser memory. None of the text, list of names, or data assets you enter are sent to our servers, assuring FERPA and GDPR compliance."
+              "text": "Massive software directories often list thousands of outdated, paywalled, or abandonware tools that require tedious registrations. ToolsOfSaaS takes the opposite approach: we offer a carefully vetted set of high-utility tools where every feature works immediately, client-side, with zero friction."
             }
           },
           {
             "@type": "Question",
-            "name": "How does the search directory work?",
+            "name": "Is my data private when using ToolsOfSaaS utilities?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Our homepage features a smart search bar that filters the list of tools dynamically. You can search by name, functionality, or category. You can also filter tool cards by clicking on category buttons at the top of the grid."
+              "text": "Yes, completely. Our tools execute locally in your web browser using JavaScript. The names, text, files, and calculations you input are processed in your device's memory and are never uploaded, logged, or stored on our servers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are there any hidden costs, paywalls, or export limits?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. All tools on ToolsOfSaaS are 100% free to use with all features unlocked. We support hosting and ongoing development through non-intrusive banner placements, ensuring no paywalls, credits, or subscription locks."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use these tools on mobile devices or offline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Every tool is built with a responsive interface optimized for mobile phones, tablets, and desktop computers. Because the logic runs locally in your browser, once a tool page is loaded, many utilities will continue functioning even without an active internet connection."
             }
           }
         ]
@@ -206,3 +221,4 @@ export const homeSeoData = {
     ]
   }
 };
+

@@ -11,13 +11,6 @@ export const metadata = {
   title: 'Blog - SaaS Insights, Tips & Web Tool Reviews',
   description:
     'Stay up to date with the latest SaaS tools, digital workflows, tutorials, and productivity guides on the ToolsOfSaaS blog.',
-  keywords: [
-    'SaaS blog',
-    'web tools reviews',
-    'productivity tips',
-    'developer resources',
-    'software tools guide',
-  ],
   alternates: {
     canonical: '/blog',
   },

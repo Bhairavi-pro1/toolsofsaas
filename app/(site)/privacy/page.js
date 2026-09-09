@@ -6,13 +6,6 @@ export const metadata = {
   title: 'Privacy Policy - Your Data Safety & Privacy',
   description:
     'Learn how ToolsOfSaaS protects your privacy and handles your data. Our privacy policy outlines our commitment to transparency and security.',
-  keywords: [
-    'privacy policy',
-    'data protection',
-    'toolsofsaas privacy',
-    'web tools safety',
-    'user data security',
-  ],
   robots: {
     index: true,
     follow: true,

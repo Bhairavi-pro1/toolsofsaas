@@ -26,32 +26,20 @@ const siteUrl =
 export const metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions',
+    default: 'ToolsOfSaaS - Free Browser Utilities & Client-Side Web Tools',
     template: '%s | ToolsOfSaaS',
   },
   description:
-    'ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow.',
-  keywords: [
-    'SaaS directory',
-    'web tools',
-    'productivity tools',
-    'developer tools',
-    'free web apps',
-    'ToolsOfSaaS',
-    'design tools',
-    'marketing tools',
-    'SaaS tools',
-    'best web apps',
-  ],
+    'Hand-picked suite of fast, 100% free web utilities and browser tools. Zero signups, zero server data storage, and instant client-side execution.',
   authors: [{ name: 'ToolsOfSaaS Team' }],
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: siteUrl,
     siteName: 'ToolsOfSaaS',
-    title: 'ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions',
+    title: 'ToolsOfSaaS - Free Browser Utilities & Client-Side Web Tools',
     description:
-      'ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow.',
+      'Hand-picked suite of fast, 100% free web utilities and browser tools. Zero signups, zero server data storage, and instant client-side execution.',
     images: [
       {
         url: '/logo.png',
@@ -78,9 +66,9 @@ export const metadata = {
   },
   twitter: {
     card: 'summary',
-    title: 'ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions',
+    title: 'ToolsOfSaaS - Free Browser Utilities & Client-Side Web Tools',
     description:
-      'ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow.',
+      'Hand-picked suite of fast, 100% free web utilities and browser tools. Zero signups, zero server data storage, and instant client-side execution.',
     images: ['/logo.png'],
   },
   icons: {
@@ -101,10 +89,10 @@ export default function RootLayout({ children }) {
         {/* OpenGraph / Social Media Link Preview Meta Tags */}
         <meta property="og:site_name" content="ToolsOfSaaS" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions" />
+        <meta property="og:title" content="ToolsOfSaaS - Free Browser Utilities & Client-Side Web Tools" />
         <meta
           property="og:description"
-          content="ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow."
+          content="Hand-picked suite of fast, 100% free web utilities and browser tools. Zero signups, zero server data storage, and instant client-side execution."
         />
         <meta property="og:image" content={`${siteUrl}/logo.png`} />
         <meta property="og:image:secure_url" content={`${siteUrl}/logo.png`} />
@@ -115,10 +103,10 @@ export default function RootLayout({ children }) {
         <link rel="image_src" href={`${siteUrl}/logo.png`} />
         <meta itemprop="image" content={`${siteUrl}/logo.png`} />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="ToolsOfSaaS - Discover Best Web Tools & SaaS Solutions" />
+        <meta name="twitter:title" content="ToolsOfSaaS - Free Browser Utilities & Client-Side Web Tools" />
         <meta
           name="twitter:description"
-          content="ToolsOfSaaS is the ultimate curated directory for discovering powerful web-based tools and SaaS solutions to supercharge your workflow."
+          content="Hand-picked suite of fast, 100% free web utilities and browser tools. Zero signups, zero server data storage, and instant client-side execution."
         />
         <meta name="twitter:image" content={`${siteUrl}/logo.png`} />
 
@@ -143,7 +131,7 @@ export default function RootLayout({ children }) {
               '@type': 'WebApplication',
               name: 'ToolsOfSaaS',
               description:
-                'A curated directory of the best web-based SaaS tools and productivity utilities.',
+                'Hand-picked suite of free, privacy-first web utilities and instant browser micro-tools.',
               url: siteUrl,
               applicationCategory: 'BusinessApplication',
               operatingSystem: 'Web',

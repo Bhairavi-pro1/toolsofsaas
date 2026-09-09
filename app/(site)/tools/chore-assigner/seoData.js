@@ -513,5 +513,56 @@ export const choreAssignerSeoData = {
     btnText: "Back to Tool Input"
   },
 
-  bottomContent: "Physical chore prints are excellent visual triggers. Enter your cleaning tasks, run our weighted scheduler, print the clean page, and stick it on the fridge. Your roommates or family members can check off tasks manually throughout the week, building co-living transparency and responsibility."
+  bottomContent: "Physical chore prints are excellent visual triggers. Enter your cleaning tasks, run our weighted scheduler, print the clean page, and stick it on the fridge. Your roommates or family members can check off tasks manually throughout the week, building co-living transparency and responsibility.",
+
+  schemas: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["SoftwareApplication", "WebApplication"],
+        "@id": "https://toolsofsaas.com/tools/chore-assigner#application",
+        "name": "Fair Chore Assigner & Weighted Cleanup Chart",
+        "url": "https://toolsofsaas.com/tools/chore-assigner",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "All / Web Browser",
+        "browserRequirements": "Requires HTML5 and JavaScript support. Compatible with Chrome, Firefox, Safari, Edge, and mobile browsers.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0.00",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "ToolsOfSaaS",
+          "url": "https://toolsofsaas.com"
+        },
+        "description": "An online utility to balance and distribute household chores fairly with difficulty weighting, roommate schedules, and printable task sheets."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://toolsofsaas.com/tools/chore-assigner#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://toolsofsaas.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Tools",
+            "item": "https://toolsofsaas.com/#tools"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Chore Assigner",
+            "item": "https://toolsofsaas.com/tools/chore-assigner"
+          }
+        ]
+      }
+    ]
+  }
 };

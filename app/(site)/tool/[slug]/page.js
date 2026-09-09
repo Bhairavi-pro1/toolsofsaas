@@ -162,24 +162,67 @@ export default async function ToolDetailPage({ params }) {
     }
   }
 
-  // Structured Schema for WebApplication / SoftwareApplication
+  let imageUrl;
+  try {
+    if (tool.iconImage) {
+      imageUrl = urlFor(tool.iconImage).width(800).height(600).url();
+    }
+  } catch {
+    // Fallback if image builder fails
+  }
+
+  // Comprehensive Structured Schema (SoftwareApplication + WebApplication + Breadcrumbs)
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: tool.title,
-    description: tool.description,
-    url: `${siteUrl}/tool/${slug}`,
-    applicationCategory: tool.tag ? tool.tag.replace('#', '') : 'UtilitiesApplication',
-    operatingSystem: 'All / Web Browser',
-    offers: {
-      '@type': 'Offer',
-      price: tool.badge === 'Free' || tool.pricing === 'Free' ? '0' : '0',
-      priceCurrency: 'USD',
-    },
-    author: {
-      '@type': tool.author ? 'Organization' : 'Organization',
-      name: tool.author || 'ToolsOfSaaS',
-    },
+    '@graph': [
+      {
+        '@type': ['SoftwareApplication', 'WebApplication'],
+        '@id': `${siteUrl}/tool/${slug}#software`,
+        name: tool.title,
+        description: tool.description || tool.longDescription || `Free client-side ${tool.title} browser utility.`,
+        url: `${siteUrl}/tool/${slug}`,
+        applicationCategory: tool.tag ? tool.tag.replace(/^#/, '') : 'UtilitiesApplication',
+        operatingSystem: 'All / Web Browser',
+        browserRequirements: 'Requires JavaScript and HTML5 support in modern web browsers.',
+        ...(imageUrl ? { image: imageUrl, screenshot: imageUrl } : {}),
+        ...(tool.features && tool.features.length > 0 ? { featureList: tool.features.join(', ') } : {}),
+        offers: {
+          '@type': 'Offer',
+          price: '0.00',
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock',
+        },
+        author: {
+          '@type': 'Organization',
+          name: tool.author || 'ToolsOfSaaS',
+          url: siteUrl,
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${siteUrl}/tool/${slug}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: siteUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Tools',
+            item: `${siteUrl}/#tools`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: tool.title,
+            item: `${siteUrl}/tool/${slug}`,
+          },
+        ],
+      },
+    ],
   };
 
   return (

@@ -42,9 +42,9 @@ export default function ToolsGrid({ initialTools, initialUpcoming }) {
       {/* HERO SECTION */}
       <div className="hero">
         <h1>
-          Discover the Best <span style={{ color: 'var(--primary)' }}>Web Tools</span>
+          Hand-Picked Free Web Tools & <span style={{ color: 'var(--primary)' }}>Browser Utilities</span>
         </h1>
-        <p>Curated list of powerful tools to supercharge your workflow.</p>
+        <p>A focused suite of fast, 100% client-side micro-tools to streamline your workflow. Zero signups, zero paywalls, and complete data privacy.</p>
       </div>
 
       {/* TOOLS GRID */}

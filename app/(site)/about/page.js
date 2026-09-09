@@ -4,13 +4,6 @@ export const metadata = {
   title: 'About Us - Our Mission & Vision',
   description:
     'Discover the story behind ToolsOfSaaS. Our mission is to provide a curated, high-performance directory of web-based tools and SaaS solutions to optimize your digital workflow.',
-  keywords: [
-    'about toolsofsaas',
-    'saas directory mission',
-    'web tools curation',
-    'digital productivity journey',
-    'our vision toolsofsaas',
-  ],
   openGraph: {
     title: 'About Us - ToolsOfSaaS',
     description: 'Learn about our mission to curate the best digital tools.',

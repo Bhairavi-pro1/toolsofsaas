@@ -6,13 +6,6 @@ export const metadata = {
   title: 'Contact Us - Support & Feedback',
   description:
     'Have questions or feedback? Contact ToolsOfSaaS. We\'re here to help with tool suggestions, support inquiries, and collaboration requests related to our web tools directory.',
-  keywords: [
-    'contact toolsofsaas',
-    'saas support',
-    'tool suggestions',
-    'web tools feedback',
-    'customer service saas directory',
-  ],
   openGraph: {
     title: 'Contact Us - ToolsOfSaaS',
     description: 'Get in touch with the ToolsOfSaaS team for support or feedback.',

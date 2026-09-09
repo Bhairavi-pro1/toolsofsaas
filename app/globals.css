@@ -457,12 +457,18 @@ a {
   background: var(--bg-card-hover);
 }
 
-.tool-card.coming-soon {
-  opacity: 0.75;
+.tool-card.coming-soon,
+.tool-card-upcoming {
+  opacity: 0.8;
+  cursor: default;
+  border-style: dashed;
 }
 
-.tool-card.coming-soon:hover {
-  transform: translateY(-2px);
+.tool-card-upcoming:hover {
+  transform: none;
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+  background: var(--bg-card);
 }
 
 .tool-card-header {

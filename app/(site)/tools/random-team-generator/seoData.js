@@ -1201,12 +1201,12 @@ export const teamPlannerSeoData = {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebApplication",
+        "@type": ["SoftwareApplication", "WebApplication"],
         "@id": "https://toolsofsaas.com/tools/random-team-generator#application",
         "name": "Random Team Generator & Multiday Planner",
         "url": "https://toolsofsaas.com/tools/random-team-generator",
         "applicationCategory": "ProductivityApplication",
-        "operatingSystem": "All",
+        "operatingSystem": "All / Web Browser",
         "browserRequirements": "Requires HTML5 support. Compatible with Chrome, Firefox, Safari, Edge, and mobile browsers.",
         "offers": {
           "@type": "Offer",

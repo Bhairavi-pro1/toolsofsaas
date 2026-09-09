@@ -1,5 +1,6 @@
 import { client } from '@/sanity/lib/client';
 import { TOOLS_QUERY, UPCOMING_TOOLS_QUERY } from '@/sanity/lib/queries';
+import { urlFor } from '@/sanity/lib/image';
 import PageWrapper from '@/components/PageWrapper';
 import AdBanner from '@/components/AdBanner';
 import ToolsGrid from '@/components/ToolsGrid';
@@ -18,6 +19,69 @@ export default async function HomePage() {
     console.error('Failed to fetch tools from Sanity:', error);
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
+
+  // Build ItemList / SoftwareApplication structured data for all live tools
+  const itemListSchema = {
+    '@type': 'ItemList',
+    '@id': `${siteUrl}#tool-list`,
+    name: 'Hand-Picked Free Web Tools & Browser Utilities',
+    description: 'Curated collection of 100% free, client-side browser tools and SaaS utilities.',
+    numberOfItems: tools.length,
+    itemListElement: tools.map((tool, index) => {
+      const slug = typeof tool.slug === 'string' ? tool.slug : tool.slug?.current;
+      const toolUrl = slug
+        ? `${siteUrl}/tool/${slug}`
+        : tool.href?.startsWith('http')
+          ? tool.href
+          : `${siteUrl}${tool.href || ''}`;
+
+      let imageUrl;
+      try {
+        if (tool.iconImage) {
+          imageUrl = urlFor(tool.iconImage).width(120).height(120).url();
+        }
+      } catch {
+        // Fallback if image builder fails
+      }
+
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        name: tool.title,
+        url: toolUrl,
+        item: {
+          '@type': 'SoftwareApplication',
+          '@id': `${toolUrl}#software`,
+          name: tool.title,
+          description: tool.description || `Free client-side ${tool.title} browser utility.`,
+          url: toolUrl,
+          applicationCategory: tool.tag ? tool.tag.replace(/^#/, '') : 'UtilitiesApplication',
+          operatingSystem: 'All / Web Browser',
+          browserRequirements: 'Requires JavaScript and HTML5 support',
+          ...(imageUrl ? { image: imageUrl } : {}),
+          offers: {
+            '@type': 'Offer',
+            price: '0.00',
+            priceCurrency: 'USD',
+            availability: 'https://schema.org/InStock',
+          },
+          author: {
+            '@type': 'Organization',
+            name: tool.author || 'ToolsOfSaaS',
+            url: siteUrl,
+          },
+        },
+      };
+    }),
+  };
+
+  // Combine site, FAQ, and ItemList schemas into a unified @graph
+  const homepageSchemas = {
+    '@context': 'https://schema.org',
+    '@graph': [...(homeSeoData.schemas?.['@graph'] || []), itemListSchema],
+  };
+
   return (
     <PageWrapper>
       {/* Header Ad */}
@@ -26,11 +90,11 @@ export default async function HomePage() {
       {/* Hero + Tools Grid (Client Component) */}
       <ToolsGrid initialTools={tools} initialUpcoming={upcomingTools} />
 
-      {/* Dynamic Homepage JSON-LD Schema Injection */}
+      {/* Dynamic Homepage JSON-LD Schema Injection (WebSite + FAQPage + ItemList / SoftwareApplication) */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(homeSeoData.schemas)
+          __html: JSON.stringify(homepageSchemas),
         }}
       />
 
@@ -108,11 +172,19 @@ export default async function HomePage() {
               <tbody>
                 {homeSeoData.comparison.rows.map((row, idx) => (
                   <tr key={idx}>
-                    <td>{row.metric}</td>
+                    <td><strong>{row.metric}</strong></td>
                     <td className="highlight">{row.ours}</td>
-                    <td>{row.ph}</td>
-                    <td>{row.alt}</td>
-                    <td>{row.g2}</td>
+                    {row.others ? (
+                      row.others.map((val, cIdx) => (
+                        <td key={cIdx}>{val}</td>
+                      ))
+                    ) : (
+                      <>
+                        <td>{row.ph}</td>
+                        <td>{row.alt}</td>
+                        <td>{row.g2}</td>
+                      </>
+                    )}
                   </tr>
                 ))}
               </tbody>

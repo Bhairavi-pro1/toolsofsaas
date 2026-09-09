@@ -6,13 +6,6 @@ export const metadata = {
   title: 'Affiliate Disclosure - Transparency & Trust',
   description:
     'Read our affiliate disclosure policy. ToolsOfSaaS explains how we use affiliate links and how it impacts your usage of our directory.',
-  keywords: [
-    'affiliate disclosure',
-    'affiliate links policy',
-    'advertising disclosure',
-    'toolsofsaas affiliate policy',
-    'transparency pledge',
-  ],
   alternates: {
     canonical: '/affiliate-disclosure',
   },

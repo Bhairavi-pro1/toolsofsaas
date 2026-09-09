@@ -4,13 +4,6 @@ export const metadata = {
   title: 'Terms of Service - User Guidelines & Rules',
   description:
     'Read the Terms of Service for ToolsOfSaaS. Understand our guidelines, user responsibilities, and the rules of using our curated directory of SaaS and web tools.',
-  keywords: [
-    'terms of service',
-    'user agreement',
-    'toolsofsaas rules',
-    'web tools usage terms',
-    'saas directory guidelines',
-  ],
   robots: {
     index: true,
     follow: true,

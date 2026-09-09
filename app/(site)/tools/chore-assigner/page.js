@@ -8,11 +8,6 @@ const { seoMetadata } = choreAssignerSeoData;
 export const metadata = {
   title: seoMetadata.metaTitle,
   description: seoMetadata.metaDescription,
-  keywords: [
-    seoMetadata.primaryKeyword,
-    ...seoMetadata.secondaryKeywords,
-    ...seoMetadata.lsiKeywords,
-  ],
   openGraph: {
     title: seoMetadata.ogTitle,
     description: seoMetadata.ogDescription,
