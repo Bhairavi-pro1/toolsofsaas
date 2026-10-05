@@ -1,21 +1,80 @@
 import PageWrapper from '@/components/PageWrapper';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
+
 export const metadata = {
-  title: 'Terms of Service - User Guidelines & Rules',
+  title: 'Terms of Service – User Guidelines & Directory Rules',
   description:
     'Read the Terms of Service for ToolsOfSaaS. Understand our guidelines, user responsibilities, and the rules of using our curated directory of SaaS and web tools.',
-  robots: {
-    index: true,
-    follow: true,
-  },
   alternates: {
     canonical: '/terms',
   },
+  openGraph: {
+    title: 'Terms of Service – ToolsOfSaaS',
+    description: 'Guidelines and rules for using ToolsOfSaaS directory.',
+    url: `${siteUrl}/terms`,
+    type: 'website',
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'ToolsOfSaaS Terms of Service',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Terms of Service – ToolsOfSaaS',
+    description: 'Guidelines and rules for using ToolsOfSaaS directory.',
+    images: [`${siteUrl}/og-image.png`],
+  },
+};
+
+const termsSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/terms#webpage`,
+      url: `${siteUrl}/terms`,
+      name: 'Terms of Service – ToolsOfSaaS',
+      description: 'Terms and conditions for ToolsOfSaaS web platform.',
+      isPartOf: {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: siteUrl,
+        name: 'ToolsOfSaaS',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${siteUrl}/terms#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: siteUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Terms of Service',
+          item: `${siteUrl}/terms`,
+        },
+      ],
+    },
+  ],
 };
 
 export default function TermsPage() {
   return (
     <PageWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(termsSchema) }}
+      />
       <div className="container content-page">
         <h1>Terms of Service</h1>
         <p style={{ textAlign: 'center' }}>Last Updated: March 4, 2026</p>

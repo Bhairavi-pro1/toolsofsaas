@@ -1,19 +1,81 @@
 import PageWrapper from '@/components/PageWrapper';
 
 const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'Bhairavi.co@gmail.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
 
 export const metadata = {
-  title: 'Affiliate Disclosure - Transparency & Trust',
+  title: 'Affiliate Disclosure – Transparency & FTC Compliance',
   description:
-    'Read our affiliate disclosure policy. ToolsOfSaaS explains how we use affiliate links and how it impacts your usage of our directory.',
+    'Read our affiliate disclosure policy. ToolsOfSaaS explains how we use affiliate links and maintain editorial independence and transparency.',
   alternates: {
     canonical: '/affiliate-disclosure',
   },
+  openGraph: {
+    title: 'Affiliate Disclosure – ToolsOfSaaS',
+    description: 'Our commitment to transparency, honest reviews, and FTC compliance.',
+    url: `${siteUrl}/affiliate-disclosure`,
+    type: 'website',
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Affiliate Disclosure ToolsOfSaaS',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Affiliate Disclosure – ToolsOfSaaS',
+    description: 'Our commitment to transparency, honest reviews, and FTC compliance.',
+    images: [`${siteUrl}/og-image.png`],
+  },
+};
+
+const disclosureSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/affiliate-disclosure#webpage`,
+      url: `${siteUrl}/affiliate-disclosure`,
+      name: 'Affiliate Disclosure – ToolsOfSaaS',
+      description: 'Affiliate disclosure and transparency guidelines for ToolsOfSaaS.',
+      isPartOf: {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: siteUrl,
+        name: 'ToolsOfSaaS',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${siteUrl}/affiliate-disclosure#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: siteUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Affiliate Disclosure',
+          item: `${siteUrl}/affiliate-disclosure`,
+        },
+      ],
+    },
+  ],
 };
 
 export default function AffiliateDisclosurePage() {
   return (
     <PageWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(disclosureSchema) }}
+      />
       <div className="container content-page">
         <h1>Affiliate Disclosure</h1>
         <p style={{ textAlign: 'center', marginBottom: '30px' }}>Last Updated: June 26, 2026</p>

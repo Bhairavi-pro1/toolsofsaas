@@ -1,22 +1,83 @@
 import PageWrapper from '@/components/PageWrapper';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
+
 export const metadata = {
-  title: 'About Us - Our Mission & Vision',
+  title: 'About Us – Mission, Vision & Curated Web Tools',
   description:
     'Discover the story behind ToolsOfSaaS. Our mission is to provide a curated, high-performance directory of web-based tools and SaaS solutions to optimize your digital workflow.',
-  openGraph: {
-    title: 'About Us - ToolsOfSaaS',
-    description: 'Learn about our mission to curate the best digital tools.',
-    url: '/about',
-  },
   alternates: {
     canonical: '/about',
   },
+  openGraph: {
+    title: 'About Us – Mission & Curated Web Tools | ToolsOfSaaS',
+    description:
+      'Learn about our mission to curate the best digital utilities and SaaS solutions for creators, developers, and entrepreneurs.',
+    url: `${siteUrl}/about`,
+    type: 'website',
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'About ToolsOfSaaS',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Us – ToolsOfSaaS',
+    description:
+      'Discover the story behind ToolsOfSaaS. Learn how we curate high-performance web tools.',
+    images: [`${siteUrl}/og-image.png`],
+  },
+};
+
+const aboutSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'AboutPage',
+      '@id': `${siteUrl}/about#webpage`,
+      url: `${siteUrl}/about`,
+      name: 'About Us – ToolsOfSaaS',
+      description:
+        'Discover the story behind ToolsOfSaaS. Our mission is to provide a curated, high-performance directory of web-based tools.',
+      isPartOf: {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: siteUrl,
+        name: 'ToolsOfSaaS',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${siteUrl}/about#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: siteUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'About Us',
+          item: `${siteUrl}/about`,
+        },
+      ],
+    },
+  ],
 };
 
 export default function AboutPage() {
   return (
     <PageWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
       <div className="container content-page">
         <h1>About Us</h1>
         <div className="about-content">

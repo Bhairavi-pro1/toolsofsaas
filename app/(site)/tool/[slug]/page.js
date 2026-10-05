@@ -107,6 +107,9 @@ export async function generateMetadata({ params }) {
       card: 'summary_large_image',
       title: pageTitle,
       description: pageDesc,
+      images: tool.iconImage
+        ? [urlFor(tool.iconImage).width(800).height(600).url()]
+        : [`${siteUrl}/og-image.png`],
     },
     alternates: {
       canonical: `/tool/${slug}`,

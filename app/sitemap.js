@@ -1,5 +1,5 @@
 import { client } from '@/sanity/lib/client';
-import { ALL_TOOL_SLUGS_QUERY, POSTS_QUERY } from '@/sanity/lib/queries';
+import { TOOLS_SITEMAP_QUERY, POSTS_QUERY } from '@/sanity/lib/queries';
 
 export default async function sitemap() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
@@ -8,7 +8,7 @@ export default async function sitemap() {
     {
       url: siteUrl,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: 'daily',
       priority: 1.0,
     },
     {
@@ -26,25 +26,25 @@ export default async function sitemap() {
     {
       url: `${siteUrl}/blog`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
+      changeFrequency: 'daily',
+      priority: 0.85,
     },
     {
       url: `${siteUrl}/privacy`,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
       url: `${siteUrl}/terms`,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
       url: `${siteUrl}/affiliate-disclosure`,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
@@ -65,14 +65,16 @@ export default async function sitemap() {
   let blogRoutes = [];
 
   try {
-    const toolSlugs = await client.fetch(ALL_TOOL_SLUGS_QUERY);
-    if (toolSlugs && toolSlugs.length > 0) {
-      toolRoutes = toolSlugs.map((slug) => ({
-        url: `${siteUrl}/tool/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.85,
-      }));
+    const tools = await client.fetch(TOOLS_SITEMAP_QUERY);
+    if (tools && tools.length > 0) {
+      toolRoutes = tools
+        .filter((t) => t && t.slug)
+        .map((t) => ({
+          url: `${siteUrl}/tool/${t.slug}`,
+          lastModified: t._updatedAt ? new Date(t._updatedAt) : t._createdAt ? new Date(t._createdAt) : new Date(),
+          changeFrequency: 'weekly',
+          priority: 0.85,
+        }));
     }
 
     const posts = await client.fetch(POSTS_QUERY);

@@ -1,23 +1,81 @@
 import PageWrapper from '@/components/PageWrapper';
 
 const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'Bhairavi.co@gmail.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
 
 export const metadata = {
-  title: 'Privacy Policy - Your Data Safety & Privacy',
+  title: 'Privacy Policy – Data Protection & Security Guidelines',
   description:
-    'Learn how ToolsOfSaaS protects your privacy and handles your data. Our privacy policy outlines our commitment to transparency and security.',
-  robots: {
-    index: true,
-    follow: true,
-  },
+    'Learn how ToolsOfSaaS protects your privacy and handles your data. Our privacy policy outlines our commitment to transparency, zero server storage, and user privacy.',
   alternates: {
     canonical: '/privacy',
   },
+  openGraph: {
+    title: 'Privacy Policy – ToolsOfSaaS',
+    description: 'Learn how ToolsOfSaaS protects your privacy and data.',
+    url: `${siteUrl}/privacy`,
+    type: 'website',
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'ToolsOfSaaS Privacy Policy',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy – ToolsOfSaaS',
+    description: 'Learn how ToolsOfSaaS protects your privacy and data.',
+    images: [`${siteUrl}/og-image.png`],
+  },
+};
+
+const privacySchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/privacy#webpage`,
+      url: `${siteUrl}/privacy`,
+      name: 'Privacy Policy – ToolsOfSaaS',
+      description: 'Privacy policy and data protection terms for ToolsOfSaaS.',
+      isPartOf: {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: siteUrl,
+        name: 'ToolsOfSaaS',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${siteUrl}/privacy#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: siteUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Privacy Policy',
+          item: `${siteUrl}/privacy`,
+        },
+      ],
+    },
+  ],
 };
 
 export default function PrivacyPage() {
   return (
     <PageWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(privacySchema) }}
+      />
       <div className="container content-page">
         <h1>Privacy Policy</h1>
         <p style={{ textAlign: 'center' }}>Last Updated: March 4, 2026</p>

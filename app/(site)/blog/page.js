@@ -5,15 +5,74 @@ import { urlFor } from '@/sanity/lib/image';
 import PageWrapper from '@/components/PageWrapper';
 import AdBanner from '@/components/AdBanner';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
+
 export const revalidate = 60;
 
 export const metadata = {
-  title: 'Blog - SaaS Insights, Tips & Web Tool Reviews',
+  title: 'Blog – SaaS Insights, Tech Tutorials & Web Tool Reviews',
   description:
-    'Stay up to date with the latest SaaS tools, digital workflows, tutorials, and productivity guides on the ToolsOfSaaS blog.',
+    'Stay up to date with the latest SaaS tools, digital workflows, software tutorials, and productivity guides on the ToolsOfSaaS blog.',
   alternates: {
     canonical: '/blog',
   },
+  openGraph: {
+    title: 'Blog – SaaS Insights & Web Tool Reviews | ToolsOfSaaS',
+    description:
+      'Stay up to date with the latest SaaS tools, digital workflows, tutorials, and productivity guides.',
+    url: `${siteUrl}/blog`,
+    type: 'website',
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'ToolsOfSaaS Blog',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog – SaaS Insights & Guides | ToolsOfSaaS',
+    description: 'Explore the latest tutorials, SaaS reviews, and digital workflow guides.',
+    images: [`${siteUrl}/og-image.png`],
+  },
+};
+
+const blogSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Blog',
+      '@id': `${siteUrl}/blog#blog`,
+      url: `${siteUrl}/blog`,
+      name: 'ToolsOfSaaS Blog',
+      description: 'SaaS insights, software reviews, tutorials, and productivity workflows.',
+      publisher: {
+        '@type': 'Organization',
+        name: 'ToolsOfSaaS',
+        url: siteUrl,
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${siteUrl}/blog#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: siteUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Blog',
+          item: `${siteUrl}/blog`,
+        },
+      ],
+    },
+  ],
 };
 
 export default async function BlogPage() {
@@ -26,6 +85,10 @@ export default async function BlogPage() {
 
   return (
     <PageWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+      />
       {/* Header Ad */}
       <AdBanner position="header" />
 

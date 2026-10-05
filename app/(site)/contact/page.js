@@ -1,24 +1,81 @@
 import PageWrapper from '@/components/PageWrapper';
 
 const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'Bhairavi.co@gmail.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
 
 export const metadata = {
-  title: 'Contact Us - Support & Feedback',
+  title: 'Contact Us – Support, Submissions & Inquiries',
   description:
     'Have questions or feedback? Contact ToolsOfSaaS. We\'re here to help with tool suggestions, support inquiries, and collaboration requests related to our web tools directory.',
-  openGraph: {
-    title: 'Contact Us - ToolsOfSaaS',
-    description: 'Get in touch with the ToolsOfSaaS team for support or feedback.',
-    url: '/contact',
-  },
   alternates: {
     canonical: '/contact',
   },
+  openGraph: {
+    title: 'Contact Us – ToolsOfSaaS',
+    description: 'Get in touch with the ToolsOfSaaS team for support, listings, or feedback.',
+    url: `${siteUrl}/contact`,
+    type: 'website',
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'Contact ToolsOfSaaS',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contact Us – ToolsOfSaaS',
+    description: 'Get in touch with the ToolsOfSaaS team for support, listings, or feedback.',
+    images: [`${siteUrl}/og-image.png`],
+  },
+};
+
+const contactSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'ContactPage',
+      '@id': `${siteUrl}/contact#webpage`,
+      url: `${siteUrl}/contact`,
+      name: 'Contact Us – ToolsOfSaaS',
+      description: 'Contact page for ToolsOfSaaS support and directory inquiries.',
+      isPartOf: {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        url: siteUrl,
+        name: 'ToolsOfSaaS',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${siteUrl}/contact#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: siteUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Contact Us',
+          item: `${siteUrl}/contact`,
+        },
+      ],
+    },
+  ],
 };
 
 export default function ContactPage() {
   return (
     <PageWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+      />
       <div className="container content-page">
         <h1>Contact Us</h1>
         <div className="contact-content">

@@ -8,6 +8,8 @@ import AdBanner from '@/components/AdBanner';
 
 export const revalidate = 60;
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   let post = null;
@@ -24,22 +26,33 @@ export async function generateMetadata({ params }) {
     };
   }
 
+  const postTitle = `${post.title} – ToolsOfSaaS Blog`;
+  const postDesc = post.description || `Read ${post.title} on ToolsOfSaaS.`;
+  const imageUrl = post.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : `${siteUrl}/og-image.png`;
+
   return {
-    title: post.title,
-    description: post.description,
+    title: postTitle,
+    description: postDesc,
     openGraph: {
-      title: post.title,
-      description: post.description,
+      title: postTitle,
+      description: postDesc,
       type: 'article',
+      url: `${siteUrl}/blog/${slug}`,
       publishedTime: post.publishedAt,
-      images: post.mainImage
-        ? [
-            {
-              url: urlFor(post.mainImage).url(),
-              alt: post.title,
-            },
-          ]
-        : [],
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: postTitle,
+      description: postDesc,
+      images: [imageUrl],
     },
     alternates: {
       canonical: `/blog/${slug}`,
@@ -245,8 +258,65 @@ export default async function BlogPostPage({ params }) {
     : 0;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BlogPosting',
+        '@id': `${siteUrl}/blog/${slug}#article`,
+        headline: post.title,
+        description: post.description || post.title,
+        datePublished: post.publishedAt || new Date().toISOString(),
+        dateModified: post.publishedAt || new Date().toISOString(),
+        url: `${siteUrl}/blog/${slug}`,
+        ...(post.mainImage ? { image: urlFor(post.mainImage).width(1200).height(630).url() } : {}),
+        publisher: {
+          '@type': 'Organization',
+          name: 'ToolsOfSaaS',
+          url: siteUrl,
+          logo: {
+            '@type': 'ImageObject',
+            url: `${siteUrl}/logo.png`,
+          },
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': `${siteUrl}/blog/${slug}`,
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${siteUrl}/blog/${slug}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: siteUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Blog',
+            item: `${siteUrl}/blog`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: post.title,
+            item: `${siteUrl}/blog/${slug}`,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <PageWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       {/* Header Ad */}
       <AdBanner position="header" />
 

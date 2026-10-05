@@ -72,6 +72,13 @@ export const RELATED_TOOLS_QUERY = `*[_type == "tool" && slug.current != $slug] 
 // Fetch all tool slugs for sitemap and static generation
 export const ALL_TOOL_SLUGS_QUERY = `*[_type in ["tool", "upcomingTool"] && defined(slug.current)][].slug.current`;
 
+// Fetch all tool entries with slugs and timestamps for dynamic sitemap
+export const TOOLS_SITEMAP_QUERY = `*[_type in ["tool", "upcomingTool"] && defined(slug.current)] {
+  "slug": slug.current,
+  _updatedAt,
+  _createdAt
+}`;
+
 // Fetch all published blog posts ordered by publish date desc
 export const POSTS_QUERY = `*[_type == "post" && !(_id in path("drafts.**"))] | order(publishedAt desc) {
   _id,
