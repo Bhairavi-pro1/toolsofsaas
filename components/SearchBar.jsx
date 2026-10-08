@@ -25,6 +25,7 @@ export default function SearchBar({ searchQuery, setSearchQuery }) {
         id="searchInput"
         className="search-input"
         placeholder="Search for tools..."
+        aria-label="Search for tools"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />

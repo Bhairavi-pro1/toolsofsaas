@@ -86,30 +86,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
       <head>
-        {/* OpenGraph / Social Media Link Preview Meta Tags */}
-        <meta property="og:site_name" content="ToolsOfSaaS" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="ToolsOfSaaS - Free Browser Utilities & Client-Side Web Tools" />
-        <meta
-          property="og:description"
-          content="Hand-picked suite of fast, 100% free web utilities and browser tools. Zero signups, zero server data storage, and instant client-side execution."
-        />
-        <meta property="og:image" content={`${siteUrl}/logo.png`} />
-        <meta property="og:image:secure_url" content={`${siteUrl}/logo.png`} />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="512" />
-        <meta property="og:image:height" content="512" />
-        <meta property="og:image:alt" content="ToolsOfSaaS Logo" />
-        <link rel="image_src" href={`${siteUrl}/logo.png`} />
-        <meta itemprop="image" content={`${siteUrl}/logo.png`} />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="ToolsOfSaaS - Free Browser Utilities & Client-Side Web Tools" />
-        <meta
-          name="twitter:description"
-          content="Hand-picked suite of fast, 100% free web utilities and browser tools. Zero signups, zero server data storage, and instant client-side execution."
-        />
-        <meta name="twitter:image" content={`${siteUrl}/logo.png`} />
-
         <script
           id="theme-initializer"
           dangerouslySetInnerHTML={{

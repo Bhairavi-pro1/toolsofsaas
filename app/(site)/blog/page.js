@@ -134,7 +134,13 @@ export default async function BlogPage() {
               <Link href={`/blog/${post.slug}`} key={post._id} className="blog-card">
                 <div className="blog-card-image">
                   {post.mainImage ? (
-                    <img src={urlFor(post.mainImage).url()} alt={post.title} />
+                    <img
+                      src={urlFor(post.mainImage).width(600).height(340).url()}
+                      alt={post.title}
+                      width={600}
+                      height={340}
+                      loading="lazy"
+                    />
                   ) : (
                     <div
                       style={{

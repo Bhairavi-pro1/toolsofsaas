@@ -16,9 +16,12 @@ const portableTextComponents = {
       return (
         <div className="tool-detail-portable-img-box">
           <img
-            src={urlFor(value).url()}
+            src={urlFor(value).width(1200).url()}
             alt={value.alt || 'Tool illustration'}
             className="tool-detail-portable-img"
+            width={800}
+            height={450}
+            loading="lazy"
           />
         </div>
       );
@@ -42,7 +45,8 @@ const portableTextComponents = {
     strong: ({ children }) => <strong>{children}</strong>,
     code: ({ children }) => <code>{children}</code>,
     link: ({ children, value }) => {
-      const target = (value?.href || '').startsWith('http') ? '_blank' : undefined;
+      const isExternal = (value?.href || '').startsWith('http');
+      const target = isExternal ? '_blank' : undefined;
       return (
         <a
           href={value?.href}
@@ -51,6 +55,7 @@ const portableTextComponents = {
           className="tool-detail-link"
         >
           {children}
+          {isExternal ? <span className="sr-only"> (opens in a new tab)</span> : null}
         </a>
       );
     },
@@ -322,10 +327,11 @@ export default async function ToolDetailPage({ params }) {
                   href={tool.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`Visit ${tool.title || 'tool'} website (opens in a new tab)`}
                   className="tool-visit-btn"
                 >
                   <span>Visit Website</span>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                     <polyline points="15 3 21 3 21 9" />
                     <line x1="10" y1="14" x2="21" y2="3" />

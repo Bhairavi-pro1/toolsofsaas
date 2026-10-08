@@ -87,7 +87,13 @@ export default function Navbar() {
       {/* DESKTOP NAVBAR VIEW */}
       <div className="navbar-desktop">
         <Link href="/" className="logo">
-          <img src="/favicon.png" alt="ToolsOfSaaS Logo" style={{ width: '45px', height: '45px', objectFit: 'contain' }} />
+          <img
+            src="/favicon.png"
+            alt="ToolsOfSaaS Logo"
+            width={45}
+            height={45}
+            style={{ width: '45px', height: '45px', objectFit: 'contain' }}
+          />
           <span className="logo-text">ToolsOfSaaS</span>
         </Link>
         <div className="nav-links">
@@ -104,7 +110,13 @@ export default function Navbar() {
         {/* Row 1: Logo & Header Controls */}
         <div className="navbar-mobile-row">
           <Link href="/" className="logo">
-            <img src="/favicon.png" alt="ToolsOfSaaS Logo" style={{ width: '38px', height: '38px', objectFit: 'contain' }} />
+            <img
+              src="/favicon.png"
+              alt="ToolsOfSaaS Logo"
+              width={38}
+              height={38}
+              style={{ width: '38px', height: '38px', objectFit: 'contain' }}
+            />
             <span className="logo-text-mobile">ToolsOfSaaS</span>
           </Link>
           <div className="navbar-mobile-controls">
@@ -154,6 +166,7 @@ export default function Navbar() {
               type="text"
               className="mobile-search-input"
               placeholder="Search for tools..."
+              aria-label="Search for tools"
               value={searchQuery}
               readOnly
               onClick={(e) => {
@@ -199,6 +212,7 @@ export default function Navbar() {
                 type="text"
                 className="overlay-search-input"
                 placeholder="Search for tools..."
+                aria-label="Search for tools"
                 autoFocus
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

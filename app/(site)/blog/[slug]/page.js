@@ -77,8 +77,11 @@ const portableTextComponents = {
           }}
         >
           <img
-            src={urlFor(value).url()}
+            src={urlFor(value).width(1200).url()}
             alt={value.alt || 'Post illustration'}
+            width={800}
+            height={450}
+            loading="lazy"
             style={{ width: '100%', height: 'auto', display: 'block' }}
           />
         </div>
@@ -188,14 +191,18 @@ const portableTextComponents = {
       </code>
     ),
     link: ({ children, value }) => {
-      const rel = value?.href && !value.href.startsWith('/') ? 'noreferrer noopener' : undefined;
+      const isExternal = value?.href && !value.href.startsWith('/');
+      const target = isExternal ? '_blank' : undefined;
+      const rel = isExternal ? 'noreferrer noopener' : undefined;
       return (
         <a
           href={value?.href || '#'}
+          target={target}
           rel={rel}
-          style={{ color: 'var(--primary)', textDecoration: 'underline' }}
+          style={{ color: 'var(--accent-link)', textDecoration: 'underline' }}
         >
           {children}
+          {isExternal ? <span className="sr-only"> (opens in a new tab)</span> : null}
         </a>
       );
     },
@@ -347,7 +354,13 @@ export default async function BlogPostPage({ params }) {
 
         {post.mainImage && (
           <div className="post-hero-image">
-            <img src={urlFor(post.mainImage).url()} alt={post.title} />
+            <img
+              src={urlFor(post.mainImage).width(1200).height(630).url()}
+              alt={post.title}
+              width={1200}
+              height={630}
+              priority="true"
+            />
           </div>
         )}
 
