@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
-import SearchBar from './SearchBar';
 import { useSearch } from '@/context/SearchContext';
 import { client } from '@/sanity/lib/client';
 import { TOOLS_QUERY } from '@/sanity/lib/queries';
@@ -97,7 +96,6 @@ export default function Navbar() {
           <span className="logo-text">ToolsOfSaaS</span>
         </Link>
         <div className="nav-links">
-          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
           <Link href="/blog" className="nav-link">
             Blog
           </Link>

@@ -4,10 +4,11 @@ import { useEffect, useMemo } from 'react';
 import { cacheTools } from '@/lib/toolsCache';
 import ToolCard from './ToolCard';
 import AdBanner from './AdBanner';
+import SearchBar from './SearchBar';
 import { useSearch } from '@/context/SearchContext';
 
 export default function ToolsGrid({ initialTools, initialUpcoming }) {
-  const { searchQuery } = useSearch();
+  const { searchQuery, setSearchQuery } = useSearch();
 
   // Cache tools in sessionStorage on first render
   useEffect(() => {
@@ -45,6 +46,7 @@ export default function ToolsGrid({ initialTools, initialUpcoming }) {
           Hand-Picked Free Web Tools & <span style={{ color: 'var(--primary)' }}>Browser Utilities</span>
         </h1>
         <p>A focused suite of fast, 100% client-side micro-tools to streamline your workflow. Zero signups, zero paywalls, and complete data privacy.</p>
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       </div>
 
       {/* TOOLS GRID */}

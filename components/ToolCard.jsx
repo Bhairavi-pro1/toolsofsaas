@@ -79,6 +79,22 @@ export default function ToolCard({ tool, isUpcoming = false }) {
           <h3 className="tool-card-title">{tool.title}</h3>
           <span className="tool-card-subtitle">{subtitleText}</span>
         </div>
+
+        <div className="tool-card-arrow" aria-hidden="true">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </div>
       </div>
 
       {/* Description Snippet */}

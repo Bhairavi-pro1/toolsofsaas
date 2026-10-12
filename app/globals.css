@@ -447,6 +447,24 @@ a {
   text-transform: uppercase;
 }
 
+.search-clear-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.search-clear-btn:hover {
+  color: var(--text-main);
+  background: var(--border);
+}
+
 /* ═══════════════════════════════════════
    TOOL GRID & CARDS (Adaptive Theme)
    ═══════════════════════════════════════ */
@@ -559,6 +577,23 @@ a {
 
 .tool-card:hover .tool-card-title {
   color: var(--primary);
+}
+
+.tool-card-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  opacity: 0;
+  transform: translate(-3px, 3px);
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.tool-card:hover .tool-card-arrow {
+  opacity: 1;
+  transform: translate(0, 0);
 }
 
 .tool-card-subtitle {
@@ -1759,16 +1794,10 @@ a {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-.seo-feature-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-hover);
-  box-shadow: var(--shadow-hover);
+  cursor: default;
 }
 
 .seo-feature-title {
@@ -1880,11 +1909,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: all 0.3s ease;
-}
-
-.seo-benefit-card:hover {
-  border-color: var(--border-hover);
+  cursor: default;
 }
 
 .seo-benefit-title {
