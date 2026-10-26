@@ -143,7 +143,7 @@ export default function SeoLandingPage({ data }) {
             onClick={() => handleNavClick('benefits')}
             className={`seo-nav-item ${activeSection === 'benefits' ? 'active' : ''}`}
           >
-            20 Core Benefits
+            Core Benefits
           </button>
           <button
             onClick={() => handleNavClick('target-audience')}
@@ -271,10 +271,10 @@ export default function SeoLandingPage({ data }) {
             </section>
           )}
 
-          {/* 20 Core Benefits */}
+          {/* Core Benefits */}
           {benefits && benefits.length > 0 && (
             <section id="benefits" className="seo-section">
-              <h2 className="seo-section-title">20 Core Benefits & Advantages</h2>
+              <h2 className="seo-section-title">Core Benefits & Advantages</h2>
               <div className="seo-benefits-grid">
                 {benefits.map((benefit, idx) => (
                   <div key={idx} className="seo-benefit-card">
@@ -292,7 +292,7 @@ export default function SeoLandingPage({ data }) {
           {/* Target Audiences */}
           {audiences && audiences.length > 0 && (
             <section id="target-audience" className="seo-section">
-              <h2 className="seo-section-title">Who Needs a Team Generator and Multiday Planner?</h2>
+              <h2 className="seo-section-title">{data.targetAudienceTitle || (data.seoMetadata?.primaryKeyword ? `Who Needs an ${data.seoMetadata.primaryKeyword.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}?` : 'Target Audiences & Workflow Integration')}</h2>
               
               {/* Tabs list */}
               <div className="seo-audience-tabs">
@@ -349,7 +349,7 @@ export default function SeoLandingPage({ data }) {
           {/* Problems Solved */}
           {problemsSolved && problemsSolved.length > 0 && (
             <section id="problems-solved" className="seo-section">
-              <h2 className="seo-section-title">20 Workplaces Problems Solved Instantly</h2>
+              <h2 className="seo-section-title">Key Problems Solved Instantly</h2>
               <div className="seo-problems-list">
                 {problemsSolved.map((prob, idx) => (
                   <div key={idx} className="seo-problem-item">
@@ -394,7 +394,7 @@ export default function SeoLandingPage({ data }) {
           {/* Best Practices */}
           {bestPractices && bestPractices.length > 0 && (
             <section id="best-practices" className="seo-section">
-              <h2 className="seo-section-title">20 Best Practices for Team Generators</h2>
+              <h2 className="seo-section-title">{data.bestPracticesTitle || 'Best Practices & Pro Guidelines'}</h2>
               <div className="seo-tips-grid">
                 {bestPractices.map((bp, idx) => (
                   <div key={idx} className="seo-tip-card">
@@ -414,7 +414,7 @@ export default function SeoLandingPage({ data }) {
           {/* Common Mistakes */}
           {commonMistakes && commonMistakes.length > 0 && (
             <section id="common-mistakes" className="seo-section">
-              <h2 className="seo-section-title">20 Common Scheduling Mistakes to Avoid</h2>
+              <h2 className="seo-section-title">{data.commonMistakesTitle || 'Common Mistakes to Avoid'}</h2>
               <div className="seo-tips-grid">
                 {commonMistakes.map((cm, idx) => (
                   <div key={idx} className="seo-tip-card" style={{ borderLeft: '4px solid #ef4444' }}>

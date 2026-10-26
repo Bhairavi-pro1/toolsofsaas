@@ -59,6 +59,12 @@ export default async function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.9,
     },
+    {
+      url: `${siteUrl}/tools/amazon-affiliate-commission-calculator`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
   ];
 
   let toolRoutes = [];
