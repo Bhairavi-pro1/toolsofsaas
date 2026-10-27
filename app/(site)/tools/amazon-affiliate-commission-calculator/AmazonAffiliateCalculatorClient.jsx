@@ -238,6 +238,44 @@ export default function AmazonAffiliateCalculatorClient() {
   // Toast State
   const [toast, setToast] = useState({ show: false, message: '', isError: false });
 
+  // Terms & Conditions / Approximate Estimation Modal State
+  const [showTermsModal, setShowTermsModal] = useState(true);
+
+  // Check acceptance on mount
+  useEffect(() => {
+    try {
+      const accepted = sessionStorage.getItem('amz_calc_terms_accepted');
+      if (accepted === 'true') {
+        setShowTermsModal(false);
+      } else {
+        setShowTermsModal(true);
+      }
+    } catch {
+      setShowTermsModal(true);
+    }
+  }, []);
+
+  // Prevent background scrolling when modal is active
+  useEffect(() => {
+    if (showTermsModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showTermsModal]);
+
+  const handleAcceptTerms = () => {
+    try {
+      sessionStorage.setItem('amz_calc_terms_accepted', 'true');
+    } catch {
+      // Ignore storage errors
+    }
+    setShowTermsModal(false);
+  };
+
   // Get Active Storefront Object
   const currentStorefront = useMemo(() => {
     return STOREFRONTS.find((s) => s.id === storefrontId) || STOREFRONTS[0];
@@ -286,7 +324,7 @@ export default function AmazonAffiliateCalculatorClient() {
   }, []);
 
   // Live Exchange Rate Fetcher
-  const fetchExchangeRate = useCallback(async () => {
+  const fetchExchangeRate = useCallback(async (isManualRefresh = false) => {
     const base = activeBaseCode;
     const target = activeTargetCode;
 
@@ -307,20 +345,38 @@ export default function AmazonAffiliateCalculatorClient() {
 
       if (data && data.rates && data.rates[target]) {
         const rate = parseFloat(data.rates[target]);
-        setExchangeRate(parseFloat(rate.toFixed(4)));
+        const roundedRate = parseFloat(rate.toFixed(4));
+        setExchangeRate(roundedRate);
         setRateStatus('Rates Live');
         setRatePulseColor('normal');
+        if (isManualRefresh) {
+          showToast(`Live exchange rate fetched: 1 ${base} = ${roundedRate} ${target}`);
+        }
       } else {
         throw new Error('Rate unavailable');
       }
     } catch {
       setRateStatus('Live Rate Offline');
       setRatePulseColor('warning');
-      showToast(`Could not fetch live rate for ${target}. Please click refresh to retry.`, true);
+      showToast(`Could not fetch live rate for ${target}. You can enter a custom rate manually.`, true);
     } finally {
       setIsRefreshingRate(false);
     }
   }, [activeBaseCode, activeTargetCode, showToast]);
+
+  // Handle Manual Exchange Rate Editing
+  const handleExchangeRateChange = (e) => {
+    setExchangeRate(e.target.value);
+    setRateStatus('Custom Rate Active');
+    setRatePulseColor('warning');
+  };
+
+  // Clean Storefront Country Label (avoids "United Tiers" bug)
+  const storefrontCountryLabel = useMemo(() => {
+    if (currentStorefront.id === 'US') return 'US';
+    if (currentStorefront.id === 'UK') return 'UK';
+    return currentStorefront.label.replace(/\s*\(.*\)/, '').trim();
+  }, [currentStorefront]);
 
   // Fetch rate on storefront or target currency change
   useEffect(() => {
@@ -644,7 +700,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
           <div>
             <div className="amz-header-title-row">
               <h1 className="amz-header-title">Amazon Affiliate Commission Calculator</h1>
-              <span className="amz-badge-pro">PRO</span>
+              {/* <span className="amz-badge-pro">PRO</span> */}
             </div>
             <p className="amz-header-sub">Global Storefront Yield & Live Home Currency Converter</p>
           </div>
@@ -751,7 +807,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
           )}
         </div>
 
-        {/* Live Exchange Rate Banner (READ-ONLY DISPLAY - User cannot manually modify, only refresh) */}
+        {/* Live Exchange Rate Banner (Auto Fetched & Manually Editable) */}
         <div className="amz-exchange-box">
           <div className="amz-exchange-left">
             <div className="amz-exchange-icon">
@@ -765,22 +821,31 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
             <div>
               <div className="amz-exchange-info-title">Foreign Exchange Conversion Rate</div>
               <div className="amz-exchange-info-sub">
-                1 {activeBaseCode} = {exchangeRate} {activeTargetCode}
+                1 {activeBaseCode} = {exchangeRate || '—'} {activeTargetCode}
               </div>
             </div>
           </div>
 
           <div className="amz-exchange-right">
             <span className="amz-exchange-static-label">1 {activeBaseCode} =</span>
-            <div className="amz-exchange-rate-badge" title="Live fetched exchange rate (Read-only)">
-              {exchangeRate ? exchangeRate.toFixed(4) : '...'}
-            </div>
+            <input
+              id="amz-exchange-rate-input"
+              type="number"
+              step="0.0001"
+              min="0.0001"
+              className="amz-rate-input"
+              value={exchangeRate}
+              onChange={handleExchangeRateChange}
+              title="Click to type a custom conversion rate, or click refresh to fetch live rate"
+              aria-label={`Custom exchange rate: 1 ${activeBaseCode} in ${activeTargetCode}`}
+            />
             <span className="amz-exchange-static-label">{activeTargetCode}</span>
             <button
               type="button"
               className={`amz-refresh-btn ${isRefreshingRate ? 'spinning' : ''}`}
-              onClick={fetchExchangeRate}
-              title="Refresh live exchange rate from central banks"
+              onClick={() => fetchExchangeRate(true)}
+              title="Refresh and display live central bank rate"
+              aria-label="Refresh and display live exchange rate"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="23 4 23 10 17 10" />
@@ -800,7 +865,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
               <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
               <line x1="7" y1="7" x2="7.01" y2="7" />
             </svg>
-            2. Select Commission Category Rate ({currentStorefront.label.split(' ')[0]} Tiers)
+            2. Select Commission Category Rate ({storefrontCountryLabel} Tiers)
           </span>
         </h2>
 
@@ -808,7 +873,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
           {/* Category Presets Dropdown */}
           <div className="amz-field">
             <label htmlFor="amz-category-select" className="amz-label">
-              Official Category Tier for {currentStorefront.label.split('(')[0]}
+              Official Category Tier for {storefrontCountryLabel === 'US' ? 'United States' : storefrontCountryLabel === 'UK' ? 'United Kingdom' : storefrontCountryLabel}
             </label>
             <select
               id="amz-category-select"
@@ -948,7 +1013,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
             <div className="amz-payout-header">
               <span className="amz-payout-label">Net Target Payout</span>
               <span className="amz-payout-rate-badge">
-                1 {activeBaseCode} = {exchangeRate.toFixed(2)} {activeTargetCode}
+                1 {activeBaseCode} = {isNaN(parseFloat(exchangeRate)) ? exchangeRate : parseFloat(exchangeRate).toFixed(2)} {activeTargetCode}
               </span>
             </div>
             <div className="amz-payout-amount">
@@ -971,7 +1036,14 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
             <strong>Estimation Notice:</strong> The displayed payout is an approximation for estimation and planning purposes only.
             Actual net earnings deposited into your bank account may differ due to foreign exchange conversion spreads, payment processor
             fees (e.g., Payoneer, Wise, direct wire fees), applicable withholding tax (such as US IRS Form W-8BEN deductions), local VAT/GST,
-            and customer product returns or cancellations.
+            and customer product returns or cancellations.{' '}
+            <button
+              type="button"
+              className="amz-terms-link-btn"
+              onClick={() => setShowTermsModal(true)}
+            >
+              View Terms &amp; Conditions
+            </button>
           </p>
         </div>
       </section>
@@ -1001,6 +1073,10 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
           </button>
         </h2>
 
+        <div className="amz-mobile-scroll-hint">
+          <span>&larr; Swipe to view all columns &rarr;</span>
+        </div>
+
         <div className="amz-table-wrap">
           <table className="amz-table">
             <thead>
@@ -1015,21 +1091,23 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
             <tbody>
               {calculatedData && calculatedData.lineItems.length > 0 ? (
                 calculatedData.lineItems.map((item) => (
-                  <tr key={item.id}>
-                    <td style={{ color: 'var(--text-muted)' }}>{item.id}</td>
-                    <td style={{ fontWeight: 700 }}>{formatMoney(item.price, calculatedData.symbol)}</td>
-                    <td style={{ color: 'var(--text-muted)' }}>
+                  <tr key={item.id} className="amz-table-row">
+                    <td className="amz-td-id">{item.id}</td>
+                    <td className="amz-td-price">{formatMoney(item.price, calculatedData.symbol)}</td>
+                    <td className="amz-td-converted">
                       {formatMoney(item.localConvertedPrice, calculatedData.targetSymbol)}
                     </td>
-                    <td style={{ color: '#ff9900', fontWeight: 700 }}>{item.yieldRate.toFixed(2)}%</td>
-                    <td style={{ textAlign: 'right', color: '#10b981', fontWeight: 800 }}>
+                    <td className="amz-td-rate">
+                      <span className="amz-rate-pill">{item.yieldRate.toFixed(2)}%</span>
+                    </td>
+                    <td className="amz-td-payout">
                       {formatMoney(item.targetPayout, calculatedData.targetSymbol)}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', padding: '36px 16px', color: 'var(--text-muted)', fontStyle: 'italic', fontFamily: 'inherit' }}>
+                  <td colSpan={5} className="amz-empty-state">
                     No calculations yet. Enter item prices and click &ldquo;Calculate Commission&rdquo;.
                   </td>
                 </tr>
@@ -1037,14 +1115,14 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
             </tbody>
             {calculatedData && calculatedData.lineItems.length > 0 && (
               <tfoot>
-                <tr>
-                  <td style={{ color: '#ff9900', textTransform: 'uppercase' }}>TOTAL</td>
-                  <td style={{ color: 'var(--text-main)' }}>{formatMoney(calculatedData.grossSales, calculatedData.symbol)}</td>
-                  <td style={{ color: 'var(--text-muted)' }}>
+                <tr className="amz-tfoot-row">
+                  <td className="amz-tf-label">TOTAL</td>
+                  <td className="amz-tf-price">{formatMoney(calculatedData.grossSales, calculatedData.symbol)}</td>
+                  <td className="amz-tf-converted">
                     {formatMoney(calculatedData.totalLocalConvertedSales, calculatedData.targetSymbol)}
                   </td>
-                  <td style={{ color: 'var(--text-muted)' }}>-</td>
-                  <td style={{ textAlign: 'right', color: '#10b981', fontSize: '16px' }}>
+                  <td className="amz-tf-dash">-</td>
+                  <td className="amz-tf-payout">
                     {formatMoney(calculatedData.totalTargetPayout, calculatedData.targetSymbol)}
                   </td>
                 </tr>
@@ -1069,6 +1147,110 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
         )}
         <span>{toast.message}</span>
       </div>
+      {/* Terms & Estimation Disclaimer Modal Popup */}
+      {showTermsModal && (
+        <div
+          className="amz-modal-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="amz-modal-title"
+        >
+          <div className="amz-modal-backdrop" onClick={handleAcceptTerms} />
+          <div className="amz-modal-card">
+            <div className="amz-modal-header">
+              <div className="amz-modal-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              </div>
+              <div className="amz-modal-header-text">
+                <h2 id="amz-modal-title" className="amz-modal-title">Terms &amp; Estimation Notice</h2>
+                <p className="amz-modal-sub">Please review terms and approximate estimation policies before continuing</p>
+              </div>
+            </div>
+
+            <div className="amz-modal-body">
+              <div className="amz-modal-point">
+                <div className="amz-point-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="amz-point-title">Approximate Estimation Only</h3>
+                  <p className="amz-point-desc">
+                    All calculations, converted totals, and commission projections displayed by this tool are <strong>estimates</strong> for financial planning and analysis. They do not constitute guaranteed earnings statements.
+                  </p>
+                </div>
+              </div>
+
+              <div className="amz-modal-point">
+                <div className="amz-point-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="17 1 21 5 17 9" />
+                    <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                    <polyline points="7 23 3 19 7 15" />
+                    <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="amz-point-title">Currency &amp; Bank Conversion Spreads</h3>
+                  <p className="amz-point-desc">
+                    Exchange rates are updated live via interbank currency data. Net amounts deposited into your local bank or payout wallet (e.g., Payoneer, Wise, direct wire) may differ due to banking forex spreads and cross-border conversion fees.
+                  </p>
+                </div>
+              </div>
+
+              <div className="amz-modal-point">
+                <div className="amz-point-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <line x1="12" y1="8" x2="12" y2="16" />
+                    <line x1="8" y1="12" x2="16" y2="12" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="amz-point-title">Taxes, Withholding &amp; Returns</h3>
+                  <p className="amz-point-desc">
+                    Final payments are subject to applicable withholding taxes (such as US IRS Form W-8BEN tax deductions up to 30% for non-US associates), local VAT/GST, and deductions for customer returns, canceled orders, or shipping exclusions per official Amazon Associate terms.
+                  </p>
+                </div>
+              </div>
+
+              <div className="amz-modal-point">
+                <div className="amz-point-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="amz-point-title">Independent Tool Disclaimer</h3>
+                  <p className="amz-point-desc">
+                    ToolsOfSaaS.com is an independent utility and is not affiliated with, endorsed by, or officially associated with Amazon.com, Inc. or its subsidiaries.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="amz-modal-footer">
+              <button
+                type="button"
+                className="amz-modal-btn-accept"
+                onClick={handleAcceptTerms}
+                autoFocus
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                OK, I Understand &amp; Agree
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -10,20 +10,22 @@
   margin: 0 auto;
   padding: 30px 16px 60px;
   box-sizing: border-box;
+  container-type: inline-size;
+  container-name: amzcalc;
 }
 
 /* Header Container */
 .amz-header-card {
   position: relative;
   border-radius: 18px;
-  padding: 28px 24px;
+  padding: 24px 20px;
   margin-bottom: 24px;
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
   border: 1px solid rgba(255, 153, 0, 0.25);
   box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5), 0 0 24px -5px rgba(255, 153, 0, 0.12);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 [data-theme='light'] .amz-header-card {
@@ -32,12 +34,21 @@
   box-shadow: 0 12px 28px -8px rgba(255, 153, 0, 0.15);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 820px) {
   .amz-header-card {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 32px 30px;
+    padding: 30px 28px;
+  }
+}
+
+@container amzcalc (min-width: 720px) {
+  .amz-header-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 28px;
   }
 }
 
@@ -196,6 +207,7 @@
   font-weight: 800;
   color: var(--text-main, #f8fafc);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -205,17 +217,19 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .amz-title-left svg {
   color: #ff9900;
+  flex-shrink: 0;
 }
 
 /* Form Controls & Inputs */
 .amz-grid-2 {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 18px;
+  gap: 16px;
 }
 
 @media (min-width: 768px) {
@@ -224,15 +238,27 @@
   }
 }
 
+@container amzcalc (min-width: 620px) {
+  .amz-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 .amz-grid-3 {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 18px;
+  gap: 16px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 820px) {
   .amz-grid-3 {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2.2fr 1fr;
+  }
+}
+
+@container amzcalc (min-width: 680px) {
+  .amz-grid-3 {
+    grid-template-columns: 2.2fr 1fr;
   }
 }
 
@@ -240,6 +266,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 }
 
 .amz-label {
@@ -265,6 +292,14 @@
   font-family: inherit;
   outline: none;
   transition: all 0.2s ease;
+}
+
+.amz-select {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-right: 32px;
+  cursor: pointer;
 }
 
 .amz-select option {
@@ -306,7 +341,7 @@
   pointer-events: none;
 }
 
-/* Exchange Rate Banner */
+/* Exchange Rate Banner (Auto Fetched & Manually Editable) */
 .amz-exchange-box {
   margin-top: 18px;
   background: rgba(15, 23, 42, 0.85);
@@ -323,7 +358,15 @@
   border: 1px solid rgba(15, 23, 42, 0.1);
 }
 
-@media (min-width: 640px) {
+@media (min-width: 800px) {
+  .amz-exchange-box {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@container amzcalc (min-width: 720px) {
   .amz-exchange-box {
     flex-direction: row;
     align-items: center;
@@ -335,17 +378,20 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
 }
 
 .amz-exchange-icon {
   width: 44px;
   height: 44px;
+  min-width: 44px;
   border-radius: 11px;
   background: rgba(255, 153, 0, 0.12);
   color: #ff9900;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .amz-exchange-info-title {
@@ -364,41 +410,65 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .amz-exchange-static-label {
   font-size: 14px;
   font-weight: 700;
   color: var(--text-main, #f8fafc);
+  white-space: nowrap;
+  user-select: none;
 }
 
-.amz-exchange-rate-badge {
+/* Editable Exchange Rate Input */
+.amz-rate-input {
   background: var(--input-bg, #090d16);
-  border: 1px solid rgba(16, 185, 129, 0.4);
+  border: 1.5px solid rgba(16, 185, 129, 0.45);
   border-radius: 10px;
-  padding: 8px 14px;
+  padding: 7px 12px;
   color: #10b981;
   font-weight: 800;
   font-size: 16px;
   font-family: monospace;
   text-align: right;
-  user-select: none;
-  cursor: default;
-  min-width: 95px;
-  display: inline-block;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  width: 105px;
+  min-width: 85px;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
-[data-theme='light'] .amz-exchange-rate-badge {
-  background: rgba(255, 255, 255, 0.9);
+.amz-rate-input::-webkit-outer-spin-button,
+.amz-rate-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.amz-rate-input:focus {
+  border-color: #ff9900;
+  box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.25);
+  color: #ff9900;
+}
+
+[data-theme='light'] .amz-rate-input {
+  background: #ffffff;
   color: #047857;
-  border-color: rgba(16, 185, 129, 0.5);
+  border-color: rgba(16, 185, 129, 0.6);
+}
+
+[data-theme='light'] .amz-rate-input:focus {
+  border-color: #ff9900;
+  color: #d97706;
 }
 
 .amz-refresh-btn {
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text-main, #f8fafc);
   border-radius: 10px;
   padding: 8px 12px;
@@ -406,6 +476,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   transition: all 0.2s ease;
 }
 
@@ -413,6 +484,10 @@
   background: rgba(255, 153, 0, 0.2);
   color: #ff9900;
   border-color: rgba(255, 153, 0, 0.4);
+}
+
+.amz-refresh-btn:active {
+  transform: scale(0.95);
 }
 
 .amz-refresh-btn.spinning svg {
@@ -711,63 +786,266 @@
   color: #34d399;
 }
 
-/* Table Breakdown */
+[data-theme='light'] .amz-copy-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='light'] .amz-copy-btn:hover {
+  background: rgba(255, 153, 0, 0.12);
+  border-color: #ff9900;
+  color: #b45309;
+}
+
+[data-theme='light'] .amz-copy-btn.excel {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #047857;
+}
+
+[data-theme='light'] .amz-copy-btn.excel:hover {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: #059669;
+  color: #065f46;
+}
+
+/* ═══════════════════════════════════════════════════
+   ITEMIZED BREAKDOWN TABLE (Dark & Light Theme Adaptable)
+   ═══════════════════════════════════════════════════ */
+
 .amz-table-wrap {
   overflow-x: auto;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
-  background: rgba(8, 11, 17, 0.4);
-  max-height: 380px;
+  background: rgba(10, 15, 29, 0.7);
+  max-height: 420px;
+  transition: all 0.2s ease;
+}
+
+[data-theme='light'] .amz-table-wrap {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 14px -4px rgba(0, 0, 0, 0.06);
 }
 
 .amz-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   text-align: left;
   font-size: 14px;
   color: var(--text-main, #f8fafc);
 }
 
+[data-theme='light'] .amz-table {
+  color: #0f172a;
+}
+
+/* Table Header */
 .amz-table th {
-  background: rgba(15, 23, 42, 0.95);
-  padding: 12px 16px;
+  background: rgba(15, 23, 42, 0.96);
+  padding: 13px 16px;
   font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--text-muted, #94a3b8);
-  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  color: #94a3b8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: sticky;
   top: 0;
   z-index: 2;
+  white-space: nowrap;
 }
 
 [data-theme='light'] .amz-table th {
-  background: rgba(241, 245, 249, 0.98);
+  background: #f8fafc;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
 }
 
+/* Table Body Rows */
+.amz-table-row {
+  background: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.amz-table-row:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+[data-theme='light'] .amz-table-row {
+  background: #ffffff;
+}
+
+[data-theme='light'] .amz-table-row:nth-child(even) {
+  background: #f8fafc;
+}
+
+.amz-table-row:hover {
+  background: rgba(255, 153, 0, 0.08) !important;
+}
+
+[data-theme='light'] .amz-table-row:hover {
+  background: rgba(255, 153, 0, 0.1) !important;
+}
+
+/* Table Cells */
 .amz-table td {
   padding: 12px 16px;
-  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.05));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   font-family: monospace;
   font-size: 14px;
+  white-space: nowrap;
 }
 
-.amz-table tbody tr:hover {
-  background: rgba(255, 153, 0, 0.05);
+[data-theme='light'] .amz-table td {
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.amz-table tfoot td {
-  background: rgba(15, 23, 42, 0.95);
-  border-top: 2px solid rgba(255, 153, 0, 0.4);
+/* Specific Columns — Dark Mode Defaults & Light Mode Overrides */
+.amz-td-id {
+  color: #94a3b8;
+  font-weight: 600;
+  width: 60px;
+}
+
+[data-theme='light'] .amz-td-id {
+  color: #64748b;
+  font-weight: 700;
+}
+
+.amz-td-price {
+  color: #f8fafc;
+  font-weight: 800;
+}
+
+[data-theme='light'] .amz-td-price {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.amz-td-converted {
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+[data-theme='light'] .amz-td-converted {
+  color: #334155;
+  font-weight: 600;
+}
+
+.amz-td-rate {
+  font-weight: 700;
+}
+
+.amz-rate-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(255, 153, 0, 0.14);
+  color: #ff9900;
+  font-weight: 800;
+  border: 1px solid rgba(255, 153, 0, 0.3);
+}
+
+[data-theme='light'] .amz-rate-pill {
+  background: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.amz-td-payout {
+  text-align: right;
+  color: #10b981;
+  font-weight: 900;
+}
+
+[data-theme='light'] .amz-td-payout {
+  color: #047857;
+  font-weight: 900;
+}
+
+/* Table Footer (Totals) */
+.amz-tfoot-row td {
+  background: rgba(15, 23, 42, 0.96);
+  border-top: 2px solid rgba(255, 153, 0, 0.5);
+  border-bottom: none;
   font-weight: 800;
   position: sticky;
   bottom: 0;
   z-index: 2;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
 }
 
-[data-theme='light'] .amz-table tfoot td {
-  background: rgba(241, 245, 249, 0.98);
+[data-theme='light'] .amz-tfoot-row td {
+  background: #f8fafc;
+  border-top: 2px solid #ff9900;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.amz-tf-label {
+  color: #ff9900;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+[data-theme='light'] .amz-tf-label {
+  color: #b45309;
+}
+
+.amz-tf-price {
+  color: #f8fafc;
+  font-weight: 900;
+}
+
+[data-theme='light'] .amz-tf-price {
+  color: #0f172a;
+}
+
+.amz-tf-converted {
+  color: #cbd5e1;
+  font-weight: 700;
+}
+
+[data-theme='light'] .amz-tf-converted {
+  color: #1e293b;
+}
+
+.amz-tf-dash {
+  color: #64748b;
+}
+
+[data-theme='light'] .amz-tf-dash {
+  color: #94a3b8;
+}
+
+.amz-tf-payout {
+  text-align: right;
+  color: #10b981;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+[data-theme='light'] .amz-tf-payout {
+  color: #047857;
+  font-size: 16px;
+}
+
+/* Empty State */
+.amz-empty-state {
+  text-align: center;
+  padding: 36px 16px;
+  color: #94a3b8;
+  font-style: italic;
+  font-family: inherit;
+}
+
+[data-theme='light'] .amz-empty-state {
+  color: #64748b;
+  background: #ffffff;
 }
 
 /* Toast Container */
@@ -809,4 +1087,670 @@
 
 .amz-toast.success svg {
   color: #10b981;
+}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE RESPONSIVE STYLES (≤ 768px)
+   Matches ToolsOfSaaS mobile design system
+   ═══════════════════════════════════════════════════ */
+
+.amz-mobile-scroll-hint {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .amz-calc-wrap {
+    padding: 10px 0 40px !important;
+  }
+
+  /* Header Card */
+  .amz-header-card {
+    padding: 16px 14px;
+    margin-bottom: 16px;
+    border-radius: 16px;
+    gap: 12px;
+  }
+
+  .amz-header-left {
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .amz-header-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 12px;
+  }
+
+  .amz-header-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .amz-header-title-row {
+    gap: 6px;
+  }
+
+  .amz-header-title {
+    font-size: 20px;
+    line-height: 1.25;
+  }
+
+  .amz-badge-pro {
+    font-size: 10px;
+    padding: 2px 7px;
+  }
+
+  .amz-header-sub {
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin-top: 4px;
+  }
+
+  .amz-rate-status {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 10px;
+    width: fit-content;
+    align-self: flex-start;
+  }
+
+  /* Card Containers */
+  .amz-card {
+    padding: 16px 14px;
+    margin-bottom: 16px;
+    border-radius: 16px;
+  }
+
+  .amz-card-title {
+    font-size: 16px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .amz-title-left {
+    gap: 8px;
+    font-size: 15.5px;
+  }
+
+  .amz-title-left svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Form Inputs & Labels */
+  .amz-grid-2,
+  .amz-grid-3 {
+    gap: 14px;
+  }
+
+  .amz-label {
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    margin-bottom: 2px;
+  }
+
+  .amz-select,
+  .amz-input,
+  .amz-textarea {
+    font-size: 13.5px;
+    padding: 11px 12px;
+    border-radius: 10px;
+  }
+
+  .amz-rate-input-wrap .amz-input {
+    font-size: 15px;
+    padding-right: 32px;
+  }
+
+  .amz-rate-percent-sign {
+    right: 12px;
+    font-size: 14px;
+  }
+
+  /* Foreign Exchange Conversion Box */
+  .amz-exchange-box {
+    margin-top: 14px;
+    padding: 12px 12px;
+    gap: 12px;
+    border-radius: 12px;
+  }
+
+  .amz-exchange-left {
+    gap: 10px;
+  }
+
+  .amz-exchange-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 8px;
+  }
+
+  .amz-exchange-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .amz-exchange-info-title {
+    font-size: 12.5px;
+    line-height: 1.3;
+  }
+
+  .amz-exchange-info-sub {
+    font-size: 11.5px;
+    margin-top: 2px;
+  }
+
+  .amz-exchange-right {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 6px 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+  }
+
+  [data-theme='light'] .amz-exchange-right {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(15, 23, 42, 0.08);
+  }
+
+  .amz-exchange-static-label {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .amz-rate-input {
+    font-size: 14px;
+    padding: 5px 8px;
+    width: 90px;
+    min-width: 75px;
+    text-align: right;
+  }
+
+  .amz-refresh-btn {
+    padding: 6px 10px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Bulk Textarea & Actions */
+  .amz-textarea {
+    min-height: 95px;
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .amz-help-text {
+    font-size: 11.5px;
+    line-height: 1.4;
+  }
+
+  .amz-sample-btn {
+    font-size: 11.5px;
+    padding: 3px 6px;
+  }
+
+  .amz-actions-row {
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .amz-btn-calc {
+    padding: 13px 18px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .amz-btn-clear {
+    padding: 11px 16px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  /* Payout Summary Grid */
+  .amz-summary-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .amz-stat-card {
+    padding: 12px 10px;
+    border-radius: 12px;
+  }
+
+  .amz-stat-label {
+    font-size: 10.5px;
+    margin-bottom: 3px;
+  }
+
+  .amz-stat-value {
+    font-size: 19px;
+    line-height: 1.2;
+  }
+
+  .amz-payout-hero-card {
+    grid-column: 1 / -1;
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+
+  .amz-payout-header {
+    margin-bottom: 8px;
+    gap: 6px;
+  }
+
+  .amz-payout-label {
+    font-size: 11.5px;
+  }
+
+  .amz-payout-rate-badge {
+    font-size: 10.5px;
+    padding: 2px 6px;
+  }
+
+  .amz-payout-amount {
+    font-size: 26px;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+
+  .amz-payout-amount-code {
+    font-size: 15px;
+    margin-left: 4px;
+  }
+
+  /* Disclaimer Box */
+  .amz-disclaimer-box {
+    margin-top: 14px;
+    padding: 11px 12px;
+    gap: 8px;
+    border-radius: 10px;
+  }
+
+  .amz-disclaimer-icon {
+    min-width: 16px;
+  }
+
+  .amz-disclaimer-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .amz-disclaimer-text {
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+
+  /* Copy Buttons */
+  .amz-copy-btn {
+    font-size: 11.5px;
+    padding: 5px 9px;
+    border-radius: 7px;
+  }
+
+  /* Mobile Scroll Hint */
+  .amz-mobile-scroll-hint {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-muted, #94a3b8);
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+
+  /* Table Breakdown */
+  .amz-table-wrap {
+    max-height: 320px;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+  }
+
+  .amz-table th {
+    padding: 9px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .amz-table td {
+    padding: 9px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* Toast Notification */
+  .amz-toast {
+    left: 14px;
+    right: 14px;
+    bottom: 16px;
+    justify-content: center;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 10px;
+  }
+}
+
+/* Extra small mobile adjustments (≤ 420px) */
+@media (max-width: 420px) {
+  .amz-header-title {
+    font-size: 18px;
+  }
+
+  .amz-stat-value {
+    font-size: 16px;
+  }
+
+  .amz-payout-amount {
+    font-size: 22px;
+  }
+
+  .amz-exchange-static-label {
+    font-size: 11.5px;
+  }
+
+  .amz-rate-input {
+    font-size: 13px;
+    min-width: 65px;
+    width: 78px;
+    padding: 4px 6px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   TERMS OF USE & ESTIMATION NOTICE MODAL POPUP
+   ═══════════════════════════════════════════════════ */
+
+.amz-terms-link-btn {
+  background: transparent;
+  border: none;
+  color: #ff9900;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0 4px;
+  font-size: 13px;
+  font-family: inherit;
+  display: inline;
+  transition: color 0.15s ease;
+}
+
+.amz-terms-link-btn:hover {
+  color: #ffa826;
+}
+
+[data-theme='light'] .amz-terms-link-btn {
+  color: #b45309;
+}
+
+[data-theme='light'] .amz-terms-link-btn:hover {
+  color: #d97706;
+}
+
+/* Modal Overlay & Backdrop */
+.amz-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+  animation: amz-fade-in 0.25s ease-out;
+}
+
+.amz-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 7, 18, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme='light'] .amz-modal-backdrop {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Modal Card */
+.amz-modal-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 640px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.96) 100%);
+  border: 1px solid rgba(255, 153, 0, 0.35);
+  border-radius: 20px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px -5px rgba(255, 153, 0, 0.18);
+  color: #f8fafc;
+  animation: amz-scale-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+[data-theme='light'] .amz-modal-card {
+  background: #ffffff;
+  border: 1px solid rgba(255, 153, 0, 0.45);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.25), 0 0 30px -5px rgba(255, 153, 0, 0.15);
+  color: #0f172a;
+}
+
+/* Modal Header */
+.amz-modal-header {
+  padding: 22px 24px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+[data-theme='light'] .amz-modal-header {
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.amz-modal-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff9900 0%, #e68a00 100%);
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px -3px rgba(255, 153, 0, 0.5);
+  flex-shrink: 0;
+}
+
+.amz-modal-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-main, #f8fafc);
+  letter-spacing: -0.01em;
+}
+
+[data-theme='light'] .amz-modal-title {
+  color: #0f172a;
+}
+
+.amz-modal-sub {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--text-muted, #94a3b8);
+  font-weight: 500;
+}
+
+[data-theme='light'] .amz-modal-sub {
+  color: #64748b;
+}
+
+/* Modal Body & Policy Points */
+.amz-modal-body {
+  padding: 18px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.amz-modal-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: border-color 0.15s ease;
+}
+
+[data-theme='light'] .amz-modal-point {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.amz-modal-point:hover {
+  border-color: rgba(255, 153, 0, 0.3);
+}
+
+.amz-point-icon {
+  color: #ff9900;
+  min-width: 20px;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme='light'] .amz-point-icon {
+  color: #d97706;
+}
+
+.amz-point-title {
+  margin: 0 0 3px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+[data-theme='light'] .amz-point-title {
+  color: #0f172a;
+}
+
+.amz-point-desc {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+[data-theme='light'] .amz-point-desc {
+  color: #475569;
+}
+
+.amz-point-desc strong {
+  color: #ff9900;
+}
+
+[data-theme='light'] .amz-point-desc strong {
+  color: #b45309;
+}
+
+/* Modal Footer */
+.amz-modal-footer {
+  padding: 16px 24px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: stretch;
+  flex-shrink: 0;
+}
+
+[data-theme='light'] .amz-modal-footer {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.amz-modal-btn-accept {
+  width: 100%;
+  background: linear-gradient(135deg, #ff9900 0%, #e68a00 100%);
+  color: #0f172a;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px -4px rgba(255, 153, 0, 0.45);
+  transition: all 0.2s ease;
+}
+
+.amz-modal-btn-accept:hover {
+  background: linear-gradient(135deg, #ffa826 0%, #ff9900 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px -4px rgba(255, 153, 0, 0.55);
+}
+
+.amz-modal-btn-accept:active {
+  transform: translateY(0);
+}
+
+@keyframes amz-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes amz-scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 640px) {
+  .amz-modal-card {
+    max-height: 92vh;
+  }
+  .amz-modal-header {
+    padding: 16px 16px 12px;
+    gap: 12px;
+  }
+  .amz-modal-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+  .amz-modal-title {
+    font-size: 17px;
+  }
+  .amz-modal-body {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+  .amz-modal-point {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  .amz-modal-footer {
+    padding: 14px 16px 18px;
+  }
 }
