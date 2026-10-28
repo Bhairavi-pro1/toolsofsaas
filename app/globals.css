@@ -2224,6 +2224,168 @@ details.seo-faq-item[open] .seo-faq-answer {
   line-height: 1.5;
 }
 
+/* ═══════════════════════════════════════════════════
+   Explore More Tools (Sanity Integration & Directory)
+   ═══════════════════════════════════════════════════ */
+.seo-explore-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.seo-explore-tools-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 16px;
+}
+
+.seo-explore-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 650px;
+}
+
+.seo-explore-pill {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+  background: var(--badge-bg);
+  border: 1px solid var(--border-hover);
+}
+
+.seo-explore-desc {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.seo-explore-view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.seo-explore-view-all-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.seo-explore-view-all-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.seo-explore-view-all-btn:hover svg {
+  transform: translateX(3px);
+}
+
+.seo-sanity-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 18px;
+  width: 100%;
+}
+
+/* Fallback chips when Sanity tools are not provided */
+.seo-fallback-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.seo-fallback-tool-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.seo-fallback-tool-chip:hover {
+  border-color: var(--primary);
+  background: var(--bg-card-hover);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.seo-fallback-chip-icon {
+  font-size: 16px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.seo-fallback-chip-text {
+  flex: 1;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.seo-fallback-tool-chip svg {
+  color: var(--text-muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.seo-fallback-tool-chip:hover svg {
+  color: var(--primary);
+  transform: translateX(2px) translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .seo-explore-tools-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .seo-explore-view-all-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .seo-sanity-tools-grid {
+    grid-template-columns: 1fr;
+  }
+  .seo-fallback-links-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Call to Action Banner */
 .seo-cta-banner {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);

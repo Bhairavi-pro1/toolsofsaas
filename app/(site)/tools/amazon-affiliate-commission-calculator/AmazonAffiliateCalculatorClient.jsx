@@ -227,12 +227,33 @@ export default function AmazonAffiliateCalculatorClient() {
   const [ratePulseColor, setRatePulseColor] = useState('normal'); // 'normal', 'warning', 'error'
   const [isRefreshingRate, setIsRefreshingRate] = useState(false);
 
-  // Category & Commission State
+  // Mode State: 'single' | 'mixed'
+  const [calcMode, setCalcMode] = useState('single');
+
+  // Single Category State
   const [categoryPreset, setCategoryPreset] = useState('4.5');
   const [commissionRate, setCommissionRate] = useState(4.5);
+  const [bulkPrices, setBulkPrices] = useState('');
+
+  // Mixed Multi-Category Bundles State
+  const [categoryGroups, setCategoryGroups] = useState([
+    {
+      id: 'grp-1',
+      presetValue: '4.5',
+      categoryName: 'Books, Outdoors, Tools, Kitchen, Auto',
+      rate: 4.5,
+      pricesText: '',
+    },
+    {
+      id: 'grp-2',
+      presetValue: '2.5',
+      categoryName: 'PC, Laptops, Components',
+      rate: 2.5,
+      pricesText: '',
+    },
+  ]);
 
   // Input & Calculation State
-  const [bulkPrices, setBulkPrices] = useState('');
   const [calculatedData, setCalculatedData] = useState(null);
 
   // Toast State
@@ -383,6 +404,17 @@ export default function AmazonAffiliateCalculatorClient() {
     fetchExchangeRate();
   }, [storefrontId, targetCurrencyCode, customTargetCode, fetchExchangeRate]);
 
+  // Helper to extract clean category name from preset value
+  const getCategoryNameFromPreset = useCallback(
+    (presetVal, presetsList = activeCategoryPresets) => {
+      if (presetVal === 'CUSTOM') return 'Custom Category';
+      const found = presetsList.find((p) => p.value === String(presetVal));
+      if (!found) return 'General Category';
+      return found.label.replace(/\s*\(\d+(\.\d+)?%\)/, '').trim();
+    },
+    [activeCategoryPresets]
+  );
+
   // When storefront changes, automatically update categories to that country's official tiers
   const handleStorefrontChange = (e) => {
     const newStorefrontId = e.target.value;
@@ -397,6 +429,144 @@ export default function AmazonAffiliateCalculatorClient() {
     const defaultTier = presets.find((p) => p.value === '4.5') || presets[0];
     setCategoryPreset(defaultTier.value);
     setCommissionRate(parseFloat(defaultTier.value) || 0);
+
+    // Also update existing category groups in Mixed Mode to match the new country's tiers
+    setCategoryGroups((prevGroups) =>
+      prevGroups.map((grp, idx) => {
+        const matchingPreset = presets[idx % presets.length] || presets[0];
+        const catName = matchingPreset.value === 'CUSTOM'
+          ? 'Custom Category'
+          : matchingPreset.label.replace(/\s*\(\d+(\.\d+)?%\)/, '').trim();
+        return {
+          ...grp,
+          presetValue: matchingPreset.value,
+          categoryName: catName,
+          rate: parseFloat(matchingPreset.value) || grp.rate,
+        };
+      })
+    );
+  };
+
+  // Mixed Mode: Add a new Category Group
+  const handleAddGroup = () => {
+    setCategoryGroups((prev) => {
+      const nextIndex = prev.length;
+      const presetOption = activeCategoryPresets[nextIndex % activeCategoryPresets.length] || activeCategoryPresets[0];
+      const catName =
+        presetOption.value === 'CUSTOM'
+          ? 'Custom Category'
+          : presetOption.label.replace(/\s*\(\d+(\.\d+)?%\)/, '').trim();
+      return [
+        ...prev,
+        {
+          id: `grp-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          presetValue: presetOption.value,
+          categoryName: catName,
+          rate: parseFloat(presetOption.value) || 3.0,
+          pricesText: '',
+        },
+      ];
+    });
+    showToast('New category group added.');
+  };
+
+  // Mixed Mode: Remove a Category Group
+  const handleRemoveGroup = (groupId) => {
+    if (categoryGroups.length <= 1) {
+      showToast('At least one category group is required.', true);
+      return;
+    }
+    setCategoryGroups((prev) => prev.filter((g) => g.id !== groupId));
+    showToast('Category group removed.');
+  };
+
+  // Mixed Mode: Update a Category Group's Preset
+  const handleGroupPresetChange = (groupId, newPresetVal) => {
+    const found = activeCategoryPresets.find((p) => p.value === newPresetVal);
+    const catName = found
+      ? (newPresetVal === 'CUSTOM' ? 'Custom Category' : found.label.replace(/\s*\(\d+(\.\d+)?%\)/, '').trim())
+      : 'Custom Category';
+    const newRate = found && newPresetVal !== 'CUSTOM' ? parseFloat(found.value) : undefined;
+
+    setCategoryGroups((prev) =>
+      prev.map((g) => {
+        if (g.id !== groupId) return g;
+        return {
+          ...g,
+          presetValue: newPresetVal,
+          categoryName: catName,
+          rate: newRate !== undefined ? newRate : g.rate,
+        };
+      })
+    );
+  };
+
+  // Mixed Mode: Update a Category Group's Rate
+  const handleGroupRateChange = (groupId, newRateVal) => {
+    setCategoryGroups((prev) =>
+      prev.map((g) => {
+        if (g.id !== groupId) return g;
+        const matched = activeCategoryPresets.some((item) => item.value === String(newRateVal));
+        return {
+          ...g,
+          rate: newRateVal,
+          presetValue: matched ? String(newRateVal) : 'CUSTOM',
+        };
+      })
+    );
+  };
+
+  // Mixed Mode: Update a Category Group's Prices Text
+  const handleGroupPricesChange = (groupId, newPricesText) => {
+    setCategoryGroups((prev) =>
+      prev.map((g) => (g.id === groupId ? { ...g, pricesText: newPricesText } : g))
+    );
+  };
+
+  // Mode Switch Handler (Preserves typed prices smoothly across modes)
+  const handleModeChange = (newMode) => {
+    if (newMode === calcMode) return;
+    setCalcMode(newMode);
+
+    if (newMode === 'mixed') {
+      if (bulkPrices.trim() && (!categoryGroups[0] || !categoryGroups[0].pricesText.trim())) {
+        const catName = getCategoryNameFromPreset(categoryPreset);
+        setCategoryGroups((prev) => {
+          if (prev.length === 0) {
+            return [
+              {
+                id: `grp-${Date.now()}`,
+                presetValue: categoryPreset,
+                categoryName: catName,
+                rate: commissionRate,
+                pricesText: bulkPrices,
+              },
+            ];
+          }
+          const updated = [...prev];
+          updated[0] = {
+            ...updated[0],
+            presetValue: categoryPreset,
+            categoryName: catName,
+            rate: commissionRate,
+            pricesText: bulkPrices,
+          };
+          return updated;
+        });
+      }
+    } else {
+      if (!bulkPrices.trim() && categoryGroups[0] && categoryGroups[0].pricesText.trim()) {
+        setBulkPrices(categoryGroups[0].pricesText);
+        setCategoryPreset(categoryGroups[0].presetValue);
+        setCommissionRate(categoryGroups[0].rate);
+      }
+    }
+
+    if (calculatedData) {
+      setTimeout(() => {
+        calculateCommission(false, newMode);
+      }, 60);
+    }
   };
 
   // Parse raw price input into array of valid positive numbers
@@ -419,64 +589,178 @@ export default function AmazonAffiliateCalculatorClient() {
     return needsSpace ? `${symbol} ${formatted}` : `${symbol}${formatted}`;
   }, []);
 
-  // Core Calculation Function
+  // Core Calculation Function (Supports Single Category and Multi-Category Bundles)
   const calculateCommission = useCallback(
-    (showSuccessToast = false) => {
-      const prices = parsePrices(bulkPrices);
-
-      if (prices.length === 0) {
-        if (showSuccessToast) showToast('Please enter valid numeric item prices.', true);
-        setCalculatedData(null);
-        return;
-      }
-
-      const ratePct = parseFloat(commissionRate) || 0;
+    (showSuccessToast = false, overrideMode = null) => {
+      const mode = overrideMode || calcMode;
       const exRate = parseFloat(exchangeRate) || 1;
 
-      let grossSales = 0;
-      let storefrontYield = 0;
-      let totalLocalConvertedSales = 0;
-      const lineItems = [];
+      if (mode === 'single') {
+        const prices = parsePrices(bulkPrices);
 
-      prices.forEach((price, index) => {
-        const localConvertedPrice = price * exRate;
-        const itemYield = price * (ratePct / 100);
-        const targetPayout = itemYield * exRate;
+        if (prices.length === 0) {
+          if (showSuccessToast) showToast('Please enter valid numeric item prices.', true);
+          setCalculatedData(null);
+          return;
+        }
 
-        grossSales += price;
-        storefrontYield += itemYield;
-        totalLocalConvertedSales += localConvertedPrice;
+        const ratePct = parseFloat(commissionRate) || 0;
+        let grossSales = 0;
+        let storefrontYield = 0;
+        let totalLocalConvertedSales = 0;
+        const lineItems = [];
+        const catName = getCategoryNameFromPreset(categoryPreset);
 
-        lineItems.push({
-          id: index + 1,
-          price,
-          localConvertedPrice,
-          yieldRate: ratePct,
-          targetPayout,
+        prices.forEach((price, index) => {
+          const localConvertedPrice = price * exRate;
+          const itemYield = price * (ratePct / 100);
+          const targetPayout = itemYield * exRate;
+
+          grossSales += price;
+          storefrontYield += itemYield;
+          totalLocalConvertedSales += localConvertedPrice;
+
+          lineItems.push({
+            id: index + 1,
+            category: catName,
+            price,
+            localConvertedPrice,
+            yieldRate: ratePct,
+            targetPayout,
+          });
         });
-      });
 
-      const totalTargetPayout = storefrontYield * exRate;
+        const totalTargetPayout = storefrontYield * exRate;
+        const categoryBreakdown = [
+          {
+            category: catName,
+            rate: ratePct,
+            count: prices.length,
+            gross: grossSales,
+            yield: storefrontYield,
+            convertedPayout: totalTargetPayout,
+          },
+        ];
 
-      setCalculatedData({
-        itemCount: prices.length,
-        grossSales,
-        totalLocalConvertedSales,
-        totalTargetPayout,
-        commissionRate: ratePct,
-        exchangeRate: exRate,
-        lineItems,
-        baseCode: activeBaseCode,
-        targetCode: activeTargetCode,
-        symbol: activeSymbol,
-        targetSymbol: activeTargetSymbol,
-      });
+        setCalculatedData({
+          mode: 'single',
+          itemCount: prices.length,
+          grossSales,
+          totalLocalConvertedSales,
+          totalTargetPayout,
+          commissionRate: ratePct,
+          blendedRate: ratePct,
+          categoryBreakdown,
+          exchangeRate: exRate,
+          lineItems,
+          baseCode: activeBaseCode,
+          targetCode: activeTargetCode,
+          symbol: activeSymbol,
+          targetSymbol: activeTargetSymbol,
+        });
 
-      if (showSuccessToast) {
-        showToast('Commission calculated successfully!');
+        if (showSuccessToast) {
+          showToast('Commission calculated successfully!');
+        }
+      } else {
+        // Mixed Categories Mode
+        let totalCount = 0;
+        let grossSales = 0;
+        let storefrontYield = 0;
+        let totalLocalConvertedSales = 0;
+        const lineItems = [];
+        const categoryBreakdown = [];
+
+        categoryGroups.forEach((grp, grpIdx) => {
+          const prices = parsePrices(grp.pricesText);
+          const grpRate = parseFloat(grp.rate) || 0;
+          const grpCatName = grp.categoryName || `Category ${grpIdx + 1}`;
+          let grpGross = 0;
+          let grpYield = 0;
+          let grpConvertedPayout = 0;
+
+          prices.forEach((price) => {
+            totalCount++;
+            const localConvertedPrice = price * exRate;
+            const itemYield = price * (grpRate / 100);
+            const targetPayout = itemYield * exRate;
+
+            grossSales += price;
+            storefrontYield += itemYield;
+            totalLocalConvertedSales += localConvertedPrice;
+
+            grpGross += price;
+            grpYield += itemYield;
+            grpConvertedPayout += targetPayout;
+
+            lineItems.push({
+              id: totalCount,
+              category: grpCatName,
+              price,
+              localConvertedPrice,
+              yieldRate: grpRate,
+              targetPayout,
+            });
+          });
+
+          if (prices.length > 0) {
+            categoryBreakdown.push({
+              category: grpCatName,
+              rate: grpRate,
+              count: prices.length,
+              gross: grpGross,
+              yield: grpYield,
+              convertedPayout: grpConvertedPayout,
+            });
+          }
+        });
+
+        if (lineItems.length === 0) {
+          if (showSuccessToast) showToast('Please enter item prices in at least one category group.', true);
+          setCalculatedData(null);
+          return;
+        }
+
+        const totalTargetPayout = storefrontYield * exRate;
+        const blendedRate = grossSales > 0 ? (storefrontYield / grossSales) * 100 : 0;
+
+        setCalculatedData({
+          mode: 'mixed',
+          itemCount: lineItems.length,
+          grossSales,
+          totalLocalConvertedSales,
+          totalTargetPayout,
+          commissionRate: blendedRate,
+          blendedRate,
+          categoryBreakdown,
+          exchangeRate: exRate,
+          lineItems,
+          baseCode: activeBaseCode,
+          targetCode: activeTargetCode,
+          symbol: activeSymbol,
+          targetSymbol: activeTargetSymbol,
+        });
+
+        if (showSuccessToast) {
+          showToast(`Mixed commission calculated across ${categoryBreakdown.length} categories!`);
+        }
       }
     },
-    [bulkPrices, commissionRate, exchangeRate, activeBaseCode, activeTargetCode, activeSymbol, activeTargetSymbol, parsePrices, showToast]
+    [
+      calcMode,
+      bulkPrices,
+      commissionRate,
+      categoryPreset,
+      categoryGroups,
+      exchangeRate,
+      activeBaseCode,
+      activeTargetCode,
+      activeSymbol,
+      activeTargetSymbol,
+      getCategoryNameFromPreset,
+      parsePrices,
+      showToast,
+    ]
   );
 
   // Auto recalculate when active calculations already exist and inputs change
@@ -484,9 +768,18 @@ export default function AmazonAffiliateCalculatorClient() {
     if (calculatedData) {
       calculateCommission(false);
     }
-  }, [commissionRate, exchangeRate, activeSymbol, activeTargetCode, activeTargetSymbol, calculateCommission]);
+  }, [
+    commissionRate,
+    exchangeRate,
+    activeSymbol,
+    activeTargetCode,
+    activeTargetSymbol,
+    categoryGroups,
+    bulkPrices,
+    calculateCommission,
+  ]);
 
-  // Handle Category Preset Change
+  // Handle Category Preset Change (Single Mode)
   const handleCategoryPresetChange = (e) => {
     const val = e.target.value;
     e.target.blur();
@@ -496,7 +789,7 @@ export default function AmazonAffiliateCalculatorClient() {
     }
   };
 
-  // Handle Manual Commission Rate Change
+  // Handle Manual Commission Rate Change (Single Mode)
   const handleCommissionRateChange = (e) => {
     const val = e.target.value;
     setCommissionRate(val);
@@ -508,18 +801,18 @@ export default function AmazonAffiliateCalculatorClient() {
     }
   };
 
-  // Sample Data Loader
-  const handleLoadSample = () => {
-    setBulkPrices('100\n300\n200\n250\n150');
-    showToast('Sample dataset loaded.');
-    setTimeout(() => {
-      calculateCommission(true);
-    }, 50);
-  };
-
-  // Reset / Clear Form
+  // Reset / Clear Form (Supports both Single and Mixed Multi-Category)
   const handleClear = () => {
-    setBulkPrices('');
+    if (calcMode === 'single') {
+      setBulkPrices('');
+    } else {
+      setCategoryGroups((prev) =>
+        prev.map((g) => ({
+          ...g,
+          pricesText: '',
+        }))
+      );
+    }
     setCalculatedData(null);
     showToast('Form cleared.');
   };
@@ -531,15 +824,33 @@ export default function AmazonAffiliateCalculatorClient() {
       return;
     }
 
+    let categoryBreakdownText = '';
+    if (calculatedData.categoryBreakdown && calculatedData.categoryBreakdown.length > 1) {
+      categoryBreakdownText = `
+Category Contribution Breakdown:
+${calculatedData.categoryBreakdown
+  .map(
+    (c) =>
+      `• ${c.category} (${c.rate.toFixed(1)}%): ${c.count} items | Sales: ${formatMoney(c.gross, calculatedData.symbol)} | Payout: ${formatMoney(c.convertedPayout, calculatedData.targetSymbol)} ${calculatedData.targetCode}`
+  )
+  .join('\n')}
+`;
+    }
+
     const summaryText = `--- Amazon Affiliate Commission Summary ---
+Mode: ${calculatedData.mode === 'mixed' ? 'Mixed Multi-Category Bundles' : 'Single Category'}
 Storefront: ${currentStorefront.label} (${calculatedData.baseCode})
 Processed Items: ${calculatedData.itemCount}
-Commission Rate: ${calculatedData.commissionRate}%
+${
+  calculatedData.mode === 'mixed'
+    ? `Blended Commission Rate: ${calculatedData.blendedRate.toFixed(2)}% (across ${calculatedData.categoryBreakdown.length} categories)`
+    : `Commission Rate: ${calculatedData.commissionRate.toFixed(2)}%`
+}
 Gross Sales: ${formatMoney(calculatedData.grossSales, calculatedData.symbol)}
 Total Local Sales: ${formatMoney(calculatedData.totalLocalConvertedSales, calculatedData.targetSymbol)} (${calculatedData.targetCode})
 Net Target Payout: ${formatMoney(calculatedData.totalTargetPayout, calculatedData.targetSymbol)} (${calculatedData.targetCode})
 Exchange Rate: 1 ${calculatedData.baseCode} = ${calculatedData.exchangeRate} ${calculatedData.targetCode}
-
+${categoryBreakdownText}
 Calculated via ToolsOfSaaS.com:
 https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
 `;
@@ -566,6 +877,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
 
     const headers = [
       'Item #',
+      'Category',
       `Price (${calculatedData.symbol})`,
       `Local Converted (${targetHeader})`,
       'Rate (%)',
@@ -574,17 +886,21 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
 
     const dataRows = calculatedData.lineItems.map((item) => [
       item.id,
+      item.category,
       formatMoney(item.price, calculatedData.symbol),
       formatMoney(item.localConvertedPrice, calculatedData.targetSymbol),
-      `${item.yieldRate.toFixed(2)}%`,
+      `${item.yieldRate.toFixed(1)}%`,
       formatMoney(item.targetPayout, calculatedData.targetSymbol),
     ]);
 
     const totalRow = [
       'TOTAL',
+      calculatedData.categoryBreakdown?.length > 1
+        ? `${calculatedData.categoryBreakdown.length} Categories`
+        : calculatedData.categoryBreakdown?.[0]?.category || '1 Category',
       formatMoney(calculatedData.grossSales, calculatedData.symbol),
       formatMoney(calculatedData.totalLocalConvertedSales, calculatedData.targetSymbol),
-      '-',
+      `${calculatedData.blendedRate.toFixed(2)}% (Blended)`,
       formatMoney(calculatedData.totalTargetPayout, calculatedData.targetSymbol),
     ];
 
@@ -593,17 +909,18 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
       <table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; font-family: Calibri, Arial, sans-serif;">
         <thead>
           <tr style="background-color: #0F172A;">
-            <th colspan="5" style="text-align: center; font-size: 14pt; padding: 10px; background-color: #0F172A; color: #FF9900; font-weight: bold;">
+            <th colspan="6" style="text-align: center; font-size: 14pt; padding: 10px; background-color: #0F172A; color: #FF9900; font-weight: bold;">
               ToolsOfSaaS.com — Amazon Affiliate Commission Calculator
             </th>
           </tr>
           <tr style="background-color: #1E293B;">
-            <th colspan="5" style="text-align: center; font-size: 9.5pt; padding: 6px; background-color: #1E293B; color: #CBD5E1; font-weight: normal;">
+            <th colspan="6" style="text-align: center; font-size: 9.5pt; padding: 6px; background-color: #1E293B; color: #CBD5E1; font-weight: normal;">
               Source: https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator | Storefront: ${currentStorefront.label} | Rate: 1 ${calculatedData.baseCode} = ${calculatedData.exchangeRate} ${calculatedData.targetCode}
             </th>
           </tr>
           <tr style="background-color: #F1F5F9; font-weight: bold; color: #0F172A;">
             <th style="text-align: center; padding: 8px;">Item #</th>
+            <th style="text-align: left; padding: 8px;">Category</th>
             <th style="text-align: right; padding: 8px;">Price (${calculatedData.symbol})</th>
             <th style="text-align: right; padding: 8px;">Local Converted (${targetHeader})</th>
             <th style="text-align: center; padding: 8px;">Rate (%)</th>
@@ -616,10 +933,11 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
               (r) => `
             <tr>
               <td style="text-align: center; padding: 6px;">${r[0]}</td>
-              <td style="text-align: right; padding: 6px;">${r[1]}</td>
+              <td style="text-align: left; padding: 6px; font-weight: 600;">${r[1]}</td>
               <td style="text-align: right; padding: 6px;">${r[2]}</td>
-              <td style="text-align: center; padding: 6px;">${r[3]}</td>
-              <td style="text-align: right; padding: 6px; font-weight: bold; color: #059669;">${r[4]}</td>
+              <td style="text-align: right; padding: 6px;">${r[3]}</td>
+              <td style="text-align: center; padding: 6px;">${r[4]}</td>
+              <td style="text-align: right; padding: 6px; font-weight: bold; color: #059669;">${r[5]}</td>
             </tr>
           `
             )
@@ -628,14 +946,15 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
         <tfoot>
           <tr style="background-color: #F8FAFC; font-weight: bold; border-top: 2px solid #0F172A;">
             <td style="text-align: center; padding: 8px; color: #D97706;">${totalRow[0]}</td>
-            <td style="text-align: right; padding: 8px;">${totalRow[1]}</td>
+            <td style="text-align: left; padding: 8px; color: #D97706; font-size: 9.5pt;">${totalRow[1]}</td>
             <td style="text-align: right; padding: 8px;">${totalRow[2]}</td>
-            <td style="text-align: center; padding: 8px;">${totalRow[3]}</td>
-            <td style="text-align: right; padding: 8px; color: #059669; font-size: 11pt;">${totalRow[4]}</td>
+            <td style="text-align: right; padding: 8px;">${totalRow[3]}</td>
+            <td style="text-align: center; padding: 8px;">${totalRow[4]}</td>
+            <td style="text-align: right; padding: 8px; color: #059669; font-size: 11pt;">${totalRow[5]}</td>
           </tr>
           <tr>
-            <td colspan="5" style="text-align: center; padding: 8px; font-size: 9pt; color: #64748B; font-style: italic; background-color: #F8FAFC;">
-              Watermark: Calculated on ToolsOfSaaS.com — 100% Free Web Tools & SaaS Calculators
+            <td colspan="6" style="text-align: center; padding: 8px; font-size: 9pt; color: #64748B; font-style: italic; background-color: #F8FAFC;">
+              Calculated on ToolsOfSaaS.com — 100% Free Web Tools & SaaS Calculators
             </td>
           </tr>
         </tfoot>
@@ -644,14 +963,14 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
 
     // Plaintext TSV with standard Windows Excel CRLF and watermark
     const tsvLines = [
-      `ToolsOfSaaS.com — Amazon Affiliate Commission Calculator\t\t\t\t`,
-      `Source: https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator\tStorefront: ${currentStorefront.label}\tRate: 1 ${calculatedData.baseCode} = ${calculatedData.exchangeRate} ${calculatedData.targetCode}\t\t`,
+      `ToolsOfSaaS.com — Amazon Affiliate Commission Calculator\t\t\t\t\t`,
+      `Source: https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator\tStorefront: ${currentStorefront.label}\tRate: 1 ${calculatedData.baseCode} = ${calculatedData.exchangeRate} ${calculatedData.targetCode}\t\t\t`,
       ``,
       headers.join('\t'),
       ...dataRows.map((r) => r.join('\t')),
       totalRow.join('\t'),
       ``,
-      `Watermark: Calculated on ToolsOfSaaS.com | Free SaaS & Web Utilities\t\t\t\t`,
+      `Watermark: Calculated on ToolsOfSaaS.com | Free SaaS & Web Utilities\t\t\t\t\t`,
     ];
     const tsvContent = tsvLines.join('\r\n');
 
@@ -857,122 +1176,328 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
         </div>
       </section>
 
-      {/* BLOCK 2: Select Commission Category Rate (Dynamically customized by Storefront Market) */}
-      <section className="amz-card">
-        <h2 className="amz-card-title">
-          <span className="amz-title-left">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-              <line x1="7" y1="7" x2="7.01" y2="7" />
-            </svg>
-            2. Select Commission Category Rate ({storefrontCountryLabel} Tiers)
-          </span>
-        </h2>
-
-        <div className="amz-grid-3">
-          {/* Category Presets Dropdown */}
-          <div className="amz-field">
-            <label htmlFor="amz-category-select" className="amz-label">
-              Official Category Tier for {storefrontCountryLabel === 'US' ? 'United States' : storefrontCountryLabel === 'UK' ? 'United Kingdom' : storefrontCountryLabel}
-            </label>
-            <select
-              id="amz-category-select"
-              className="amz-select"
-              value={categoryPreset}
-              onChange={handleCategoryPresetChange}
-            >
-              {activeCategoryPresets.map((cat, idx) => (
-                <option key={`${cat.value}-${idx}`} value={cat.value}>
-                  {cat.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Manual Active Rate % Input */}
-          <div className="amz-field">
-            <label htmlFor="amz-commission-input" className="amz-label">
-              Active Rate (%)
-            </label>
-            <div className="amz-rate-input-wrap">
-              <input
-                id="amz-commission-input"
-                type="number"
-                step="0.1"
-                min="0"
-                max="100"
-                className="amz-input"
-                value={commissionRate}
-                onChange={handleCommissionRateChange}
-              />
-              <span className="amz-rate-percent-sign">%</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* BLOCK 3: Bulk Price Entry */}
-      <section className="amz-card">
-        <h2 className="amz-card-title">
-          <span className="amz-title-left">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="8" y1="6" x2="21" y2="6" />
-              <line x1="8" y1="12" x2="21" y2="12" />
-              <line x1="8" y1="18" x2="21" y2="18" />
-              <line x1="3" y1="6" x2="3.01" y2="6" />
-              <line x1="3" y1="12" x2="3.01" y2="12" />
-              <line x1="3" y1="18" x2="3.01" y2="18" />
-            </svg>
-            3. Item Prices Bulk Entry
-          </span>
-          <button type="button" className="amz-sample-btn" onClick={handleLoadSample}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-            </svg>
-            Load Sample Data
-          </button>
-        </h2>
-
-        <div>
-          <textarea
-            id="amz-bulk-prices"
-            className="amz-textarea"
-            rows={5}
-            placeholder={`Paste item prices separated by lines, spaces, or commas...\nExample:\n29.99\n149.50, 89.00\n499.99`}
-            value={bulkPrices}
-            onChange={(e) => setBulkPrices(e.target.value)}
-          />
-          <p className="amz-help-text">
-            Accepts any currency format (e.g., $49.99, 120.00, 350.50). Multiple lines or comma lists are parsed automatically.
-          </p>
-        </div>
-
-        {/* Action Triggers */}
-        <div className="amz-actions-row">
-          <button type="button" className="amz-btn-calc" onClick={() => calculateCommission(true)}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="4" y="2" width="16" height="20" rx="2" />
-              <line x1="8" y1="6" x2="16" y2="6" />
-              <line x1="16" y1="14" x2="16" y2="18" />
-              <path d="M16 10h.01" />
-              <path d="M12 10h.01" />
-              <path d="M8 10h.01" />
-              <path d="M12 14h.01" />
-              <path d="M8 14h.01" />
-              <path d="M12 18h.01" />
-              <path d="M8 18h.01" />
-            </svg>
-            Calculate Commission
-          </button>
-          <button type="button" className="amz-btn-clear" onClick={handleClear}>
+      {/* MODE SWITCHER BAR */}
+      <div className="amz-mode-bar">
+        <div className="amz-mode-label-group">
+          <span className="amz-mode-title">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="3 6 5 6 21 6" />
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
             </svg>
-            Clear
+            Calculation Workflow Mode
+          </span>
+          <span className="amz-mode-desc">
+            Choose single category or calculate multiple product categories together in one bundle
+          </span>
+        </div>
+        <div className="amz-mode-toggle" role="tablist" aria-label="Calculation Mode">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={calcMode === 'single'}
+            className={`amz-mode-btn ${calcMode === 'single' ? 'active' : ''}`}
+            onClick={() => handleModeChange('single')}
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+            <span>Single Category</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={calcMode === 'mixed'}
+            className={`amz-mode-btn ${calcMode === 'mixed' ? 'active' : ''}`}
+            onClick={() => handleModeChange('mixed')}
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+              <polygon points="12 11 12 17 17 14" />
+            </svg>
+            <span>Mixed Categories</span>
+            <span className="amz-mode-badge">Bundle</span>
           </button>
         </div>
-      </section>
+      </div>
+
+      {calcMode === 'single' ? (
+        <>
+          {/* BLOCK 2: Select Commission Category Rate (Dynamically customized by Storefront Market) */}
+          <section className="amz-card">
+            <h2 className="amz-card-title">
+              <span className="amz-title-left">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                  <line x1="7" y1="7" x2="7.01" y2="7" />
+                </svg>
+                2. Select Commission Category Rate ({storefrontCountryLabel} Tiers)
+              </span>
+            </h2>
+
+            <div className="amz-grid-3">
+              {/* Category Presets Dropdown */}
+              <div className="amz-field">
+                <label htmlFor="amz-category-select" className="amz-label">
+                  Official Category Tier for {storefrontCountryLabel === 'US' ? 'United States' : storefrontCountryLabel === 'UK' ? 'United Kingdom' : storefrontCountryLabel}
+                </label>
+                <select
+                  id="amz-category-select"
+                  className="amz-select"
+                  value={categoryPreset}
+                  onChange={handleCategoryPresetChange}
+                >
+                  {activeCategoryPresets.map((cat, idx) => (
+                    <option key={`${cat.value}-${idx}`} value={cat.value}>
+                      {cat.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Manual Active Rate % Input */}
+              <div className="amz-field">
+                <label htmlFor="amz-commission-input" className="amz-label">
+                  Active Rate (%)
+                </label>
+                <div className="amz-rate-input-wrap">
+                  <input
+                    id="amz-commission-input"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="100"
+                    className="amz-input"
+                    value={commissionRate}
+                    onChange={handleCommissionRateChange}
+                  />
+                  <span className="amz-rate-percent-sign">%</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* BLOCK 3: Bulk Price Entry */}
+          <section className="amz-card">
+            <h2 className="amz-card-title">
+              <span className="amz-title-left">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="8" y1="6" x2="21" y2="6" />
+                  <line x1="8" y1="12" x2="21" y2="12" />
+                  <line x1="8" y1="18" x2="21" y2="18" />
+                  <line x1="3" y1="6" x2="3.01" y2="6" />
+                  <line x1="3" y1="12" x2="3.01" y2="12" />
+                  <line x1="3" y1="18" x2="3.01" y2="18" />
+                </svg>
+                3. Item Prices Bulk Entry
+              </span>
+            </h2>
+
+            <div>
+              <textarea
+                id="amz-bulk-prices"
+                className="amz-textarea"
+                rows={5}
+                placeholder={`Paste item prices separated by lines, spaces, or commas...\nExample:\n29.99\n149.50, 89.00\n499.99`}
+                value={bulkPrices}
+                onChange={(e) => setBulkPrices(e.target.value)}
+              />
+              <p className="amz-help-text">
+                Accepts any currency format (e.g., $49.99, 120.00, 350.50). Multiple lines or comma lists are parsed automatically.
+              </p>
+            </div>
+
+            {/* Action Triggers */}
+            <div className="amz-actions-row">
+              <button type="button" className="amz-btn-calc" onClick={() => calculateCommission(true)}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="4" y="2" width="16" height="20" rx="2" />
+                  <line x1="8" y1="6" x2="16" y2="6" />
+                  <line x1="16" y1="14" x2="16" y2="18" />
+                  <path d="M16 10h.01" />
+                  <path d="M12 10h.01" />
+                  <path d="M8 10h.01" />
+                  <path d="M12 14h.01" />
+                  <path d="M8 14h.01" />
+                  <path d="M12 18h.01" />
+                  <path d="M8 18h.01" />
+                </svg>
+                Calculate Commission
+              </button>
+              <button type="button" className="amz-btn-clear" onClick={handleClear}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                Clear
+              </button>
+            </div>
+          </section>
+        </>
+      ) : (
+        /* BLOCK 2 (MIXED MODE): Mixed Category Product Bundles */
+        <section className="amz-card">
+          <h2 className="amz-card-title">
+            <span className="amz-title-left">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                <polygon points="12 11 12 17 17 14" />
+              </svg>
+              2. Mixed Category Bundles ({storefrontCountryLabel} Tiers)
+            </span>
+          </h2>
+          <p className="amz-section-intro">
+            Add product bundles across various Amazon categories. Each group computes using its category-specific commission rate.
+          </p>
+
+          {/* Category Groups List */}
+          <div className="amz-groups-stack">
+            {categoryGroups.map((group, index) => {
+              const parsedGroupPrices = parsePrices(group.pricesText);
+              const grpGross = parsedGroupPrices.reduce((acc, p) => acc + p, 0);
+              const grpYield = grpGross * ((parseFloat(group.rate) || 0) / 100);
+
+              return (
+                <div key={group.id} className="amz-group-card">
+                  <div className="amz-group-header">
+                    <div className="amz-group-badge-wrap">
+                      <span className="amz-group-badge">Group #{index + 1}</span>
+                      <span className="amz-group-name" title={group.categoryName}>
+                        {group.categoryName}
+                      </span>
+                    </div>
+                    {categoryGroups.length > 1 && (
+                      <button
+                        type="button"
+                        className="amz-group-remove-btn"
+                        onClick={() => handleRemoveGroup(group.id)}
+                        title="Remove this category group"
+                        aria-label={`Remove Group ${index + 1}`}
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="3 6 5 6 21 6" />
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                        </svg>
+                        <span>Remove</span>
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="amz-group-body">
+                    <div className="amz-group-tier-row">
+                      {/* Category Tier Selector */}
+                      <div className="amz-field amz-flex-2">
+                        <label htmlFor={`amz-group-select-${group.id}`} className="amz-label">
+                          Official Category Tier
+                        </label>
+                        <select
+                          id={`amz-group-select-${group.id}`}
+                          className="amz-select"
+                          value={group.presetValue}
+                          onChange={(e) => handleGroupPresetChange(group.id, e.target.value)}
+                        >
+                          {activeCategoryPresets.map((cat, pIdx) => (
+                            <option key={`${cat.value}-${pIdx}`} value={cat.value}>
+                              {cat.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Commission Rate Input */}
+                      <div className="amz-field amz-flex-1">
+                        <label htmlFor={`amz-group-rate-${group.id}`} className="amz-label">
+                          Rate (%)
+                        </label>
+                        <div className="amz-rate-input-wrap">
+                          <input
+                            id={`amz-group-rate-${group.id}`}
+                            type="number"
+                            step="0.1"
+                            min="0"
+                            max="100"
+                            className="amz-input"
+                            value={group.rate}
+                            onChange={(e) => handleGroupRateChange(group.id, e.target.value)}
+                          />
+                          <span className="amz-rate-percent-sign">%</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Group Prices Textarea */}
+                    <div className="amz-field amz-mt-12">
+                      <label htmlFor={`amz-group-prices-${group.id}`} className="amz-label">
+                        Item Prices in this Category ({activeSymbol})
+                      </label>
+                      <textarea
+                        id={`amz-group-prices-${group.id}`}
+                        className="amz-textarea amz-group-textarea"
+                        rows={3}
+                        placeholder={`Paste prices (e.g. 29.99, 149.00, 75.50)...`}
+                        value={group.pricesText}
+                        onChange={(e) => handleGroupPricesChange(group.id, e.target.value)}
+                      />
+                    </div>
+
+                    {/* Group Subtotal Pill */}
+                    <div className="amz-group-footer">
+                      <div className="amz-group-subtotal">
+                        <span className="amz-gst-items">
+                          {parsedGroupPrices.length} {parsedGroupPrices.length === 1 ? 'item' : 'items'}
+                        </span>
+                        <span className="amz-gst-dot">·</span>
+                        <span className="amz-gst-gross">
+                          Gross: <strong>{formatMoney(grpGross, activeSymbol)}</strong>
+                        </span>
+                        <span className="amz-gst-dot">·</span>
+                        <span className="amz-gst-yield">
+                          Est. Yield: <strong>{formatMoney(grpYield, activeSymbol)}</strong>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Add Another Category Group Button */}
+          <button type="button" className="amz-add-group-btn" onClick={handleAddGroup}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span>Add Another Category Group</span>
+          </button>
+
+          {/* Action Triggers */}
+          <div className="amz-actions-row">
+            <button type="button" className="amz-btn-calc" onClick={() => calculateCommission(true)}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="4" y="2" width="16" height="20" rx="2" />
+                <line x1="8" y1="6" x2="16" y2="6" />
+                <line x1="16" y1="14" x2="16" y2="18" />
+                <path d="M16 10h.01" />
+                <path d="M12 10h.01" />
+                <path d="M8 10h.01" />
+                <path d="M12 14h.01" />
+                <path d="M8 14h.01" />
+                <path d="M12 18h.01" />
+                <path d="M8 18h.01" />
+              </svg>
+              Calculate Mixed Commission
+            </button>
+            <button type="button" className="amz-btn-clear" onClick={handleClear}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+              Clear All Groups
+            </button>
+          </div>
+        </section>
+      )}
 
       {/* BLOCK 4: Payout Summary Dashboard */}
       <section className="amz-card">
@@ -1011,7 +1536,14 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
           {/* Net Target Payout Highlight Card */}
           <div className="amz-payout-hero-card">
             <div className="amz-payout-header">
-              <span className="amz-payout-label">Net Target Payout</span>
+              <div className="amz-payout-header-left">
+                <span className="amz-payout-label">Net Target Payout</span>
+                {calculatedData?.mode === 'mixed' && (
+                  <span className="amz-payout-blended-badge" title="Weighted Blended Average Commission Rate across all groups">
+                    Blended Rate: {calculatedData.blendedRate.toFixed(2)}%
+                  </span>
+                )}
+              </div>
               <span className="amz-payout-rate-badge">
                 1 {activeBaseCode} = {isNaN(parseFloat(exchangeRate)) ? exchangeRate : parseFloat(exchangeRate).toFixed(2)} {activeTargetCode}
               </span>
@@ -1022,6 +1554,61 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
             </div>
           </div>
         </div>
+
+        {/* Category Contribution Matrix (Displayed when multi-categories are calculated) */}
+        {calculatedData && calculatedData.categoryBreakdown && calculatedData.categoryBreakdown.length > 1 && (
+          <div className="amz-breakdown-section">
+            <div className="amz-breakdown-title-row">
+              <span className="amz-breakdown-title">
+                Category Contribution Matrix ({calculatedData.categoryBreakdown.length} Categories)
+              </span>
+              <span className="amz-breakdown-sub">
+                Blended Yield: <strong>{calculatedData.blendedRate.toFixed(2)}%</strong>
+              </span>
+            </div>
+            <div className="amz-breakdown-grid">
+              {calculatedData.categoryBreakdown.map((catItem, idx) => {
+                const shareOfPayout =
+                  calculatedData.totalTargetPayout > 0
+                    ? ((catItem.convertedPayout / calculatedData.totalTargetPayout) * 100).toFixed(1)
+                    : '0.0';
+                return (
+                  <div key={`cat-breakdown-${idx}`} className="amz-breakdown-card">
+                    <div className="amz-breakdown-card-top">
+                      <span className="amz-breakdown-cat-name" title={catItem.category}>
+                        {catItem.category}
+                      </span>
+                      <span className="amz-breakdown-rate-pill">{catItem.rate.toFixed(1)}%</span>
+                    </div>
+                    <div className="amz-breakdown-card-stats">
+                      <div className="amz-bd-stat">
+                        <span className="amz-bd-stat-label">Items</span>
+                        <span className="amz-bd-stat-val">{catItem.count}</span>
+                      </div>
+                      <div className="amz-bd-stat">
+                        <span className="amz-bd-stat-label">Gross Volume</span>
+                        <span className="amz-bd-stat-val">{formatMoney(catItem.gross, calculatedData.symbol)}</span>
+                      </div>
+                      <div className="amz-bd-stat highlight">
+                        <span className="amz-bd-stat-label">Est. Payout</span>
+                        <span className="amz-bd-stat-val">
+                          {formatMoney(catItem.convertedPayout, calculatedData.targetSymbol)}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="amz-breakdown-progress-bar-wrap" title={`${shareOfPayout}% of total payout`}>
+                      <div
+                        className="amz-breakdown-progress-fill"
+                        style={{ width: `${Math.min(100, Math.max(0, parseFloat(shareOfPayout)))}%` }}
+                      />
+                      <span className="amz-breakdown-progress-label">{shareOfPayout}% of payout</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* ⚠️ REQUIRED NOTE BELOW THE CALCULATED PRICE */}
         <div className="amz-disclaimer-box">
@@ -1081,7 +1668,8 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
           <table className="amz-table">
             <thead>
               <tr>
-                <th style={{ width: '60px' }}>#</th>
+                <th style={{ width: '50px' }}>#</th>
+                <th>Category</th>
                 <th>Price ({activeSymbol})</th>
                 <th>Local Converted ({activeTargetSymbol && activeTargetSymbol !== activeTargetCode ? `${activeTargetSymbol} / ${activeTargetCode}` : activeTargetCode})</th>
                 <th>Rate</th>
@@ -1093,12 +1681,17 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
                 calculatedData.lineItems.map((item) => (
                   <tr key={item.id} className="amz-table-row">
                     <td className="amz-td-id">{item.id}</td>
+                    <td className="amz-td-cat">
+                      <span className="amz-cat-tag" title={item.category}>
+                        {item.category}
+                      </span>
+                    </td>
                     <td className="amz-td-price">{formatMoney(item.price, calculatedData.symbol)}</td>
                     <td className="amz-td-converted">
                       {formatMoney(item.localConvertedPrice, calculatedData.targetSymbol)}
                     </td>
                     <td className="amz-td-rate">
-                      <span className="amz-rate-pill">{item.yieldRate.toFixed(2)}%</span>
+                      <span className="amz-rate-pill">{item.yieldRate.toFixed(1)}%</span>
                     </td>
                     <td className="amz-td-payout">
                       {formatMoney(item.targetPayout, calculatedData.targetSymbol)}
@@ -1107,7 +1700,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="amz-empty-state">
+                  <td colSpan={6} className="amz-empty-state">
                     No calculations yet. Enter item prices and click &ldquo;Calculate Commission&rdquo;.
                   </td>
                 </tr>
@@ -1117,11 +1710,26 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
               <tfoot>
                 <tr className="amz-tfoot-row">
                   <td className="amz-tf-label">TOTAL</td>
+                  <td className="amz-tf-cat">
+                    {calculatedData.categoryBreakdown?.length > 1
+                      ? `${calculatedData.categoryBreakdown.length} Categories`
+                      : calculatedData.categoryBreakdown?.[0]?.category || '1 Category'}
+                  </td>
                   <td className="amz-tf-price">{formatMoney(calculatedData.grossSales, calculatedData.symbol)}</td>
                   <td className="amz-tf-converted">
                     {formatMoney(calculatedData.totalLocalConvertedSales, calculatedData.targetSymbol)}
                   </td>
-                  <td className="amz-tf-dash">-</td>
+                  <td className="amz-tf-rate">
+                    {calculatedData.mode === 'mixed' ? (
+                      <span className="amz-rate-pill blended" title="Weighted Blended Average Commission Rate">
+                        {calculatedData.blendedRate.toFixed(2)}% avg
+                      </span>
+                    ) : (
+                      <span className="amz-rate-pill">
+                        {calculatedData.commissionRate.toFixed(2)}%
+                      </span>
+                    )}
+                  </td>
                   <td className="amz-tf-payout">
                     {formatMoney(calculatedData.totalTargetPayout, calculatedData.targetSymbol)}
                   </td>

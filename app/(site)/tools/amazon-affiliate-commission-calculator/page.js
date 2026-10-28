@@ -2,6 +2,10 @@ import PageWrapper from '@/components/PageWrapper';
 import AmazonAffiliateCalculatorClient from './AmazonAffiliateCalculatorClient';
 import SeoLandingPage from '@/components/SeoLandingPage';
 import { amazonAffiliateSeoData } from './seoData';
+import { client } from '@/sanity/lib/client';
+import { TOOLS_QUERY } from '@/sanity/lib/queries';
+
+export const revalidate = 60;
 
 const { seoMetadata } = amazonAffiliateSeoData;
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
@@ -45,11 +49,24 @@ export const metadata = {
   },
 };
 
-export default function AmazonAffiliateCalculatorPage() {
+export default async function AmazonAffiliateCalculatorPage() {
+  let sanityTools = [];
+  try {
+    const allTools = await client.fetch(TOOLS_QUERY);
+    sanityTools = (allTools || []).filter(
+      (t) =>
+        t.slug !== 'amazon-affiliate-commission-calculator' &&
+        !t.href?.includes('amazon-affiliate-commission-calculator')
+    );
+  } catch (err) {
+    console.error('Failed to fetch tools from Sanity for Amazon calculator:', err);
+  }
+
   return (
     <PageWrapper>
       <AmazonAffiliateCalculatorClient />
-      <SeoLandingPage data={amazonAffiliateSeoData} />
+      <SeoLandingPage data={amazonAffiliateSeoData} sanityTools={sanityTools} />
     </PageWrapper>
   );
 }
+

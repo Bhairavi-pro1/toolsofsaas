@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import ToolCard from './ToolCard';
 
-export default function SeoLandingPage({ data }) {
+export default function SeoLandingPage({ data, sanityTools = [] }) {
   const [activeAudience, setActiveAudience] = useState(0);
   const [openFaq, setOpenFaq] = useState(null);
   const [activeSection, setActiveSection] = useState('overview');
@@ -209,7 +211,7 @@ export default function SeoLandingPage({ data }) {
             onClick={() => handleNavClick('related-resources')}
             className={`seo-nav-item ${activeSection === 'related-resources' ? 'active' : ''}`}
           >
-            Related Resources
+            Explore More Tools
           </button>
         </aside>
 
@@ -573,21 +575,48 @@ export default function SeoLandingPage({ data }) {
             </section>
           )}
 
-          {/* Related Tools & Directory Linking */}
-          {relatedTools && relatedTools.length > 0 && (
-            <section id="related-resources" className="seo-section">
-              <h2 className="seo-section-title">Related Resource Directory</h2>
-              <div className="seo-links-grid">
-                <div className="seo-links-card" style={{ gridColumn: '1 / -1' }}>
-                  <ul style={{ flexDirection: 'row', flexWrap: 'wrap', gap: '15px', listStyle: 'none', padding: 0 }}>
-                    {relatedTools.map((tool, idx) => (
-                      <li key={idx}>
-                        <a href={tool.url} title={tool.name}>{tool.anchorText}</a>
-                      </li>
-                    ))}
-                  </ul>
+          {/* Explore More Tools & Sanity Integration */}
+          {((sanityTools && sanityTools.length > 0) || (relatedTools && relatedTools.length > 0)) && (
+            <section id="related-resources" className="seo-section seo-explore-section">
+              <div className="seo-explore-tools-header">
+                <div className="seo-explore-title-wrap">
+                  <span className="seo-explore-pill">ToolsOfSaaS Ecosystem</span>
+                  <h2 className="seo-section-title" style={{ margin: '6px 0 6px 0', borderBottom: 'none', paddingBottom: 0 }}>
+                    Explore More Free Tools & Utilities
+                  </h2>
+                  <p className="seo-explore-desc">
+                    Discover hand-picked, 100% free client-side browser utilities, team planners, and web diagnostics.
+                  </p>
                 </div>
+                <Link href="/" className="seo-explore-view-all-btn">
+                  <span>Browse All Tools</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </Link>
               </div>
+
+              {sanityTools && sanityTools.length > 0 ? (
+                <div className="tools-grid seo-sanity-tools-grid">
+                  {sanityTools.map((tool) => (
+                    <ToolCard key={tool._id || tool.slug} tool={tool} />
+                  ))}
+                </div>
+              ) : (
+                <div className="seo-fallback-links-grid">
+                  {relatedTools.map((tool, idx) => (
+                    <a key={idx} href={tool.url} className="seo-fallback-tool-chip" title={tool.name}>
+                      <span className="seo-fallback-chip-icon">⚡</span>
+                      <span className="seo-fallback-chip-text">{tool.anchorText || tool.name}</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7" />
+                        <polyline points="7 7 17 7 17 17" />
+                      </svg>
+                    </a>
+                  ))}
+                </div>
+              )}
             </section>
           )}
 
