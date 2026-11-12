@@ -1,14 +1,14 @@
 export const amazonAffiliateSeoData = {
   seoMetadata: {
-    metaTitle: "Amazon Affiliate Commission Calculator PRO | Free Global Payout Tool",
-    metaDescription: "Calculate Amazon Associates earnings across global storefronts (US, UK, DE, JP, IN, CA, etc.) with live currency exchange rate conversion and bulk price entry. 100% free.",
+    metaTitle: "Amazon Affiliate Commission Calculator – Global Payouts",
+    metaDescription: "Free Amazon Associates calculator. Estimate commissions by category across 21+ storefronts, convert to your currency, and export to Excel or Sheets.",
     seoUrlSlug: "amazon-affiliate-commission-calculator",
     canonicalUrl: "https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator",
-    ogTitle: "Amazon Affiliate Commission Calculator PRO - Global Payouts & Live Rates",
-    ogDescription: "Estimate Amazon Associates commission earnings across 21+ global storefronts with live exchange rates and official category tier rates. 100% free browser tool.",
-    twitterTitle: "Amazon Associates Commission & Global Payout Calculator",
-    twitterDescription: "Convert Amazon affiliate earnings into your home bank currency using live exchange rates and official category percentage tiers.",
-    suggestedImageAlt: "Amazon Affiliate Commission Calculator interface showing multi-currency payouts and itemized breakdowns.",
+    ogTitle: "Amazon Affiliate Commission Calculator – Global Payouts",
+    ogDescription: "Estimate Amazon Associates earnings in your local currency across 21+ storefronts. Free.",
+    twitterTitle: "Amazon Affiliate Commission Calculator – Global Payouts",
+    twitterDescription: "Estimate Amazon Associates earnings in your local currency across 21+ storefronts. Free.",
+    suggestedImageAlt: "Amazon Affiliate Commission Calculator showing global storefront rates and local currency payouts.",
     primaryKeyword: "amazon affiliate commission calculator",
     secondaryKeywords: [
       "amazon associates earnings calculator",
@@ -17,7 +17,7 @@ export const amazonAffiliateSeoData = {
       "amazon associates rates",
       "calculate amazon affiliate commission",
       "amazon affiliate earnings by country",
-      "amazon associates commission rates 2025",
+      "amazon associates commission rates 2026",
       "global amazon affiliate payout calculator"
     ],
     lsiKeywords: [
@@ -40,20 +40,83 @@ export const amazonAffiliateSeoData = {
     contentCategory: "finance-marketing"
   },
 
-  h1: "Amazon Affiliate Commission Calculator PRO (Global Storefronts & Live Rates)",
+  h1: "Amazon Affiliate Commission Calculator",
+  overviewHeading: "Overview: Amazon Associates Earnings & Rates Breakdown",
 
   introduction: {
     paragraphs: [
-      "The <strong>Amazon Affiliate Commission Calculator PRO</strong> is a free, instant web utility engineered for Amazon Associates, content creators, bloggers, and niche website publishers worldwide. Calculate gross sales, category percentage yields, and net payouts across all major Amazon marketplaces—including the United States (.com), United Kingdom (.co.uk), India (.in), Germany (.de), Canada (.ca), Japan (.co.jp), and beyond.",
-      "Navigating cross-border Amazon Associates earnings is notoriously complex. Amazon operates separate affiliate portals for each country with independent fee schedules, while creators receive payouts in their local home bank currency. Our tool bridges this gap by combining official category percentage presets with real-time central bank foreign exchange conversion rates.",
-      "Whether evaluating a single high-ticket product or processing bulk price lists, enter your product figures to receive instant itemized breakdowns, total commissions, and 1-click export to Excel or Google Sheets. No signup, no API keys, and 100% private client-side processing."
+      "The <strong>Amazon Affiliate Commission Calculator</strong> is a free, instant browser utility built for Amazon Associates, affiliate marketers, content creators, and niche publishers worldwide. Calculate gross sales volume, category commission yields, and net local currency payouts across 21+ official Amazon storefronts—including the United States (.com), United Kingdom (.co.uk), India (.in), Germany (.de), Canada (.ca), Japan (.co.jp), and more.",
+      "Managing cross-border Amazon Associates income involves independent regional fee schedules and shifting currency values. This calculator bridges the gap by combining official Amazon Associates category percentage tiers with live interbank foreign exchange conversion rates.",
+      "Whether analyzing a single product or evaluating bulk price lists for product roundups and gift guides, enter your figures to receive an immediate itemized breakdown, total commissions, and 1-click export to Excel or Google Sheets. All calculations execute client-side in your browser with zero data stored."
     ]
+  },
+
+  ratesTable: {
+    title: "Amazon Associates Commission Rates by Category (Updated November 2026)",
+    intro: "These are the US category tiers built into the calculator. Rates differ by storefront and Amazon can change them, so confirm in your Associates Central account.",
+    rows: [
+      { category: "Amazon Games", rate: "20.0%" },
+      { category: "Luxury Beauty and Amazon Coins", rate: "10.0%" },
+      { category: "Amazon Haul", rate: "7.0%" },
+      { category: "Digital Music, Physical Music, Video", rate: "5.0%" },
+      { category: "Books, Outdoors, Tools, Kitchen, Auto", rate: "4.5%" },
+      { category: "Amazon Devices, Apparel, Beauty, Home", rate: "4.0%" },
+      { category: "Toys, Baby, Pet Products, Sports", rate: "3.0%" },
+      { category: "PC, Laptops, Components", rate: "2.5%" },
+      { category: "Video Games, Consoles, TVs", rate: "2.0%" },
+      { category: "Grocery, Health and Personal Care", rate: "1.0%" },
+      { category: "Gift Cards, Gold and Excluded", rate: "0.0%" }
+    ],
+    note: "Gift cards and excluded items earn nothing, so remove them from your bulk entry for accurate totals."
+  },
+
+  workedExamplesTitle: "Example Calculations",
+  workedExamples: [
+    {
+      title: "Single Category Calculation",
+      description: "Three kitchen items priced at $25, $40, and $60 total $125 in gross sales volume.",
+      calculation: "$125 × 4.5% = $5.63 net commission"
+    },
+    {
+      title: "Mixed Categories Calculation",
+      description: "A customer purchases a $300 laptop in PC & Components (2.5%) and a $20 book in Books & Media (4.5%).",
+      calculation: "($300 × 2.5% = $7.50) + ($20 × 4.5% = $0.90) = $8.40 total commission"
+    },
+    {
+      title: "Cross-Border International Payout",
+      description: "A UK or European blogger drives traffic to the US (.com) marketplace and requests payouts in GBP (£) or EUR (€). Select United States as the storefront market and GBP as target currency to convert earnings at live interbank rates.",
+      calculation: "USD Commission × Live Interbank FX Rate = Net home bank currency estimate"
+    }
+  ],
+
+  payoutGuide: {
+    title: "How and When Amazon Pays Affiliates",
+    intro: "Understanding Amazon Associates payment schedules, regional payout methods, and accounting deductions ensures realistic revenue forecasts:",
+    points: [
+      {
+        title: "Net-60 Payment Schedule",
+        description: "Amazon Associates commissions are paid approximately 60 days following the end of the month in which they were earned (e.g., January commissions are disbursed in late March)."
+      },
+      {
+        title: "Disbursement Methods by Country",
+        description: "Payment is disbursed via direct bank deposit, Amazon Gift Certificate, or wire check, depending on your registered marketplace and residency settings."
+      },
+      {
+        title: "Returns and Order Cancellations",
+        description: "Customer returns, refunded products, and cancelled shipments reduce your final earnings and are adjusted in subsequent payment statements."
+      },
+      {
+        title: "Bank Spreads, Processor Fees & Withholding Taxes",
+        description: "Foreign exchange rate spreads (typically 1%–2.5% charged by banks, Payoneer, or Wise) and withholding taxes (such as IRS Form W-8BEN withholding up to 30% for non-US residents) alter the final amount reaching your bank."
+      }
+    ],
+    sources: true
   },
 
   features: [
     {
       title: "21+ Official Amazon Storefronts",
-      description: "Supports all major Amazon storefronts across North America, Europe, Asia-Pacific, Latin America, and the Middle East.",
+      description: "Supports major Amazon storefronts across North America, Europe, Asia-Pacific, Latin America, and the Middle East.",
       benefit: "Allows international affiliates to estimate revenue across multiple localized Amazon links accurately.",
       example: "Promoting to US audiences while living in the UK or India? Switch seamlessly between storefronts and currencies."
     },
@@ -259,24 +322,40 @@ export const amazonAffiliateSeoData = {
 
   faqs: [
     {
-      question: "How is Amazon Associates commission calculated?",
-      answer: "Amazon calculates commission by multiplying the qualifying product purchase price (excluding taxes, shipping, and gift-wrapping) by the official category commission rate (ranging from 1% to 20%). If you earn in a foreign storefront, that commission is converted into your local payout currency."
+      question: "How much commission does Amazon Associates pay?",
+      answer: "Rates run from 0% to 20% depending on the category. Most physical product categories pay between 1% and 4.5%. See the table above."
     },
     {
-      question: "Why do commission rates vary by country?",
-      answer: "Amazon operates separate affiliate programs in over 20 countries. Each regional marketplace (such as Amazon.com in the US, Amazon.in in India, or Amazon.co.uk in the UK) sets category percentages based on local market dynamics, operating costs, and retailer margins."
+      question: "How do I calculate my Amazon affiliate commission?",
+      answer: "Multiply the product price by the category rate. For several items, enter all prices into the bulk field and the calculator sums them."
     },
     {
-      question: "What products earn 0% commission on Amazon?",
-      answer: "Across almost all Amazon marketplaces, Gift Cards, Amazon Prime memberships, gold/silver coins, flight bookings, and certain excluded high-demand smartphones (like newly released iPhone models in select regions) earn 0% advertising fees."
+      question: "Does the calculator work for non-US Amazon stores?",
+      answer: "Yes. It supports 21+ storefronts, including the UK, Germany, Japan, India, Canada, Australia and Brazil. You can also enter a custom rate."
     },
     {
-      question: "How accurate is this calculator?",
-      answer: "The calculator provides an accurate mathematical projection based on official percentage tiers and live exchange rates. However, final bank deposits may differ slightly due to payment provider FX fees, withholding taxes (e.g. US Form W-8BEN), and customer order cancellations or returns."
+      question: "Can I convert my earnings into my local currency?",
+      answer: "Yes. Choose your payout currency from the list and the calculator applies a live exchange rate. You can also type your own rate."
     },
     {
-      question: "Can I enter multiple product prices at once?",
-      answer: "Yes! Paste any list of prices separated by line breaks, spaces, or commas into the bulk entry area. The tool will parse each number, generate an itemized breakdown, and calculate total sales and commission instantly."
+      question: "Is the result exactly what I will be paid?",
+      answer: "No. It is an estimate. Returns, bank spreads, processor fees, taxes and rate changes can all alter the final payout."
+    },
+    {
+      question: "Can I calculate several product categories at once?",
+      answer: "Yes. Use Mixed Categories or Bundle mode to combine categories in one calculation."
+    },
+    {
+      question: "Can I export the results?",
+      answer: "Yes. Copy the summary, or export the itemized table to Excel or Google Sheets."
+    },
+    {
+      question: "Is this tool affiliated with Amazon?",
+      answer: "No. It is an independent tool, and rates should always be checked in your official Associates account."
+    },
+    {
+      question: "Is the calculator free?",
+      answer: "Yes, with no signup and no data stored."
     }
   ],
 
@@ -349,18 +428,7 @@ export const amazonAffiliateSeoData = {
     }
   ],
 
-  relatedTools: [
-    {
-      name: "Random Team Generator",
-      url: "/tools/random-team-generator",
-      anchorText: "Random Team Generator & Multi-Day Planner"
-    },
-    {
-      name: "Household Chore Assigner",
-      url: "/tools/chore-assigner",
-      anchorText: "Household Chore Assigner & Fair Wheel"
-    }
-  ],
+  relatedTools: [],
 
   cta: {
     title: "Start Estimating Your Amazon Associates Earnings Today",
@@ -373,17 +441,23 @@ export const amazonAffiliateSeoData = {
   schemas: [
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Amazon Affiliate Commission Calculator PRO",
-      "url": "https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator",
-      "description": "Free Amazon Associates commission calculator supporting 21+ global storefronts, official category percentage tiers, and live exchange rate conversion.",
+      "@type": "SoftwareApplication",
+      "name": "Amazon Affiliate Commission Calculator",
       "applicationCategory": "BusinessApplication",
-      "operatingSystem": "All",
-      "offers": {
-        "@type": "Offer",
-        "price": "0.00",
-        "priceCurrency": "USD"
-      }
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "url": "https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator",
+      "description": "Estimate Amazon Associates commissions across 21+ storefronts with live currency conversion.",
+      "dateModified": "2026-11-10"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://toolsofsaas.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://toolsofsaas.com/tools" },
+        { "@type": "ListItem", "position": 3, "name": "Amazon Affiliate Commission Calculator", "item": "https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator" }
+      ]
     }
   ]
 };

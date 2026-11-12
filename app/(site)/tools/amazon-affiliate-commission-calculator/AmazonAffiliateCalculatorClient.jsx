@@ -999,6 +999,23 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
       {/* Top Banner Ad */}
       <AdBanner position="header" />
 
+      {/* Visual Breadcrumb Navigation */}
+      <nav aria-label="Breadcrumb" className="amz-breadcrumb-nav">
+        <ol className="amz-breadcrumb-list">
+          <li className="amz-breadcrumb-item">
+            <a href="/" className="amz-breadcrumb-link">Home</a>
+          </li>
+          <li className="amz-breadcrumb-separator" aria-hidden="true">/</li>
+          <li className="amz-breadcrumb-item">
+            <a href="/" className="amz-breadcrumb-link">Tools</a>
+          </li>
+          <li className="amz-breadcrumb-separator" aria-hidden="true">/</li>
+          <li className="amz-breadcrumb-item active" aria-current="page">
+            Amazon Affiliate Commission Calculator
+          </li>
+        </ol>
+      </nav>
+
       {/* Header Card */}
       <header className="amz-header-card">
         <div className="amz-header-left">
@@ -1019,9 +1036,8 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
           <div>
             <div className="amz-header-title-row">
               <h1 className="amz-header-title">Amazon Affiliate Commission Calculator</h1>
-              {/* <span className="amz-badge-pro">PRO</span> */}
             </div>
-            <p className="amz-header-sub">Global Storefront Yield & Live Home Currency Converter</p>
+            <p className="amz-header-sub">Global Storefront Yield &amp; Live Home Currency Converter</p>
           </div>
         </div>
 
@@ -1034,6 +1050,49 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
           <span>{rateStatus}</span>
         </div>
       </header>
+
+      {/* Above-the-fold Intro & Quick Formula Card */}
+      <section className="amz-intro-card" aria-label="Tool Overview & Formula">
+        <p className="amz-intro-text">
+          Estimate how much you earn from Amazon Associates before you publish a single link. Pick your storefront, choose the category rate, paste your product prices, and see your commission converted into your own currency. It works across 21+ Amazon storefronts and 40+ payout currencies, and you can export the results to Excel or Google Sheets. It&apos;s free, needs no signup, and runs in your browser.
+        </p>
+
+        {/* Trust Signals & E-E-A-T Badges */}
+        <div className="amz-trust-row">
+          <span className="amz-trust-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            Last updated: November 10, 2026
+          </span>
+          <span className="amz-trust-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            Calculations run in your browser. Nothing is stored.
+          </span>
+          <span className="amz-trust-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="18" y1="20" x2="18" y2="10" />
+              <line x1="12" y1="20" x2="12" y2="4" />
+              <line x1="6" y1="20" x2="6" y2="14" />
+            </svg>
+            Official category rates &amp; live forex
+          </span>
+        </div>
+
+        {/* Quick Formula Callout Box */}
+        <div className="amz-formula-box">
+          <div className="amz-formula-header">
+            <span className="amz-formula-tag">Quick Formula</span>
+            <code className="amz-formula-equation">Commission = Product price &times; Category commission rate</code>
+          </div>
+          <p className="amz-formula-example">
+            <strong>Example:</strong> A $100 item in a 4.5% category (Books, Outdoors, Tools, Kitchen, Auto) earns $4.50. At an example rate of 1 USD = 93.93 INR, that is about 422.68 INR before bank fees and taxes.
+          </p>
+        </div>
+      </section>
 
       {/* BLOCK 1: Storefront & Target Currencies */}
       <section className="amz-card">
@@ -1294,6 +1353,9 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
             </h2>
 
             <div>
+              <label htmlFor="amz-bulk-prices" className="amz-label">
+                Paste Product Prices (one per line, or separated by commas)
+              </label>
               <textarea
                 id="amz-bulk-prices"
                 className="amz-textarea"
@@ -1301,6 +1363,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
                 placeholder={`Paste item prices separated by lines, spaces, or commas...\nExample:\n29.99\n149.50, 89.00\n499.99`}
                 value={bulkPrices}
                 onChange={(e) => setBulkPrices(e.target.value)}
+                aria-label="Enter product prices separated by commas or lines"
               />
               <p className="amz-help-text">
                 Accepts any currency format (e.g., $49.99, 120.00, 350.50). Multiple lines or comma lists are parsed automatically.
@@ -1501,22 +1564,24 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
 
       {/* BLOCK 4: Payout Summary Dashboard */}
       <section className="amz-card">
-        <h2 className="amz-card-title">
-          <span className="amz-title-left">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-              <path d="M22 12A10 10 0 0 0 12 2v10z" />
-            </svg>
-            Payout Summary
-          </span>
-          <button type="button" className="amz-copy-btn" onClick={handleCopySummary}>
+        <div className="amz-card-header-bar">
+          <h2 className="amz-card-title-clean">
+            <span className="amz-title-left">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+                <path d="M22 12A10 10 0 0 0 12 2v10z" />
+              </svg>
+              Payout Summary
+            </span>
+          </h2>
+          <button type="button" className="amz-copy-btn" onClick={handleCopySummary} aria-label="Copy Payout Summary">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
             </svg>
             Copy Summary
           </button>
-        </h2>
+        </div>
 
         <div className="amz-summary-grid">
           {/* Processed Item Count */}
@@ -1637,18 +1702,20 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
 
       {/* BLOCK 5: Line Item Matrix Breakdown */}
       <section className="amz-card">
-        <h2 className="amz-card-title">
-          <span className="amz-title-left">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <line x1="3" y1="9" x2="21" y2="9" />
-              <line x1="3" y1="15" x2="21" y2="15" />
-              <line x1="9" y1="3" x2="9" y2="21" />
-              <line x1="15" y1="3" x2="15" y2="21" />
-            </svg>
-            Itemized Breakdown ({calculatedData ? `${calculatedData.lineItems.length} lines` : '0 lines'})
-          </span>
-          <button type="button" className="amz-copy-btn excel" onClick={handleCopyExcel}>
+        <div className="amz-card-header-bar">
+          <h2 className="amz-card-title-clean">
+            <span className="amz-title-left">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <line x1="3" y1="9" x2="21" y2="9" />
+                <line x1="3" y1="15" x2="21" y2="15" />
+                <line x1="9" y1="3" x2="9" y2="21" />
+                <line x1="15" y1="3" x2="15" y2="21" />
+              </svg>
+              Itemized Breakdown ({calculatedData ? `${calculatedData.lineItems.length} lines` : '0 lines'})
+            </span>
+          </h2>
+          <button type="button" className="amz-copy-btn excel" onClick={handleCopyExcel} aria-label="Copy Excel Table">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
@@ -1658,7 +1725,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
             </svg>
             Copy Excel Table
           </button>
-        </h2>
+        </div>
 
         <div className="amz-mobile-scroll-hint">
           <span>&larr; Swipe to view all columns &rarr;</span>
@@ -1740,6 +1807,130 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
         </div>
       </section>
 
+      {/* SECTION 1: Commission Rates Reference Table */}
+      <section className="amz-card amz-info-section" id="amz-rates-table">
+        <h2 className="amz-card-title-clean">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          Amazon Associates Commission Rates by Category (Updated November 2026)
+        </h2>
+        <p className="amz-section-intro">
+          These are the US category tiers built into the calculator. Rates differ by storefront and Amazon can change them, so confirm in your Associates Central account.
+        </p>
+
+        <div className="amz-table-wrap">
+          <table className="amz-table">
+            <thead>
+              <tr>
+                <th style={{ textAlign: 'left' }}>Category</th>
+                <th style={{ textAlign: 'right' }}>Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Amazon Games</td><td style={{ textAlign: 'right', fontWeight: 700, color: '#ff9900' }}>20.0%</td></tr>
+              <tr><td>Luxury Beauty and Amazon Coins</td><td style={{ textAlign: 'right', fontWeight: 700, color: '#ff9900' }}>10.0%</td></tr>
+              <tr><td>Amazon Haul</td><td style={{ textAlign: 'right', fontWeight: 700, color: '#ff9900' }}>7.0%</td></tr>
+              <tr><td>Digital Music, Physical Music, Video</td><td style={{ textAlign: 'right', fontWeight: 700, color: '#ff9900' }}>5.0%</td></tr>
+              <tr><td>Books, Outdoors, Tools, Kitchen, Auto</td><td style={{ textAlign: 'right', fontWeight: 700, color: '#ff9900' }}>4.5%</td></tr>
+              <tr><td>Amazon Devices, Apparel, Beauty, Home</td><td style={{ textAlign: 'right', fontWeight: 700, color: '#ff9900' }}>4.0%</td></tr>
+              <tr><td>Toys, Baby, Pet Products, Sports</td><td style={{ textAlign: 'right', fontWeight: 700, color: '#ff9900' }}>3.0%</td></tr>
+              <tr><td>PC, Laptops, Components</td><td style={{ textAlign: 'right', fontWeight: 700, color: '#ff9900' }}>2.5%</td></tr>
+              <tr><td>Video Games, Consoles, TVs</td><td style={{ textAlign: 'right', fontWeight: 700, color: '#ff9900' }}>2.0%</td></tr>
+              <tr><td>Grocery, Health and Personal Care</td><td style={{ textAlign: 'right', fontWeight: 700, color: '#ff9900' }}>1.0%</td></tr>
+              <tr><td>Gift Cards, Gold and Excluded</td><td style={{ textAlign: 'right', fontWeight: 700, color: 'var(--text-muted)' }}>0.0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="amz-table-note">
+          Gift cards and excluded items earn nothing, so remove them from your bulk entry for accurate totals.
+        </p>
+      </section>
+
+      {/* SECTION 2: Example Calculations */}
+      <section className="amz-card amz-info-section" id="amz-worked-examples">
+        <h2 className="amz-card-title-clean">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="9 11 12 14 22 4" />
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+          </svg>
+          Example Calculations
+        </h2>
+
+        <div className="amz-examples-grid">
+          <div className="amz-example-card">
+            <h3 className="amz-example-title">Single category</h3>
+            <p className="amz-example-desc">
+              Three kitchen items at $25, $40 and $60 total $125.
+            </p>
+            <div className="amz-example-result">
+              At 4.5% the commission is <strong>$5.63</strong>.
+            </div>
+          </div>
+
+          <div className="amz-example-card">
+            <h3 className="amz-example-title">Mixed categories</h3>
+            <p className="amz-example-desc">
+              A $300 laptop at 2.5% earns $7.50, and a $20 book at 4.5% earns $0.90.
+            </p>
+            <div className="amz-example-result">
+              Total commission is <strong>$8.40</strong>.
+            </div>
+          </div>
+
+          <div className="amz-example-card">
+            <h3 className="amz-example-title">Cross-border</h3>
+            <p className="amz-example-desc">
+              A UK blogger sells through the .com storefront and wants the payout in GBP.
+            </p>
+            <div className="amz-example-result">
+              Select <strong>United States</strong> as storefront and <strong>GBP</strong> as target currency.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3: How and When Amazon Pays Affiliates */}
+      <section className="amz-card amz-info-section" id="amz-payout-guide">
+        <h2 className="amz-card-title-clean">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="6" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          How and When Amazon Pays Affiliates
+        </h2>
+
+        <ul className="amz-payout-list">
+          <li className="amz-payout-item">
+            Commissions are paid about 60 days after the end of the month in which they were earned.
+          </li>
+          <li className="amz-payout-item">
+            Payment is by direct deposit, gift certificate or check, depending on your region.
+          </li>
+          <li className="amz-payout-item">
+            Returns and cancellations reduce your final earnings.
+          </li>
+          <li className="amz-payout-item">
+            Currency conversion spreads, payment processor fees and withholding tax (such as W-8BEN for non-US residents) can change what reaches your bank.
+          </li>
+        </ul>
+
+        <div className="amz-source-box">
+          Official Reference:{' '}
+          <a
+            href="https://affiliate-program.amazon.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="amz-source-link"
+          >
+            Amazon Associates Operating Agreement &amp; Fee Schedules &rarr;
+          </a>
+        </div>
+      </section>
+
       {/* Floating Toast Notification */}
       <div className={`amz-toast ${toast.show ? 'show' : ''} ${toast.isError ? 'error' : 'success'}`} role="status">
         {toast.isError ? (
@@ -1772,7 +1963,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
                 </svg>
               </div>
               <div className="amz-modal-header-text">
-                <h2 id="amz-modal-title" className="amz-modal-title">Terms &amp; Estimation Notice</h2>
+                <div id="amz-modal-title" className="amz-modal-title" role="heading" aria-level="2">Terms &amp; Estimation Notice</div>
                 <p className="amz-modal-sub">Please review terms and approximate estimation policies before continuing</p>
               </div>
             </div>
@@ -1787,7 +1978,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
                   </svg>
                 </div>
                 <div>
-                  <h3 className="amz-point-title">Approximate Estimation Only</h3>
+                  <div className="amz-point-title">Approximate Estimation Only</div>
                   <p className="amz-point-desc">
                     All calculations, converted totals, and commission projections displayed by this tool are <strong>estimates</strong> for financial planning and analysis. They do not constitute guaranteed earnings statements.
                   </p>
@@ -1804,7 +1995,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
                   </svg>
                 </div>
                 <div>
-                  <h3 className="amz-point-title">Currency &amp; Bank Conversion Spreads</h3>
+                  <div className="amz-point-title">Currency &amp; Bank Conversion Spreads</div>
                   <p className="amz-point-desc">
                     Exchange rates are updated live via interbank currency data. Net amounts deposited into your local bank or payout wallet (e.g., Payoneer, Wise, direct wire) may differ due to banking forex spreads and cross-border conversion fees.
                   </p>
@@ -1820,7 +2011,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
                   </svg>
                 </div>
                 <div>
-                  <h3 className="amz-point-title">Taxes, Withholding &amp; Returns</h3>
+                  <div className="amz-point-title">Taxes, Withholding &amp; Returns</div>
                   <p className="amz-point-desc">
                     Final payments are subject to applicable withholding taxes (such as US IRS Form W-8BEN tax deductions up to 30% for non-US associates), local VAT/GST, and deductions for customer returns, canceled orders, or shipping exclusions per official Amazon Associate terms.
                   </p>
@@ -1835,7 +2026,7 @@ https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator
                   </svg>
                 </div>
                 <div>
-                  <h3 className="amz-point-title">Independent Tool Disclaimer</h3>
+                  <div className="amz-point-title">Independent Tool Disclaimer</div>
                   <p className="amz-point-desc">
                     ToolsOfSaaS.com is an independent utility and is not affiliated with, endorsed by, or officially associated with Amazon.com, Inc. or its subsidiaries.
                   </p>

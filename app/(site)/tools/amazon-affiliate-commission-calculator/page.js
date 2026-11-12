@@ -23,26 +23,26 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: `${siteUrl}/logo.png`,
-        width: 512,
-        height: 512,
-        type: 'image/png',
-        alt: 'ToolsOfSaaS Logo',
-      },
-      {
         url: `${siteUrl}/og-image.png`,
         width: 1200,
         height: 630,
         type: 'image/png',
         alt: 'Amazon Affiliate Commission Calculator - ToolsOfSaaS',
       },
+      {
+        url: `${siteUrl}/logo.png`,
+        width: 512,
+        height: 512,
+        type: 'image/png',
+        alt: 'ToolsOfSaaS Logo',
+      },
     ],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: seoMetadata.twitterTitle,
     description: seoMetadata.twitterDescription,
-    images: [`${siteUrl}/logo.png`],
+    images: [`${siteUrl}/og-image.png`],
   },
   alternates: {
     canonical: `${siteUrl}/tools/amazon-affiliate-commission-calculator`,
@@ -69,4 +69,3 @@ export default async function AmazonAffiliateCalculatorPage() {
     </PageWrapper>
   );
 }
-
