@@ -428,7 +428,12 @@ export const amazonAffiliateSeoData = {
     }
   ],
 
-  relatedTools: [],
+  relatedTools: [
+    { name: "Random Team Generator", url: "/tools/random-team-generator/", anchorText: "Random Team Generator & Multiday Planner" },
+    { name: "Fair Chore Assigner", url: "/tools/chore-assigner/", anchorText: "Fair Chore Assigner & Cleanup Rotator" },
+    { name: "AI Color Palette Generator", url: "/tool/color-palette-gen/", anchorText: "AI Color Palette Generator" },
+    { name: "All Free Web Utilities", url: "/tools/", anchorText: "Browse All Free Tools" }
+  ],
 
   cta: {
     title: "Start Estimating Your Amazon Associates Earnings Today",
@@ -438,26 +443,29 @@ export const amazonAffiliateSeoData = {
 
   bottomContent: "The Amazon Affiliate Commission Calculator is an independent web utility created by ToolsOfSaaS. Amazon, Amazon Associates, and the Amazon logo are trademarks of Amazon.com, Inc. or its affiliates. ToolsOfSaaS is not endorsed by or affiliated with Amazon.",
 
-  schemas: [
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Amazon Affiliate Commission Calculator",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "url": "https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator",
-      "description": "Estimate Amazon Associates commissions across 21+ storefronts with live currency conversion.",
-      "dateModified": "2026-11-10"
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://toolsofsaas.com/" },
-        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://toolsofsaas.com/tools" },
-        { "@type": "ListItem", "position": 3, "name": "Amazon Affiliate Commission Calculator", "item": "https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator" }
-      ]
-    }
-  ]
+  schemas: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator/#application",
+        "name": "Amazon Affiliate Commission Calculator",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "url": "https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator/",
+        "description": "Estimate Amazon Associates commissions across 21+ storefronts with live currency conversion.",
+        "dateModified": "2026-11-10"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator/#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://toolsofsaas.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://toolsofsaas.com/tools/" },
+          { "@type": "ListItem", "position": 3, "name": "Amazon Affiliate Commission Calculator", "item": "https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator/" }
+        ]
+      }
+    ]
+  }
 };

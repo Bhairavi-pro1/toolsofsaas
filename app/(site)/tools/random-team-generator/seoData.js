@@ -1143,16 +1143,12 @@ export const teamPlannerSeoData = {
   ],
 
   relatedTools: [
-    { name: "Random Team Generator", url: "/tools/random-team-generator", anchorText: "Random Team Generator" },
-    { name: "Multi-Day Group Rotator", url: "/tools/random-team-generator", anchorText: "Multi-Day Group Rotator" },
-    { name: "Classroom Group Maker", url: "/tools/random-team-generator", anchorText: "Classroom Group Maker" },
-    { name: "Pair Programming Scheduler", url: "/tools/random-team-generator", anchorText: "Pair Programming Scheduler" },
-    { name: "Breakout Room Builder", url: "/tools/random-team-generator", anchorText: "Breakout Room Builder" },
-    { name: "Agile Standup Rotator", url: "/tools/random-team-generator", anchorText: "Agile Standup Rotator" },
-    { name: "Networking Group Coordinator", url: "/tools/random-team-generator", anchorText: "Networking Group Coordinator" },
-    { name: "Tournament Roster Maker", url: "/tools/random-team-generator", anchorText: "Tournament Roster Maker" },
-    { name: "Online Name Randomizer", url: "/tools/random-team-generator", anchorText: "Online Name Randomizer" },
-    { name: "Roster Splitter Tool", url: "/tools/random-team-generator", anchorText: "Roster Splitter Tool" }
+    { name: "Fair Chore Assigner", url: "/tools/chore-assigner/", anchorText: "Fair Chore Assigner" },
+    { name: "Amazon Affiliate Commission Calculator", url: "/tools/amazon-affiliate-commission-calculator/", anchorText: "Amazon Commission Calculator" },
+    { name: "AI Color Palette Generator", url: "/tool/color-palette-gen/", anchorText: "AI Color Palette Generator" },
+    { name: "ErrorFixer Platform", url: "/tool/errorfixer-smart-error-detection-and-resolution-platform/", anchorText: "ErrorFixer Code Resolution" },
+    { name: "All Free Web Utilities", url: "/tools/", anchorText: "Browse All Free Tools" },
+    { name: "SaaS & Tech Guides", url: "/blog/", anchorText: "Productivity & SaaS Guides" }
   ],
 
 
@@ -1255,25 +1251,25 @@ export const teamPlannerSeoData = {
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://toolsofsaas.com/tools/random-team-generator#breadcrumb",
+        "@id": "https://toolsofsaas.com/tools/random-team-generator/#breadcrumb",
         "itemListElement": [
           {
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "https://toolsofsaas.com"
+            "item": "https://toolsofsaas.com/"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Tools",
-            "item": "https://toolsofsaas.com/tools"
+            "item": "https://toolsofsaas.com/tools/"
           },
           {
             "@type": "ListItem",
             "position": 3,
             "name": "Random Team Generator",
-            "item": "https://toolsofsaas.com/tools/random-team-generator"
+            "item": "https://toolsofsaas.com/tools/random-team-generator/"
           }
         ]
       },

@@ -7,7 +7,7 @@ import AdBanner from '@/components/AdBanner';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24-hour edge cache
 
 export const metadata = {
   title: 'Blog – SaaS Insights, Tech Tutorials & Web Tool Reviews',

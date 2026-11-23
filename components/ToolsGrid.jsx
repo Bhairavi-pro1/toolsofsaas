@@ -7,7 +7,13 @@ import AdBanner from './AdBanner';
 import SearchBar from './SearchBar';
 import { useSearch } from '@/context/SearchContext';
 
-export default function ToolsGrid({ initialTools, initialUpcoming }) {
+export default function ToolsGrid({
+  initialTools,
+  initialUpcoming,
+  badge,
+  title,
+  subtitle,
+}) {
   const { searchQuery, setSearchQuery } = useSearch();
 
   // Cache tools in sessionStorage on first render
@@ -42,10 +48,22 @@ export default function ToolsGrid({ initialTools, initialUpcoming }) {
     <>
       {/* HERO SECTION */}
       <div className="hero">
+        {badge && (
+          <span className="internal-links-badge" style={{ marginBottom: '14px' }}>
+            {badge}
+          </span>
+        )}
         <h1>
-          Hand-Picked Free Web Tools & <span style={{ color: 'var(--primary)' }}>Browser Utilities</span>
+          {title || (
+            <>
+              Hand-Picked Free Web Tools & <span style={{ color: 'var(--primary)' }}>Browser Utilities</span>
+            </>
+          )}
         </h1>
-        <p>A focused suite of fast, 100% client-side micro-tools to streamline your workflow. Zero signups, zero paywalls, and complete data privacy.</p>
+        <p>
+          {subtitle ||
+            'A focused suite of fast, 100% client-side micro-tools to streamline your workflow. Zero signups, zero paywalls, and complete data privacy.'}
+        </p>
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       </div>
 

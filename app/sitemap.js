@@ -6,61 +6,67 @@ export default async function sitemap() {
 
   const staticRoutes = [
     {
-      url: siteUrl,
+      url: `${siteUrl}/`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1.0,
     },
     {
-      url: `${siteUrl}/about`,
+      url: `${siteUrl}/tools/`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.95,
+    },
+    {
+      url: `${siteUrl}/about/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${siteUrl}/contact`,
+      url: `${siteUrl}/contact/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${siteUrl}/blog`,
+      url: `${siteUrl}/blog/`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.85,
     },
     {
-      url: `${siteUrl}/privacy`,
+      url: `${siteUrl}/privacy/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${siteUrl}/terms`,
+      url: `${siteUrl}/terms/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${siteUrl}/affiliate-disclosure`,
+      url: `${siteUrl}/affiliate-disclosure/`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${siteUrl}/tools/random-team-generator`,
+      url: `${siteUrl}/tools/random-team-generator/`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/tools/chore-assigner`,
+      url: `${siteUrl}/tools/chore-assigner/`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/tools/amazon-affiliate-commission-calculator`,
+      url: `${siteUrl}/tools/amazon-affiliate-commission-calculator/`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
@@ -76,7 +82,7 @@ export default async function sitemap() {
       toolRoutes = tools
         .filter((t) => t && t.slug)
         .map((t) => ({
-          url: `${siteUrl}/tool/${t.slug}`,
+          url: `${siteUrl}/tool/${t.slug}/`,
           lastModified: t._updatedAt ? new Date(t._updatedAt) : t._createdAt ? new Date(t._createdAt) : new Date(),
           changeFrequency: 'weekly',
           priority: 0.85,
@@ -86,7 +92,7 @@ export default async function sitemap() {
     const posts = await client.fetch(POSTS_QUERY);
     if (posts && posts.length > 0) {
       blogRoutes = posts.map((post) => ({
-        url: `${siteUrl}/blog/${post.slug}`,
+        url: `${siteUrl}/blog/${post.slug}/`,
         lastModified: post.publishedAt ? new Date(post.publishedAt) : new Date(),
         changeFrequency: 'monthly',
         priority: 0.75,
@@ -98,4 +104,3 @@ export default async function sitemap() {
 
   return [...staticRoutes, ...toolRoutes, ...blogRoutes];
 }
-

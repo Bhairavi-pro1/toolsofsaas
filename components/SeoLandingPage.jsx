@@ -13,6 +13,10 @@ export default function SeoLandingPage({ data, sanityTools = [] }) {
   const {
     h1,
     introduction,
+    ratesTable,
+    workedExamplesTitle,
+    workedExamples,
+    payoutGuide,
     features,
     howToUse,
     benefits,
@@ -40,6 +44,9 @@ export default function SeoLandingPage({ data, sanityTools = [] }) {
     const handleScroll = () => {
       const sections = [
         'overview',
+        'rates-table',
+        'worked-examples',
+        'payout-guide',
         'features',
         'how-to-use',
         'benefits',
@@ -87,35 +94,54 @@ export default function SeoLandingPage({ data, sanityTools = [] }) {
     }
   };
 
+  // Combine all schemas into a single unified @graph to comply with Google & Bing SEO guidelines
+  const unifiedJsonLd = (() => {
+    let baseNodes = [];
+    if (schemas) {
+      if (Array.isArray(schemas)) {
+        baseNodes = [...schemas];
+      } else if (Array.isArray(schemas['@graph'])) {
+        baseNodes = [...schemas['@graph']];
+      } else if (typeof schemas === 'object') {
+        baseNodes = [schemas];
+      }
+    }
+
+    const hasFaqPage = baseNodes.some((item) => {
+      const type = item?.['@type'];
+      return type === 'FAQPage' || (Array.isArray(type) && type.includes('FAQPage'));
+    });
+
+    if (!hasFaqPage && faqs && faqs.length > 0) {
+      baseNodes.push({
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: faq.answer,
+          },
+        })),
+      });
+    }
+
+    if (baseNodes.length === 0) return null;
+
+    return {
+      '@context': 'https://schema.org',
+      '@graph': baseNodes,
+    };
+  })();
+
   return (
     <>
-      {/* Schema Injection */}
-      {schemas && (
+      {/* Single Unified Schema Injection (@graph) */}
+      {unifiedJsonLd && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schemas)
-          }}
-        />
-      )}
-
-      {/* Dynamic FAQPage Schema for all rendered FAQs */}
-      {faqs && faqs.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              "mainEntity": faqs.map((faq) => ({
-                "@type": "Question",
-                "name": faq.question,
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": faq.answer
-                }
-              }))
-            })
+            __html: JSON.stringify(unifiedJsonLd),
           }}
         />
       )}
@@ -129,6 +155,30 @@ export default function SeoLandingPage({ data, sanityTools = [] }) {
           >
             Overview
           </button>
+          {ratesTable && (
+            <button
+              onClick={() => handleNavClick('rates-table')}
+              className={`seo-nav-item ${activeSection === 'rates-table' ? 'active' : ''}`}
+            >
+              Category Rates
+            </button>
+          )}
+          {workedExamples && workedExamples.length > 0 && (
+            <button
+              onClick={() => handleNavClick('worked-examples')}
+              className={`seo-nav-item ${activeSection === 'worked-examples' ? 'active' : ''}`}
+            >
+              Worked Examples
+            </button>
+          )}
+          {payoutGuide && (
+            <button
+              onClick={() => handleNavClick('payout-guide')}
+              className={`seo-nav-item ${activeSection === 'payout-guide' ? 'active' : ''}`}
+            >
+              Payout Rules
+            </button>
+          )}
           <button
             onClick={() => handleNavClick('features')}
             className={`seo-nav-item ${activeSection === 'features' ? 'active' : ''}`}
@@ -225,6 +275,77 @@ export default function SeoLandingPage({ data, sanityTools = [] }) {
               <p key={idx} className="seo-text" dangerouslySetInnerHTML={{ __html: p }} />
             ))}
           </section>
+
+          {/* Rates Table (if present) */}
+          {ratesTable && (
+            <section id="rates-table" className="seo-section">
+              <h2 className="seo-section-title">{ratesTable.title || 'Commission Rates by Category'}</h2>
+              {ratesTable.intro && (
+                <p className="seo-text" style={{ marginBottom: '20px' }}>{ratesTable.intro}</p>
+              )}
+              <div style={{ overflowX: 'auto', marginBottom: '16px' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border)' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid var(--border)', background: 'var(--bg-card)' }}>
+                      <th style={{ padding: '14px 18px', color: 'var(--text-main)', fontWeight: '700' }}>Category</th>
+                      <th style={{ padding: '14px 18px', color: 'var(--text-main)', fontWeight: '700' }}>Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ratesTable.rows?.map((row, idx) => (
+                      <tr key={idx} style={{ borderBottom: '1px solid var(--border)', background: idx % 2 === 0 ? 'transparent' : 'var(--input-bg)' }}>
+                        <td style={{ padding: '12px 18px', color: 'var(--text-main)' }}>{row.category}</td>
+                        <td style={{ padding: '12px 18px', color: 'var(--primary)', fontWeight: '700' }}>{row.rate}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {ratesTable.note && (
+                <p style={{ fontSize: '13px', color: 'var(--text-muted)', margin: 0, fontStyle: 'italic' }}>
+                  💡 {ratesTable.note}
+                </p>
+              )}
+            </section>
+          )}
+
+          {/* Worked Examples (if present) */}
+          {workedExamples && workedExamples.length > 0 && (
+            <section id="worked-examples" className="seo-section">
+              <h2 className="seo-section-title">{workedExamplesTitle || 'Example Calculations'}</h2>
+              <div className="seo-features-grid">
+                {workedExamples.map((ex, idx) => (
+                  <div key={idx} className="seo-feature-card">
+                    <h3 className="seo-feature-title">{ex.title}</h3>
+                    <p className="seo-feature-desc" style={{ marginBottom: '12px' }}>{ex.description || ex.scenario}</p>
+                    <div style={{ background: 'var(--input-bg)', padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border)', fontSize: '13px', color: 'var(--text-main)' }}>
+                      <strong style={{ color: 'var(--primary)' }}>Calculation:</strong> {ex.calculation}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* How and When Payouts Occur (if present) */}
+          {payoutGuide && (
+            <section id="payout-guide" className="seo-section">
+              <h2 className="seo-section-title">{payoutGuide.title}</h2>
+              {payoutGuide.intro && (
+                <p className="seo-text" style={{ marginBottom: '20px' }}>{payoutGuide.intro}</p>
+              )}
+              <div className="seo-features-grid">
+                {payoutGuide.points?.map((pt, idx) => (
+                  <div key={idx} className="seo-feature-card">
+                    <h3 className="seo-feature-title">{typeof pt === 'string' ? pt : pt.title}</h3>
+                    {pt.description && (
+                      <p className="seo-feature-desc">{pt.description}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Key Features */}
           {features && features.length > 0 && (
@@ -588,7 +709,7 @@ export default function SeoLandingPage({ data, sanityTools = [] }) {
                     Discover hand-picked, 100% free client-side browser utilities, team planners, and web diagnostics.
                   </p>
                 </div>
-                <Link href="/" className="seo-explore-view-all-btn">
+                <Link href="/tools/" className="seo-explore-view-all-btn">
                   <span>Browse All Tools</span>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12" />
@@ -606,14 +727,14 @@ export default function SeoLandingPage({ data, sanityTools = [] }) {
               ) : (
                 <div className="seo-fallback-links-grid">
                   {relatedTools.map((tool, idx) => (
-                    <a key={idx} href={tool.url} className="seo-fallback-tool-chip" title={tool.name}>
+                    <Link key={idx} href={tool.url} className="seo-fallback-tool-chip" title={tool.name}>
                       <span className="seo-fallback-chip-icon">⚡</span>
                       <span className="seo-fallback-chip-text">{tool.anchorText || tool.name}</span>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <line x1="7" y1="17" x2="17" y2="7" />
                         <polyline points="7 7 17 7 17 17" />
                       </svg>
-                    </a>
+                    </Link>
                   ))}
                 </div>
               )}

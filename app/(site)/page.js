@@ -6,7 +6,7 @@ import AdBanner from '@/components/AdBanner';
 import ToolsGrid from '@/components/ToolsGrid';
 import { homeSeoData } from './homeSeoData';
 
-export const revalidate = 60; // Revalidate this page cache every 60 seconds
+export const revalidate = 86400; // 24-hour edge cache (dramatically reduces serverless function credit consumption)
 
 export default async function HomePage() {
   let tools = [];

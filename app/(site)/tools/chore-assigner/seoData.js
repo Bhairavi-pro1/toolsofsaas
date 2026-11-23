@@ -501,10 +501,10 @@ export const choreAssignerSeoData = {
   ],
 
   relatedTools: [
-    {
-      url: "/tools/random-team-generator",
-      anchorText: "Random Team Generator and Multiday Planner"
-    }
+    { name: "Random Team Generator", url: "/tools/random-team-generator/", anchorText: "Random Team Generator & Multiday Planner" },
+    { name: "Amazon Affiliate Commission Calculator", url: "/tools/amazon-affiliate-commission-calculator/", anchorText: "Amazon Commission Calculator" },
+    { name: "AI Color Palette Generator", url: "/tool/color-palette-gen/", anchorText: "AI Color Palette Generator" },
+    { name: "All Free Web Utilities", url: "/tools/", anchorText: "Browse All Free Tools" }
   ],
 
   cta: {
@@ -541,25 +541,25 @@ export const choreAssignerSeoData = {
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://toolsofsaas.com/tools/chore-assigner#breadcrumb",
+        "@id": "https://toolsofsaas.com/tools/chore-assigner/#breadcrumb",
         "itemListElement": [
           {
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "https://toolsofsaas.com"
+            "item": "https://toolsofsaas.com/"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Tools",
-            "item": "https://toolsofsaas.com/#tools"
+            "item": "https://toolsofsaas.com/tools/"
           },
           {
             "@type": "ListItem",
             "position": 3,
             "name": "Chore Assigner",
-            "item": "https://toolsofsaas.com/tools/chore-assigner"
+            "item": "https://toolsofsaas.com/tools/chore-assigner/"
           }
         ]
       }

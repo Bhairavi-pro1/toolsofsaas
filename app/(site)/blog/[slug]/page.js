@@ -5,8 +5,18 @@ import { POST_QUERY } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
 import PageWrapper from '@/components/PageWrapper';
 import AdBanner from '@/components/AdBanner';
+import InternalLinks from '@/components/InternalLinks';
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24-hour edge cache
+
+export async function generateStaticParams() {
+  try {
+    const posts = await client.fetch(`*[_type == "post" && !(_id in path("drafts.**")) && defined(slug.current)][].slug.current`);
+    return (posts || []).map((slug) => ({ slug }));
+  } catch {
+    return [];
+  }
+}
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
 
@@ -369,6 +379,9 @@ export default async function BlogPostPage({ params }) {
             <PortableText value={post.body} components={portableTextComponents} />
           )}
         </article>
+
+        {/* Global Built-In Utilities Internal Links */}
+        <InternalLinks currentPath={`/blog/${slug}/`} />
       </div>
     </PageWrapper>
   );

@@ -5,9 +5,10 @@ import { TOOL_BY_SLUG_QUERY, RELATED_TOOLS_QUERY, ALL_TOOL_SLUGS_QUERY } from '@
 import { urlFor } from '@/sanity/lib/image';
 import PageWrapper from '@/components/PageWrapper';
 import AdBanner from '@/components/AdBanner';
+import InternalLinks from '@/components/InternalLinks';
 import ToolCard from '@/components/ToolCard';
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24-hour edge cache
 
 const portableTextComponents = {
   types: {
@@ -448,7 +449,7 @@ export default async function ToolDetailPage({ params }) {
           <section className="tool-related-section">
             <div className="tool-related-header">
               <h2>More Tools You May Like</h2>
-              <Link href="/" className="tool-related-all-link">
+              <Link href="/tools/" className="tool-related-all-link">
                 View All Tools →
               </Link>
             </div>
@@ -460,6 +461,9 @@ export default async function ToolDetailPage({ params }) {
             </div>
           </section>
         )}
+
+        {/* Global Built-In Utilities Internal Links */}
+        <InternalLinks currentPath={`/tool/${slug}/`} />
       </div>
     </PageWrapper>
   );

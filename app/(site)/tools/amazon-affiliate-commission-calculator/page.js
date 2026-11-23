@@ -5,7 +5,7 @@ import { amazonAffiliateSeoData } from './seoData';
 import { client } from '@/sanity/lib/client';
 import { TOOLS_QUERY } from '@/sanity/lib/queries';
 
-export const revalidate = 60;
+export const revalidate = 86400; // 24-hour edge cache
 
 const { seoMetadata } = amazonAffiliateSeoData;
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
@@ -45,7 +45,7 @@ export const metadata = {
     images: [`${siteUrl}/og-image.png`],
   },
   alternates: {
-    canonical: `${siteUrl}/tools/amazon-affiliate-commission-calculator`,
+    canonical: `${siteUrl}/tools/amazon-affiliate-commission-calculator/`,
   },
 };
 

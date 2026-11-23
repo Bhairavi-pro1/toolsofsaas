@@ -1,19 +1,23 @@
 # ToolsOfSaaS - Core Directory & Resources
 
-> ToolsOfSaaS is a curated directory of browser-based utilities and software-as-a-service (SaaS) tools designed to streamline daily workflows for developers, designers, teachers, and teams.
+> ToolsOfSaaS (https://toolsofsaas.com/) is a curated directory of fast, 100% free browser-based micro-tools and software-as-a-service (SaaS) utilities. All client tools execute locally on the user's device with zero signups, zero server data storage, and complete privacy.
 
 ## Navigation & Discovery
 - [Homepage](https://toolsofsaas.com/)
+- [All Free Web Tools Directory](https://toolsofsaas.com/tools/)
 - [Sitemap](https://toolsofsaas.com/sitemap.xml)
-- [About Us](https://toolsofsaas.com/about)
-- [Contact Information](https://toolsofsaas.com/contact)
-- [Official Blog](https://toolsofsaas.com/blog)
+- [Official Blog](https://toolsofsaas.com/blog/)
+- [About Us](https://toolsofsaas.com/about/)
+- [Contact Information](https://toolsofsaas.com/contact/)
 
-## Curated Tools & Utilities
-- [Random Team Generator & Multiday Planner](https://toolsofsaas.com/tools/random-team-generator): An advanced random grouping tool and multiday scheduler. It automatically runs sorting loops to minimize teammate repeat matches, ensuring diverse peer collaborations in classrooms, projects, sprints, and speed networking workshops.
-- [Chore Assigner](https://toolsofsaas.com/tools/chore-assigner): An interactive household chore assigner and fair chore wheel generator. Employs a weighted workload scoring algorithm and an interactive spin wheel to balance tasks across roommates, kids, or family members fairly.
+## Featured Web Utilities
+- [Amazon Affiliate Commission Calculator](https://toolsofsaas.com/tools/amazon-affiliate-commission-calculator/): Calculate projected Amazon Associates earnings by category tier across 21+ global storefronts with live exchange rates and Excel/Sheets export.
+- [Random Team Generator & Multiday Planner](https://toolsofsaas.com/tools/random-team-generator/): Intelligent grouping tool and multi-round rotation scheduler. Built with a pairing algorithm that minimizes teammate repeat matches across days, rounds, and classroom sessions.
+- [Fair Chore Assigner & Schedule Rotator](https://toolsofsaas.com/tools/chore-assigner/): Household task assigner and fair cleanup chart generator. Uses weighted difficulty scores and rotation schedules to equitably balance duties across roommates or family members.
+- [AI Color Palette Generator](https://toolsofsaas.com/tool/color-palette-gen/): Curated tool to generate harmonized color schemes, export HEX/RGB tokens, and test accessible contrast ratios.
+- [ErrorFixer Diagnostic Platform](https://toolsofsaas.com/tool/errorfixer-smart-error-detection-and-resolution-platform/): Automated debugging and exception diagnostics platform for modern software stacks.
 
 ## Legal and Compliance Policies
-- [Privacy Policy](https://toolsofsaas.com/privacy)
-- [Terms of Service](https://toolsofsaas.com/terms)
-- [Affiliate Disclosure](https://toolsofsaas.com/affiliate-disclosure)
+- [Privacy Policy](https://toolsofsaas.com/privacy/)
+- [Terms of Service](https://toolsofsaas.com/terms/)
+- [Affiliate Disclosure](https://toolsofsaas.com/affiliate-disclosure/)

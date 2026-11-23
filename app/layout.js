@@ -18,10 +18,7 @@ const outfit = Outfit({
 });
 
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.RENDER_EXTERNAL_URL
-    ? `https://${process.env.RENDER_EXTERNAL_URL.replace(/^https?:\/\//, '')}`
-    : 'https://toolsofsaas.onrender.com');
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://toolsofsaas.com';
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
